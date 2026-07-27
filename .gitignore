@@ -2,6 +2,7 @@
 App.xaml.cs
 agy.txt
 
+
 # Platform
 Platforms/iOS/
 Platforms/MacCatalyst/
@@ -20,6 +21,7 @@ Resources/
 # IDE
 .vs/
 .vscode/
+.git/
 
 # Properties
 Properties/

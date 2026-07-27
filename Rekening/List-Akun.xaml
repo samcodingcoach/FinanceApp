@@ -14,26 +14,44 @@
 
             <Grid ColumnDefinitions="*" ColumnSpacing="10">
                 <Border Grid.Column="0" Padding="0" StrokeShape="RoundRectangle 10"  Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
-                    <SearchBar Placeholder="Cari akun rekening" x:Name="T_Search"></SearchBar>
+                    <SearchBar Placeholder="Cari akun rekening" x:Name="T_Search" TextChanged="T_Search_TextChanged"></SearchBar>
                 </Border>
             </Grid>
 
         </Border>
 
-        <Border Grid.Row="1" VerticalOptions="Start" Margin="10,0" StrokeShape="RoundRectangle 10" 
-                Stroke="#CCCCCC" StrokeThickness="0.2" BackgroundColor="White">
-            <Grid ColumnDefinitions="Auto,*,Auto" Padding="20" ColumnSpacing="15">
-                <toolkit:AvatarView Text="A" FontAttributes="Bold" Grid.Column="0" FontSize="20" 
-                                    BackgroundColor="CornflowerBlue" TextColor="White" />
+        <Grid Grid.Row="1" Margin="10,0,10,10">
+            <CollectionView x:Name="ListAkunCollection">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border VerticalOptions="Start" Margin="0,0,0,10" StrokeShape="RoundRectangle 10" 
+                                Stroke="#CCCCCC" StrokeThickness="0.2" BackgroundColor="White">
+                            <Grid ColumnDefinitions="Auto,*,Auto" Padding="20" ColumnSpacing="15">
+                                <toolkit:AvatarView Text="{Binding AvatarInitial}" FontAttributes="Bold" Grid.Column="0" FontSize="20" 
+                                                    BackgroundColor="CornflowerBlue" TextColor="White" />
 
-                <StackLayout Grid.Column="1" VerticalOptions="Center">
-                    <Label Text="Bank BCA MANDIRI BRI" FontSize="16" FontAttributes="Bold" TextColor="#444"></Label>
-                    <Label Text="27 Juli 2026 10:02" FontSize="Small" TextColor="Grey"></Label>
-                </StackLayout>
+                                <StackLayout Grid.Column="1" VerticalOptions="Center">
+                                    <!--nama_rekening-->
+                                    <Label Text="{Binding nama_rekening}" FontSize="16" FontAttributes="Bold" TextColor="#444"></Label>
+                                    <!--last_update-->
+                                    <Label Text="{Binding FormattedDate}" FontSize="Small" TextColor="Grey"></Label>
+                                </StackLayout>
+                                <!--saldo_akhir-->
+                                <Label Grid.Column="2" FontAttributes="Bold" FontSize="18" TextColor="DarkKhaki"
+                                       Text="{Binding FormattedSaldo}" VerticalOptions="Center"></Label>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
 
-                <Label Grid.Column="2" FontAttributes="Bold" FontSize="18" TextColor="DarkKhaki"
-                       Text="Rp 500.000.000" VerticalOptions="Center"></Label>
-            </Grid>
-        </Border>
+        <!-- Overlay Loading -->
+        <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#80000000" IsVisible="True" ZIndex="999">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="White" WidthRequest="50" HeightRequest="50" />
+                <Label Text="Mohon Tunggu..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>
