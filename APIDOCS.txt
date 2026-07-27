@@ -1,0 +1,196 @@
+========================================================================
+TUTORIAL PENGGUNAAN API DI .NET MAUI / C# (Standar MyPosAccurate2026)
+========================================================================
+
+Dokumen ini berisi panduan dan standardisasi cara aplikasi berinteraksi 
+dengan backend (API) untuk menampilkan data (GET), menyimpan (POST), 
+serta mengedit data (PUT/POST).
+
+------------------------------------------------------------------------
+1. PERSIAPAN AWAL (LIBRARY & OTORISASI)
+------------------------------------------------------------------------
+Pastikan Anda selalu menggunakan library HttpClient bawaan .NET dan 
+Newtonsoft.Json untuk mengubah data JSON menjadi objek (Deserialization) 
+atau sebaliknya (Serialization).
+
+Setiap kali Anda menembak API yang diamankan, pastikan untuk membaca 
+Token dari sistem penyimpanan lokal terlebih dahulu:
+
+```csharp
+string cleanToken = Preferences.Get("TOKEN_KEY", "").Replace("Bearer ", "").Trim();
+if (string.IsNullOrEmpty(cleanToken))
+{
+    // Jika token kosong, lemparkan ke halaman login
+    return;
+}
+```
+
+------------------------------------------------------------------------
+2. MENAMPILKAN DATA DARI API (GET REQUEST)
+------------------------------------------------------------------------
+GET digunakan untuk menarik daftar data atau detail dari server.
+
+// Langkah-langkah:
+1. Siapkan Model Class sesuai JSON yang dikembalikan backend.
+2. Gunakan httpClient.GetAsync(url).
+3. Parsing string JSON menggunakan JsonConvert.DeserializeObject<T>().
+
+```csharp
+public async Task LoadDataPemasok()
+{
+    try
+    {
+        string cleanToken = Preferences.Get("TOKEN_KEY", "").Replace("Bearer ", "").Trim();
+        
+        using (var client = new HttpClient())
+        {
+            // Set Header Otorisasi
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", cleanToken);
+
+            // URL Endpoint API
+            string apiUrl = "https://domain.com/api/pemasok/list.php?limit=50&page=1";
+            
+            // Eksekusi GET Request
+            var response = await client.GetAsync(apiUrl);
+            
+            // Cek jika status HTTP bukan 200 OK
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("API Gagal diakses");
+                return;
+            }
+
+            // Baca konten hasil kembalian (Response string)
+            string responseContent = await response.Content.ReadAsStringAsync();
+            
+            // Konversi String JSON ke Model C# (Deserialization)
+            var result = JsonConvert.DeserializeObject<PemasokResponse>(responseContent);
+            
+            if (result != null && result.status == "success")
+            {
+                foreach(var item in result.data)
+                {
+                    // Masukkan ke dalam UI / ObservableCollection
+                    _pemasokList.Add(item);
+                }
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+}
+```
+
+------------------------------------------------------------------------
+3. MENYIMPAN DATA BARU KE API (POST REQUEST)
+------------------------------------------------------------------------
+POST digunakan untuk mengirim data formulir baru ke backend (Insert).
+
+// Langkah-langkah:
+1. Kumpulkan data dari UI (Entry/Form) menjadi satu buah object.
+2. Ubah Object tersebut menjadi format teks JSON (Serialization).
+3. Bungkus dalam StringContent dengan Encoding UTF-8 dan tipe media "application/json".
+4. Gunakan httpClient.PostAsync(url, content).
+
+```csharp
+public async Task SimpanDataPemasok(string namaPemasok, string teleponPemasok)
+{
+    try
+    {
+        string cleanToken = Preferences.Get("TOKEN_KEY", "").Replace("Bearer ", "").Trim();
+        using (var client = new HttpClient())
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", cleanToken);
+            string apiUrl = "https://domain.com/api/pemasok/insert.php";
+
+            // 1. Buat Payload (Model data yang akan dikirim)
+            var requestData = new 
+            {
+                name = namaPemasok,
+                phone = teleponPemasok
+            };
+
+            // 2. Ubah ke JSON (Serialization)
+            string jsonPayload = JsonConvert.SerializeObject(requestData);
+            
+            // 3. Siapkan tipe paket pengiriman HTTP
+            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+            // 4. Eksekusi POST Request
+            var response = await client.PostAsync(apiUrl, content);
+            string responseContent = await response.Content.ReadAsStringAsync();
+            
+            // Opsional: Cek kembalian dari backend (Berhasil/Gagal)
+            var result = JsonConvert.DeserializeObject<BaseResponse>(responseContent);
+            if (result.status == "success")
+            {
+                // Sukses tersimpan
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error Simpan: {ex.Message}");
+    }
+}
+```
+
+------------------------------------------------------------------------
+4. MENGUBAH / EDIT DATA DI API (PUT atau POST REQUEST)
+------------------------------------------------------------------------
+Edit Data mirip 100% dengan POST/Menyimpan, bedanya Anda harus 
+menyertakan parameter unik (ID/Kode) agar database tahu data mana yang di-update.
+
+```csharp
+public async Task UpdateDataPemasok(int idYangDiedit, string namaBaru, string teleponBaru)
+{
+    try
+    {
+        string cleanToken = Preferences.Get("TOKEN_KEY", "").Replace("Bearer ", "").Trim();
+        using (var client = new HttpClient())
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", cleanToken);
+            
+            // URL biasanya meminta parameter id, atau dilempar dari JSON
+            string apiUrl = $"https://domain.com/api/pemasok/update.php?id={idYangDiedit}";
+
+            // Payload / Data baru yang diperbarui
+            var requestData = new 
+            {
+                id = idYangDiedit,
+                name = namaBaru,
+                phone = teleponBaru
+            };
+
+            string jsonPayload = JsonConvert.SerializeObject(requestData);
+            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+            // Tergantung spesifikasi Backend Anda (bisa PostAsync atau PutAsync)
+            // Di mayoritas PHP lama, method update tetap menggunakan POST
+            var response = await client.PostAsync(apiUrl, content);
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<BaseResponse>(responseContent);
+            if (result.status == "success")
+            {
+                // Sukses di-update
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error Update: {ex.Message}");
+    }
+}
+```
+
+------------------------------------------------------------------------
+5. TIPS TAMBAHAN & PRAKTIK TERBAIK (BEST PRACTICES)
+------------------------------------------------------------------------
+- Timeout: Jika respon server berat, set `client.Timeout = TimeSpan.FromSeconds(30);`.
+- Exception Handling: Operasi API WAJIB dibungkus Try-Catch.
+- Debounce (Search API): Jangan panggil API per huruf yang diketik. Gunakan `CancellationTokenSource` dengan jeda (delay) 500ms agar server tidak berat.
+- Infinite Scroll (Pagination): Tumpuk daftar dengan `ObservableCollection.Add()` lalu naikkan `_currentPage++`.
+- Validasi Respons Kasar: Beberapa server membuang pesan error HTML jika gagal. Cek dengan `if (responseContent.StartsWith("<")) { // Error }` untuk mencegah aplikasi hancur saat DeserializeObject.
