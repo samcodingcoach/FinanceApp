@@ -20,12 +20,12 @@
                         BackgroundColor="WhiteSmoke">
 
                 <Entry x:Name="e_saldoawal" Keyboard="Numeric" ClearButtonVisibility="WhileEditing" 
-                       VerticalTextAlignment="Center" Placeholder="Ex: 100000..."></Entry>
+                       VerticalTextAlignment="Center" Placeholder="Ex: 100000..." TextChanged="e_saldoawal_TextChanged"></Entry>
 
             </Border>
 
             <StackLayout Orientation="Horizontal" Spacing="5" Margin="-10,10,0,0">
-                <CheckBox IsChecked="True" Color="CornflowerBlue"></CheckBox>
+                <CheckBox x:Name="c_isactive" IsChecked="True" Color="CornflowerBlue"></CheckBox>
                 <Label Text="Rekening Aktif" VerticalOptions="Center" TranslationY="-1" 
                        TextColor="Gray"
                        FontAttributes="Bold"></Label>
@@ -38,5 +38,13 @@
         <Button Text="SIMPAN REKENING" x:Name="BSimpan" Clicked="BSimpan_Clicked" FontAttributes="Bold" FontSize="18" CharacterSpacing="1" Grid.Row="1" Margin="20" 
                 CornerRadius="20"
                 BackgroundColor="CornflowerBlue"></Button>
+                
+        <!-- Overlay Loading -->
+        <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="White" WidthRequest="50" HeightRequest="50" />
+                <Label Text="Mohon Tunggu..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>
