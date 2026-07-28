@@ -145,6 +145,15 @@ public partial class List_Kategori : ContentPage
     {
         await Navigation.PushAsync(new FinanceApp.Kategori.New_Kategori());
     }
+
+    private async void ListKategoriCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is KategoriModel selectedItem)
+        {
+            ListKategoriCollection.SelectedItem = null;
+            await Navigation.PushAsync(new FinanceApp.Kategori.Edit_Kategori(selectedItem));
+        }
+    }
 }
 
 public class KategoriModel
