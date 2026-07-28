@@ -10,12 +10,15 @@
 
         <StackLayout Grid.Row="0" Padding="20">
 
-            <Border Padding="20" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" 
+            <Border x:Name="IconBorder" Padding="20" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" 
                     StrokeThickness="0.5" 
                     BackgroundColor="White">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="SelectIcon_Tapped" />
+                </Border.GestureRecognizers>
                 <StackLayout>
-                    <Image Source="uploadicon100.png" HeightRequest="100"></Image>
-                    <Label Text="Pilih Icon Kategori" TextColor="CornflowerBlue" 
+                    <Image x:Name="ImgIcon" Source="uploadicon100.png" HeightRequest="100"></Image>
+                    <Label x:Name="L_IconStatus" Text="Pilih Icon Kategori" TextColor="CornflowerBlue" 
                            FontSize="16"
                            HorizontalOptions="Center"></Label>
                 </StackLayout>
@@ -24,8 +27,8 @@
             <Label Text="Nama Kategori" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
             <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
                     BackgroundColor="White">
-
-                <Entry x:Name="e_nama_rekening" ClearButtonVisibility="WhileEditing" 
+                <!--nama_kategori-->
+                <Entry x:Name="e_nama_kategori" ClearButtonVisibility="WhileEditing" 
                        VerticalTextAlignment="Center" Placeholder="Ex: Transportasi, Listrik, Pulsa..."></Entry>
             </Border>
 
@@ -33,6 +36,7 @@
             <Border Padding="5" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
                     BackgroundColor="WhiteSmoke">
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <!--tipe-->
                     <Button x:Name="BPemasukan" Clicked="BPemasukan_Clicked" CornerRadius="10" FontAttributes="Bold" Text="PEMASUKAN" TextColor="DarkGrey" Grid.Column="0" BackgroundColor="Transparent"></Button>
                     <Button x:Name="BPengeluaran" Clicked="BPengeluaran_Clicked" Text="PENGELUARAN" FontAttributes="Bold" CornerRadius="10" Grid.Column="1" BackgroundColor="DarkCyan"></Button>
                 </Grid>
@@ -46,7 +50,7 @@
                         <Label Text="Kategori Transaksi Aktif" TextColor="#444" FontSize="16" FontAttributes="Bold"></Label>
                         <Label Text="Muncul di daftar pilihan transaksi" TextColor="Grey" FontSize="Small"></Label>
                     </StackLayout>
-
+                    <!--is_active-->
                     <Switch OnColor="CornflowerBlue" VerticalOptions="Center"></Switch>
                 </Grid>
             </Border>
