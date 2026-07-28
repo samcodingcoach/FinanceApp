@@ -6,36 +6,78 @@
              BackgroundColor="#f8fafa" NavigationPage.HasNavigationBar="False"
              Shell.NavBarIsVisible="False">
     <Grid RowDefinitions="Auto,*">
-        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20">
-            <StackLayout>
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20" ColumnSpacing="10">
+            <!-- Title Mode -->
+            <StackLayout x:Name="StackLayoutTitle" IsVisible="True">
                 <Label Text="List Kategori Transaksi" FontSize="18" 
                        TextColor="CornflowerBlue"
                        FontAttributes="Bold"></Label>
-                <Label Text="0 Items" FontSize="Small" TextColor="Grey"></Label>
+                <Label x:Name="L_ItemCount" Text="0 Items" FontSize="Small" TextColor="Grey"></Label>
             </StackLayout>
 
-            <Image Source="more50gray.png" Grid.Column="1" HeightRequest="20" Rotation="90"></Image>
+            <!-- Search Mode -->
+            <StackLayout x:Name="StackLayoutSearch" IsVisible="False" VerticalOptions="Center">
+                <Border Padding="0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
+                    <SearchBar x:Name="T_Search" Placeholder="Cari Kategori" TextChanged="T_Search_TextChanged"></SearchBar>
+                </Border>
+            </StackLayout>
+
+            <Image x:Name="ImgAction" Source="more50gray.png" Grid.Column="1" HeightRequest="20" Rotation="90" VerticalOptions="Center">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="BtnMore_Tapped"></TapGestureRecognizer>
+                </Image.GestureRecognizers>
+            </Image>
         </Grid>
-        
-        <!--collection view dan refresh view-->
-        <Border Grid.Row="1" Padding="15" StrokeShape="RoundRectangle 15" 
-                VerticalOptions="Start" HorizontalOptions="Start"
-                Margin="20,10" Stroke="LightGrey" WidthRequest="80" 
-                StrokeThickness="0.3" BackgroundColor="DarkSlateBlue">
-            
-            <Border.Shadow>
-                <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
-            </Border.Shadow>
+        <RefreshView x:Name="KategoriRefresh" Grid.Row="1" Refreshing="KategoriRefresh_Refreshing">
+            <CollectionView x:Name="ListKategoriCollection" Margin="10,0,10,10">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="10" VerticalItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border WidthRequest="80" HorizontalOptions="Center" Padding="10" StrokeShape="RoundRectangle 15" 
+                                Stroke="LightGrey" StrokeThickness="0.3" 
+                                BackgroundColor="{Binding BgColor}"
+                                Opacity="{Binding VisualOpacity}">
+                            <Border.Shadow>
+                                <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
+                            </Border.Shadow>
 
-            <StackLayout Spacing="7">
-                <!--icon-->
-                <Image Source="wallet100.png" HeightRequest="30"></Image>
-                <!--nama_kategori-->
-                <Label Text="Air PDAM" LineBreakMode="TailTruncation" TextColor="White" FontSize="14" 
-                       FontAttributes="Bold"></Label>
-            </StackLayout>
+                            <StackLayout Spacing="7" VerticalOptions="Center">
+                                <Image Source="{Binding FullIconUrl}" HeightRequest="30"></Image>
+                                <Label Text="{Binding nama_kategori}" LineBreakMode="TailTruncation" TextColor="White" FontSize="12" 
+                                       HorizontalTextAlignment="Center"
+                                       FontAttributes="Bold"></Label>
+                            </StackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
 
-        </Border>
+        <!-- FAB -->
+        <ImageButton Source="add60.png" 
+                     Grid.Row="1" 
+                     BackgroundColor="CornflowerBlue" 
+                     HorizontalOptions="End" 
+                     VerticalOptions="End" 
+                     Margin="0,0,20,20"
+                     WidthRequest="60" 
+                     HeightRequest="60" 
+                     CornerRadius="30"
+                     Padding="15"
+                     Clicked="FAB_Clicked">
+            <ImageButton.Shadow>
+                <Shadow Brush="#000000" Opacity="0.3" Radius="8" Offset="0,4" />
+            </ImageButton.Shadow>
+        </ImageButton>
 
+        <!-- Overlay Loading -->
+        <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="White" WidthRequest="50" HeightRequest="50" />
+                <Label Text="Mohon Tunggu..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>
