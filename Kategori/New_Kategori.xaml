@@ -2,11 +2,43 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FinanceApp.Kategori.New_Kategori"
-             Title="New_Kategori">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             BackgroundColor="#f8fafa"
+            
+             Title="Buat Kategori Transaksi"
+             >
+    <Grid RowDefinitions="*,Auto">
+
+        <StackLayout Grid.Row="0" Padding="20">
+
+            <Border Padding="20" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" 
+                    StrokeThickness="0.5" 
+                    BackgroundColor="White">
+                <StackLayout>
+                    <Image Source="uploadicon100.png" HeightRequest="100"></Image>
+                    <Label Text="Pilih Icon Kategori" TextColor="CornflowerBlue" 
+                           FontSize="16"
+                           HorizontalOptions="Center"></Label>
+                </StackLayout>
+            </Border>
+
+            <Label Text="Nama Kategori" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
+            <Border Padding="10,0" StrokeShape="RoundRectangle 8" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                    BackgroundColor="White">
+
+                <Entry x:Name="e_nama_rekening" ClearButtonVisibility="WhileEditing" 
+                       VerticalTextAlignment="Center" Placeholder="Ex: Transportasi, Listrik, Pulsa..."></Entry>
+
+
+            </Border>
+
+
+            <Label Text="Tipe Transaksi" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
+            
+
+        </StackLayout>
+
+        <Button Text="SIMPAN Kategori" x:Name="BSimpan" Clicked="BSimpan_Clicked" 
+                FontAttributes="Bold" FontSize="18" CharacterSpacing="1" Grid.Row="1" Margin="20" 
+                CornerRadius="20" BackgroundColor="CornflowerBlue"></Button>
+    </Grid>
 </ContentPage>

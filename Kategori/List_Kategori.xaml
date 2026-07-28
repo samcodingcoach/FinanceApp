@@ -31,7 +31,7 @@
         <RefreshView x:Name="KategoriRefresh" Grid.Row="1" Refreshing="KategoriRefresh_Refreshing">
             <CollectionView x:Name="ListKategoriCollection" Margin="10,0,10,10">
                 <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="10" VerticalItemSpacing="10" />
+                    <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="0" VerticalItemSpacing="10" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
