@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FinanceApp.Kategori.List_Kategori"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             BackgroundColor="#f8fafa" NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
+    <Grid RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20">
+            <StackLayout>
+                <Label Text="List Kategori Transaksi" FontSize="18" 
+                       TextColor="CornflowerBlue"
+                       FontAttributes="Bold"></Label>
+                <Label Text="0 Items" FontSize="Small" TextColor="Grey"></Label>
+            </StackLayout>
+
+            <Image Source="more50gray.png" Grid.Column="1" HeightRequest="20" Rotation="90"></Image>
+        </Grid>
+        
+        <!--collection view dan refresh view-->
+        <Border Grid.Row="1" Padding="15" StrokeShape="RoundRectangle 15" 
+                VerticalOptions="Start" HorizontalOptions="Start"
+                Margin="20,10" Stroke="LightGrey" WidthRequest="80" 
+                StrokeThickness="0.3" BackgroundColor="DarkSlateBlue">
+            
+            <Border.Shadow>
+                <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
+            </Border.Shadow>
+
+            <StackLayout Spacing="7">
+                <!--icon-->
+                <Image Source="wallet100.png" HeightRequest="30"></Image>
+                <!--nama_kategori-->
+                <Label Text="Air PDAM" LineBreakMode="TailTruncation" TextColor="White" FontSize="14" 
+                       FontAttributes="Bold"></Label>
+            </StackLayout>
+
+        </Border>
+
+    </Grid>
+</ContentPage>
