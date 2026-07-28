@@ -22,22 +22,39 @@
             </Border>
 
             <Label Text="Nama Kategori" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
-            <Border Padding="10,0" StrokeShape="RoundRectangle 8" Stroke="#CCCCCC" StrokeThickness="0.5" 
+            <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
                     BackgroundColor="White">
 
                 <Entry x:Name="e_nama_rekening" ClearButtonVisibility="WhileEditing" 
                        VerticalTextAlignment="Center" Placeholder="Ex: Transportasi, Listrik, Pulsa..."></Entry>
+            </Border>
 
+            <Label Text="Tipe Transaksi" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
+            <Border Padding="5" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                    BackgroundColor="WhiteSmoke">
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button x:Name="BPemasukan" Clicked="BPemasukan_Clicked" CornerRadius="10" FontAttributes="Bold" Text="PEMASUKAN" TextColor="DarkGrey" Grid.Column="0" BackgroundColor="Transparent"></Button>
+                    <Button x:Name="BPengeluaran" Clicked="BPengeluaran_Clicked" Text="PENGELUARAN" FontAttributes="Bold" CornerRadius="10" Grid.Column="1" BackgroundColor="DarkCyan"></Button>
+                </Grid>
+            </Border>
 
+            
+            <Border Padding="15" Margin="0,15" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                    BackgroundColor="White">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <StackLayout VerticalOptions="Center">
+                        <Label Text="Kategori Transaksi Aktif" TextColor="#444" FontSize="16" FontAttributes="Bold"></Label>
+                        <Label Text="Muncul di daftar pilihan transaksi" TextColor="Grey" FontSize="Small"></Label>
+                    </StackLayout>
+
+                    <Switch OnColor="CornflowerBlue" VerticalOptions="Center"></Switch>
+                </Grid>
             </Border>
 
 
-            <Label Text="Tipe Transaksi" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
-            
-
         </StackLayout>
 
-        <Button Text="SIMPAN Kategori" x:Name="BSimpan" Clicked="BSimpan_Clicked" 
+        <Button Text="SIMPAN KATEGORI" x:Name="BSimpan" Clicked="BSimpan_Clicked" 
                 FontAttributes="Bold" FontSize="18" CharacterSpacing="1" Grid.Row="1" Margin="20" 
                 CornerRadius="20" BackgroundColor="CornflowerBlue"></Button>
     </Grid>
