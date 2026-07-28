@@ -56,7 +56,8 @@ public partial class List_Akun : ContentPage
 
                     if (result != null)
                     {
-                        foreach (var item in result)
+                        var sorted = result.OrderByDescending(x => x.last_update ?? x.created_at).ToList();
+                        foreach (var item in sorted)
                         {
                             _allAkun.Add(item);
                             _filteredAkun.Add(item);
@@ -100,6 +101,15 @@ public partial class List_Akun : ContentPage
     private async void FAB_Clicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new FinanceApp.Rekening.New_Rekening());
+    }
+
+    private async void ListAkunCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is AkunRekening selectedItem)
+        {
+            ListAkunCollection.SelectedItem = null;
+            await Navigation.PushAsync(new FinanceApp.Rekening.Edit_Rekening(selectedItem));
+        }
     }
 }
 

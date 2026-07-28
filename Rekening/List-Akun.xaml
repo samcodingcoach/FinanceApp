@@ -21,7 +21,7 @@
         </Border>
 
         <Grid Grid.Row="1" Margin="10,0,10,10">
-            <CollectionView x:Name="ListAkunCollection">
+            <CollectionView x:Name="ListAkunCollection" SelectionMode="Single" SelectionChanged="ListAkunCollection_SelectionChanged">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border VerticalOptions="Start" Margin="0,0,0,10" StrokeShape="RoundRectangle 10" 
