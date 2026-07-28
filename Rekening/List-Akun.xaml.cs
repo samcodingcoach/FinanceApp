@@ -96,6 +96,11 @@ public partial class List_Akun : ContentPage
             }
         }
     }
+
+    private async void FAB_Clicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new FinanceApp.Rekening.New_Rekening());
+    }
 }
 
 public class AkunRekening

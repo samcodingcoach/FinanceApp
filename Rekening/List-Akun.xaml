@@ -46,6 +46,23 @@
             </CollectionView>
         </Grid>
 
+        <!-- FAB (Floating Action Button) -->
+        <ImageButton Source="add60.png" 
+                     Grid.Row="1" 
+                     BackgroundColor="CornflowerBlue" 
+                     HorizontalOptions="End" 
+                     VerticalOptions="End" 
+                     Margin="0,0,20,30"
+                     WidthRequest="60" 
+                     HeightRequest="60" 
+                     CornerRadius="30"
+                     Padding="15"
+                     Clicked="FAB_Clicked">
+            <ImageButton.Shadow>
+                <Shadow Brush="#000000" Opacity="0.3" Radius="8" Offset="0,4" />
+            </ImageButton.Shadow>
+        </ImageButton>
+
         <!-- Overlay Loading -->
         <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#80000000" IsVisible="True" ZIndex="999">
             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">

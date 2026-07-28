@@ -12,6 +12,7 @@
 
                 <Entry x:Name="e_nama_rekening" ClearButtonVisibility="WhileEditing" 
                        VerticalTextAlignment="Center" Placeholder="Ex: Tunai, Bank Kaltim..."></Entry>
+                
 
             </Border>
             
