@@ -38,7 +38,7 @@
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                     <!--tipe-->
                     <Button x:Name="BPemasukan" Clicked="BPemasukan_Clicked" CornerRadius="10" FontAttributes="Bold" Text="PEMASUKAN" TextColor="DarkGrey" Grid.Column="0" BackgroundColor="Transparent"></Button>
-                    <Button x:Name="BPengeluaran" Clicked="BPengeluaran_Clicked" Text="PENGELUARAN" FontAttributes="Bold" CornerRadius="10" Grid.Column="1" BackgroundColor="DarkCyan"></Button>
+                    <Button x:Name="BPengeluaran" Clicked="BPengeluaran_Clicked" Text="PENGELUARAN" TextColor="White" FontAttributes="Bold" CornerRadius="10" Grid.Column="1" BackgroundColor="DarkCyan"></Button>
                 </Grid>
             </Border>
 
@@ -51,7 +51,7 @@
                         <Label Text="Muncul di daftar pilihan transaksi" TextColor="Grey" FontSize="Small"></Label>
                     </StackLayout>
                     <!--is_active-->
-                    <Switch OnColor="CornflowerBlue" VerticalOptions="Center"></Switch>
+                    <Switch x:Name="c_isactive" IsToggled="True" OnColor="CornflowerBlue" VerticalOptions="Center"></Switch>
                 </Grid>
             </Border>
 
@@ -61,5 +61,13 @@
         <Button Text="SIMPAN KATEGORI" x:Name="BSimpan" Clicked="BSimpan_Clicked" 
                 FontAttributes="Bold" FontSize="18" CharacterSpacing="1" Grid.Row="1" Margin="20" 
                 CornerRadius="20" BackgroundColor="CornflowerBlue"></Button>
+
+        <!-- Overlay Loading -->
+        <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="White" WidthRequest="50" HeightRequest="50" />
+                <Label Text="Menyimpan Data..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>
