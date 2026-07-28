@@ -14,6 +14,11 @@ public partial class List_Akun : ContentPage
     private ObservableCollection<AkunRekening> _allAkun;
     private ObservableCollection<AkunRekening> _filteredAkun;
 
+    private int _offset = 0;
+    private const int _limit = 50;
+    private bool _isLoadingMore = false;
+    private bool _hasMoreData = true;
+
     public List_Akun()
     {
         InitializeComponent();
@@ -25,18 +30,45 @@ public partial class List_Akun : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await LoadDataAsync();
+        _offset = 0;
+        _hasMoreData = true;
+        _allAkun.Clear();
+        _filteredAkun.Clear();
+        await LoadDataAsync(true);
     }
 
-    private async Task LoadDataAsync()
+    private async void AkunRefresh_Refreshing(object sender, EventArgs e)
     {
-        var delayTask = Task.Delay(3000);
+        _offset = 0;
+        _hasMoreData = true;
+        _allAkun.Clear();
+        _filteredAkun.Clear();
+        await LoadDataAsync(false);
+    }
+
+    private async void ListAkunCollection_RemainingItemsThresholdReached(object sender, EventArgs e)
+    {
+        if (_isLoadingMore || !_hasMoreData) return;
+        
+        _offset += _limit;
+        await LoadDataAsync(false);
+    }
+
+    private async Task LoadDataAsync(bool showOverlay = true)
+    {
+        if (_isLoadingMore) return;
+        _isLoadingMore = true;
+
+        if (showOverlay)
+            OverlayLoading.IsVisible = true;
+
+        var delayTask = showOverlay ? Task.Delay(3000) : Task.CompletedTask;
 
         try
         {
             var app = Application.Current as App;
             string tokenKey = app?.TOKEN_KEY ?? string.Empty;
-            string apiUrl = App.API_HOST + "akun_rekening";
+            string apiUrl = App.API_HOST + $"akun_rekening?limit={_limit}&offset={_offset}";
 
             using (var client = new HttpClient())
             {
@@ -51,18 +83,25 @@ public partial class List_Akun : ContentPage
                     string responseContent = await response.Content.ReadAsStringAsync();
                     var result = JsonConvert.DeserializeObject<List<AkunRekening>>(responseContent);
 
-                    _allAkun.Clear();
-                    _filteredAkun.Clear();
-
-                    if (result != null)
+                    if (result != null && result.Count > 0)
                     {
                         var sorted = result.OrderByDescending(x => x.last_update ?? x.created_at).ToList();
                         foreach (var item in sorted)
                         {
                             _allAkun.Add(item);
-                            _filteredAkun.Add(item);
+                        }
+
+                        if (result.Count < _limit)
+                        {
+                            _hasMoreData = false;
                         }
                     }
+                    else
+                    {
+                        _hasMoreData = false;
+                    }
+
+                    RefreshLocalFilter();
                 }
             }
         }
@@ -75,18 +114,25 @@ public partial class List_Akun : ContentPage
         }
         finally
         {
-            await delayTask;
+            if (showOverlay) await delayTask;
             
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                OverlayLoading.IsVisible = false;
+                if (showOverlay) OverlayLoading.IsVisible = false;
+                AkunRefresh.IsRefreshing = false;
+                _isLoadingMore = false;
             });
         }
     }
 
     private void T_Search_TextChanged(object sender, TextChangedEventArgs e)
     {
-        var keyword = e.NewTextValue?.ToLower() ?? string.Empty;
+        RefreshLocalFilter();
+    }
+
+    private void RefreshLocalFilter()
+    {
+        var keyword = T_Search.Text?.ToLower() ?? string.Empty;
 
         _filteredAkun.Clear();
         foreach (var item in _allAkun)
@@ -96,6 +142,14 @@ public partial class List_Akun : ContentPage
                 _filteredAkun.Add(item);
             }
         }
+
+        UpdateGrandTotal();
+    }
+
+    private void UpdateGrandTotal()
+    {
+        double total = _filteredAkun.Sum(x => x.saldo_akhir);
+        L_GrandTotal.Text = $"Rp {total.ToString("N0", new System.Globalization.CultureInfo("id-ID"))}";
     }
 
     private async void FAB_Clicked(object sender, EventArgs e)
@@ -130,5 +184,40 @@ public class AkunRekening
     public string FormattedDate => last_update.HasValue ? last_update.Value.ToString("dd MMMM yyyy HH:mm") : created_at.ToString("dd MMMM yyyy HH:mm");
 
     [JsonIgnore]
-    public string FormattedSaldo => $"Rp {saldo_akhir.ToString("N0", new System.Globalization.CultureInfo("id-ID"))}";
+    public string FormattedSaldo
+    {
+        get { return "Rp " + saldo_akhir.ToString("N0", new System.Globalization.CultureInfo("id-ID")); }
+    }
+
+    public string AvatarImage
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(nama_rekening)) return "wallet100.png";
+            
+            string lowerName = nama_rekening.ToLower();
+            if (lowerName.Contains("tunai"))
+                return "tunai100.png";
+            if (lowerName.Contains("bank"))
+                return "bank100.png";
+                
+            return "wallet100.png";
+        }
+    }
+
+    public Color AvatarColor
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(nama_rekening)) return Color.FromArgb("#8B002E");
+            
+            string lowerName = nama_rekening.ToLower();
+            if (lowerName.Contains("tunai"))
+                return Color.FromArgb("#6E9FDA");
+            if (lowerName.Contains("bank"))
+                return Color.FromArgb("#008B8B");
+                
+            return Color.FromArgb("#8B002E");
+        }
+    }
 }

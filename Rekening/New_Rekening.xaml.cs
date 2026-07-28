@@ -13,6 +13,26 @@ public partial class New_Rekening : ContentPage
         InitializeComponent();
     }
 
+    protected override bool OnBackButtonPressed()
+    {
+        HandleCancel();
+        return true;
+    }
+
+    private void Cancel_Clicked(object sender, EventArgs e)
+    {
+        HandleCancel();
+    }
+
+    private async void HandleCancel()
+    {
+        bool answer = await DisplayAlert("Konfirmasi", "Apakah Anda yakin ingin membatalkan?", "Ya", "Tidak");
+        if (answer)
+        {
+            await Navigation.PopAsync();
+        }
+    }
+
     private async void BSimpan_Clicked(object sender, EventArgs e)
     {
         string namaRekening = e_nama_rekening.Text?.Trim();

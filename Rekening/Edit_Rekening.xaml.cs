@@ -22,6 +22,26 @@ public partial class Edit_Rekening : ContentPage
         c_isactive.IsChecked = _rekening.is_active;
     }
 
+    protected override bool OnBackButtonPressed()
+    {
+        HandleCancel();
+        return true;
+    }
+
+    private void Cancel_Clicked(object sender, EventArgs e)
+    {
+        HandleCancel();
+    }
+
+    private async void HandleCancel()
+    {
+        bool answer = await DisplayAlert("Konfirmasi", "Apakah Anda yakin ingin membatalkan?", "Ya", "Tidak");
+        if (answer)
+        {
+            await Navigation.PopAsync();
+        }
+    }
+
     private void e_saldoawal_TextChanged(object sender, TextChangedEventArgs e)
     {
         if (_isFormattingSaldo) return;

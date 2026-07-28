@@ -6,7 +6,7 @@
              BackgroundColor="#f8fafa" NavigationPage.HasNavigationBar="False"
              Shell.NavBarIsVisible="False"
              >
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,*,Auto">
         <Border Grid.Row="0" Padding="10" StrokeShape="RoundRectangle 10" Margin="10" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="White">
             <Border.Shadow>
                 <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
@@ -20,23 +20,23 @@
 
         </Border>
 
-        <Grid Grid.Row="1" Margin="10,0,10,10">
-            <CollectionView x:Name="ListAkunCollection" SelectionMode="Single" SelectionChanged="ListAkunCollection_SelectionChanged">
+        <RefreshView x:Name="AkunRefresh" Grid.Row="1" Margin="10,0,10,10" Refreshing="AkunRefresh_Refreshing">
+            <CollectionView x:Name="ListAkunCollection" SelectionMode="Single" SelectionChanged="ListAkunCollection_SelectionChanged"
+                            RemainingItemsThreshold="3" RemainingItemsThresholdReached="ListAkunCollection_RemainingItemsThresholdReached">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border VerticalOptions="Start" Margin="0,0,0,10" StrokeShape="RoundRectangle 10" 
                                 Stroke="#CCCCCC" StrokeThickness="0.2" BackgroundColor="White">
                             <Grid ColumnDefinitions="Auto,*,Auto" Padding="20" ColumnSpacing="15">
-                                <toolkit:AvatarView Text="{Binding AvatarInitial}" FontAttributes="Bold" Grid.Column="0" FontSize="20" 
-                                                    BackgroundColor="CornflowerBlue" TextColor="White" />
+                                <toolkit:AvatarView ImageSource="{Binding AvatarImage}" Grid.Column="0" 
+                                                    WidthRequest="50" HeightRequest="50" CornerRadius="25"
+                                                    BackgroundColor="{Binding AvatarColor}" />
 
                                 <StackLayout Grid.Column="1" VerticalOptions="Center">
-                                    <!--nama_rekening-->
                                     <Label Text="{Binding nama_rekening}" FontSize="16" FontAttributes="Bold" TextColor="#444"></Label>
-                                    <!--last_update-->
                                     <Label Text="{Binding FormattedDate}" FontSize="Small" TextColor="Grey"></Label>
                                 </StackLayout>
-                                <!--saldo_akhir-->
+                                
                                 <Label Grid.Column="2" FontAttributes="Bold" FontSize="18" TextColor="DarkKhaki"
                                        Text="{Binding FormattedSaldo}" VerticalOptions="Center"></Label>
                             </Grid>
@@ -44,7 +44,15 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-        </Grid>
+        </RefreshView>
+
+        <!-- Bottom Grand Total (Row 2) -->
+        <Border Grid.Row="2" BackgroundColor="#2D3E50" Stroke="Transparent" Padding="20,15" Margin="0,0,0,0">
+            <Grid ColumnDefinitions="*,Auto">
+                <Label Text="TOTAL SALDO" TextColor="White" FontAttributes="Bold" VerticalOptions="Center" />
+                <Label x:Name="L_GrandTotal" Text="Rp 0" TextColor="#FFD700" FontAttributes="Bold" FontSize="18" Grid.Column="1" VerticalOptions="Center" />
+            </Grid>
+        </Border>
 
         <!-- FAB (Floating Action Button) -->
         <ImageButton Source="add60.png" 
@@ -52,7 +60,7 @@
                      BackgroundColor="CornflowerBlue" 
                      HorizontalOptions="End" 
                      VerticalOptions="End" 
-                     Margin="0,0,20,30"
+                     Margin="0,0,20,20"
                      WidthRequest="60" 
                      HeightRequest="60" 
                      CornerRadius="30"
@@ -64,7 +72,7 @@
         </ImageButton>
 
         <!-- Overlay Loading -->
-        <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#80000000" IsVisible="True" ZIndex="999">
+        <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="3" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">
             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
                 <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="White" WidthRequest="50" HeightRequest="50" />
                 <Label Text="Mohon Tunggu..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
