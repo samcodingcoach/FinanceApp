@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FinanceApp.Users.List_Users"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-            BackgroundColor="#f8fafa" NavigationPage.HasNavigationBar="False"
-            Shell.NavBarIsVisible="False">
+             BackgroundColor="#f8fafa" NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
 
     <Grid RowDefinitions="Auto,Auto,*" RowSpacing="0">
         <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20" ColumnSpacing="10" BackgroundColor="White">
@@ -27,71 +27,124 @@
                 </Image.GestureRecognizers>
             </Image>
         </Grid>
+        
         <!--filterisasi-->
-        <Grid Grid.Row="1" ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Padding="20,10" ColumnSpacing="5">
-            <Border Padding="15,5" Grid.Column="0" WidthRequest="70" StrokeShape="RoundRectangle 20" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
-                <Label Text="Semua" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="White"></Label>
-            </Border>
-            <Border Padding="15,5" Grid.Column="1" WidthRequest="60" StrokeShape="RoundRectangle 20" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
-                <Label Text="Ayah" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="#444"></Label>
-            </Border>
-            <Border Padding="15,5" Grid.Column="2" WidthRequest="60" StrokeShape="RoundRectangle 20" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
-                <Label Text="Ibu" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="#444"></Label>
-            </Border>
-            <Border Padding="15,5" Grid.Column="3" WidthRequest="60" StrokeShape="RoundRectangle 20" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
-                <Label Text="Anak" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="#444"></Label>
-            </Border>
-            <Border Padding="15,5" Grid.Column="4" WidthRequest="80" StrokeShape="RoundRectangle 20" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
-                <Label Text="Lainnya" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="#444"></Label>
-            </Border>
-        </Grid>
-        <!--collection view refresh view-->
-        <Border Padding="20" Grid.Row="2" VerticalOptions="Start" Margin="20,0" StrokeShape="RoundRectangle 15" Stroke="LightGrey" StrokeThickness="0.5" 
-            BackgroundColor="White">
-            <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="10" ColumnSpacing="12">
-                <!--jika photo null pakai avatar, jika ada pakai gambar dengan link prefix 
-                bucket_url + photo_user + {photo}-->
-                <toolkit:AvatarView Grid.Column="0" Grid.Row="0" Text="Z" BackgroundColor="CornflowerBlue" 
-                                    TextColor="White" FontSize="28">
-                    
-                </toolkit:AvatarView>
-
-                <StackLayout Grid.Column="1" Grid.Row="0" VerticalOptions="Center">
-                    <!--nama_lengkap dan username-->
-                    <Label Text="NAMA USER APPS" FontSize="16" FontAttributes="Bold" TextColor="#444"></Label>
-                    <Label Text="@username" FontSize="Small"  TextColor="Grey"></Label>
-                    
-                </StackLayout>
-
-                <Border Padding="10,0" HeightRequest="25" Grid.Column="2" StrokeShape="RoundRectangle 10" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="Green">
-                    <!--is_active true / false-->
-                    <Label Text="AKTIF"  VerticalTextAlignment="Center" FontSize="12"  HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="White"></Label>
+        <ScrollView Grid.Row="1" Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+            <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto" Padding="20,10" ColumnSpacing="5">
+                <Border x:Name="FilterSemua" Padding="15,5" Grid.Column="0" WidthRequest="70" StrokeShape="RoundRectangle 20" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Filter_Tapped" CommandParameter="Semua" />
+                    </Border.GestureRecognizers>
+                    <Label x:Name="L_FilterSemua" Text="Semua" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="White"></Label>
                 </Border>
-
-                <BoxView BackgroundColor="LightGrey" Opacity="0.5" HeightRequest="0.1" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"></BoxView>
-
-                <StackLayout Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
-                    <!--email dan role-->
-                    <Label Text="email@email.com" TextColor="Grey" FontSize="14"></Label>
-                    <Label Text="AYAH" TextColor="Grey" FontSize="14"></Label>
-                </StackLayout>
-                
-                <!--di tap membuka wa.me whatsapp-->
-                <Border Padding="15,5" Grid.Column="2" Grid.Row="2"  StrokeShape="RoundRectangle 20" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="#25D366">
-                    <StackLayout Orientation="Horizontal" Spacing="5">
-                        <Image Source="wa100.png" HeightRequest="16"></Image>
-                        <Label Text="Chat" TextColor="White" 
-                               VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
-                               FontAttributes="Bold"></Label>
-                        
-                    </StackLayout>
+                <Border x:Name="FilterAyah" Padding="15,5" Grid.Column="1" WidthRequest="65" StrokeShape="RoundRectangle 20" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Filter_Tapped" CommandParameter="Ayah" />
+                    </Border.GestureRecognizers>
+                    <Label x:Name="L_FilterAyah" Text="Ayah" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="#444"></Label>
                 </Border>
-
+                <Border x:Name="FilterIbu" Padding="15,5" Grid.Column="2" WidthRequest="60" StrokeShape="RoundRectangle 20" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Filter_Tapped" CommandParameter="Ibu" />
+                    </Border.GestureRecognizers>
+                    <Label x:Name="L_FilterIbu" Text="Ibu" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="#444"></Label>
+                </Border>
+                <Border x:Name="FilterAnak" Padding="15,5" Grid.Column="3" WidthRequest="65" StrokeShape="RoundRectangle 20" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Filter_Tapped" CommandParameter="Anak" />
+                    </Border.GestureRecognizers>
+                    <Label x:Name="L_FilterAnak" Text="Anak" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="#444"></Label>
+                </Border>
+                <Border x:Name="FilterLainnya" Padding="15,5" Grid.Column="4" WidthRequest="80" StrokeShape="RoundRectangle 20" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Filter_Tapped" CommandParameter="Lainnya" />
+                    </Border.GestureRecognizers>
+                    <Label x:Name="L_FilterLainnya" Text="Lainnya" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="#444"></Label>
+                </Border>
             </Grid>
-        </Border>
+        </ScrollView>
+        
+        <!--collection view refresh view-->
+        <RefreshView x:Name="UsersRefresh" Grid.Row="2" Refreshing="UsersRefresh_Refreshing">
+            <CollectionView x:Name="ListUsersCollection" SelectionMode="Single" SelectionChanged="ListUsersCollection_SelectionChanged" Margin="0,0,0,10">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="20" Margin="20,0" StrokeShape="RoundRectangle 15" Stroke="LightGrey" StrokeThickness="0.5" BackgroundColor="White">
+                            <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="10" ColumnSpacing="12">
+                                
+                                <toolkit:AvatarView Grid.Column="0" Grid.Row="0" Text="{Binding Initial}" 
+                                                    ImageSource="{Binding FullPhotoUrl}"
+                                                    BackgroundColor="CornflowerBlue" 
+                                                    TextColor="White" FontSize="28">
+                                </toolkit:AvatarView>
 
+                                <StackLayout Grid.Column="1" Grid.Row="0" VerticalOptions="Center">
+                                    <Label Text="{Binding nama_lengkap}" FontSize="16" FontAttributes="Bold" TextColor="#444"></Label>
+                                    <Label Text="{Binding DisplayUsername}" FontSize="Small" TextColor="Grey"></Label>
+                                </StackLayout>
 
+                                <Border Padding="10,0" HeightRequest="25" Grid.Column="2" StrokeShape="RoundRectangle 10" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="{Binding StatusColor}">
+                                    <Label Text="{Binding StatusText}" VerticalTextAlignment="Center" FontSize="12" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="White"></Label>
+                                </Border>
+
+                                <BoxView BackgroundColor="LightGrey" Opacity="0.5" HeightRequest="0.1" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"></BoxView>
+
+                                <StackLayout Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+                                    <Label Text="{Binding email}" TextColor="Grey" FontSize="14"></Label>
+                                    <Label Text="{Binding role}" TextColor="Grey" FontSize="14"></Label>
+                                </StackLayout>
+                                
+                                <!-- Chat WA -->
+                                <Border Padding="15,5" Grid.Column="2" Grid.Row="2" StrokeShape="RoundRectangle 20" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="#25D366">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="ChatWa_Tapped" CommandParameter="{Binding whatsapp}"></TapGestureRecognizer>
+                                    </Border.GestureRecognizers>
+                                    <StackLayout Orientation="Horizontal" Spacing="5" VerticalOptions="Center">
+                                        <Image Source="wa100.png" HeightRequest="16" VerticalOptions="Center"></Image>
+                                        <Label Text="Chat" TextColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold"></Label>
+                                    </StackLayout>
+                                </Border>
+
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <!-- FAB -->
+        <ImageButton Source="add60.png" 
+                     Grid.Row="1" Grid.RowSpan="2"
+                     BackgroundColor="CornflowerBlue" 
+                     HorizontalOptions="End" 
+                     VerticalOptions="End" 
+                     Margin="0,0,20,20"
+                     WidthRequest="60" 
+                     HeightRequest="60" 
+                     CornerRadius="30"
+                     Padding="15"
+                     Clicked="FAB_Clicked">
+            <ImageButton.Shadow>
+                <Shadow Brush="#000000" Opacity="0.3" Radius="8" Offset="0,4" />
+            </ImageButton.Shadow>
+        </ImageButton>
+
+        <!-- Overlay Loading -->
+        <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="3" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="White" WidthRequest="50" HeightRequest="50" />
+                <Label Text="Memuat Data..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Empty State -->
+        <VerticalStackLayout x:Name="EmptyStateView" Grid.Row="2" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="False" Spacing="10">
+            <Image Source="empty2.png" HeightRequest="150" WidthRequest="150" HorizontalOptions="Center" Opacity="0.7"></Image>
+            <Label Text="Data tidak ditemukan" TextColor="Grey" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"></Label>
+        </VerticalStackLayout>
 
     </Grid>
-
 </ContentPage>
