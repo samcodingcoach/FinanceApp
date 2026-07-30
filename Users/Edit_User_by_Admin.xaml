@@ -44,9 +44,9 @@
         </ScrollView>
 
         <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10" Margin="20,10,20,60">
-            <Button Text="HAPUS" Grid.Column="0" x:Name="BDelete"  FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
+            <Button Text="HAPUS" Grid.Column="0" x:Name="BDelete" Clicked="BDelete_Clicked"  FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
                     CornerRadius="20" BackgroundColor="IndianRed"></Button>
-            <Button Text="UPDATE" Grid.Column="1" x:Name="BSimpan"  FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
+            <Button Text="UPDATE" Grid.Column="1" x:Name="BSimpan" Clicked="BSimpan_Clicked"  FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
                     CornerRadius="20" BackgroundColor="CornflowerBlue"></Button>
 
         </Grid>

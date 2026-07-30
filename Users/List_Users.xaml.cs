@@ -209,8 +209,7 @@ public partial class List_Users : ContentPage
         if (e.CurrentSelection.FirstOrDefault() is UserModel selectedItem)
         {
             ListUsersCollection.SelectedItem = null;
-            // Navigasi edit atau detail
-            await Toast.Make($"Terpilih: {selectedItem.nama_lengkap}").Show();
+            await Navigation.PushAsync(new Edit_User_by_Admin(selectedItem));
         }
     }
 
