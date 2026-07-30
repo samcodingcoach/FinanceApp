@@ -73,6 +73,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Budget\List_Budget.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Budget\New_Budget.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Kategori\Edit_Kategori.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

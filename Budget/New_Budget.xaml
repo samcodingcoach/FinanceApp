@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FinanceApp.Budget.New_Budget"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             BackgroundColor="#f8fafa"
+             Title="Budget Baru">
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <StackLayout Grid.Row="0" Spacing="5" Padding="20">
+            <Label Text="Buat Anggaran Baru" FontAttributes="Bold" 
+                   FontSize="18"
+                   TextColor="#444"></Label>
+            <Label 
+                FontSize="Small" WidthRequest="220" HorizontalOptions="Start" TextColor="Grey"
+                Text="Atur anggaran pengeluaran dan pemasukan pada periode tanggal yang diatur"></Label>
+        </StackLayout>
+
+        <Border Grid.Row="1" Padding="20" Margin="20,0" StrokeShape="RoundRectangle 10" VerticalOptions="Start"
+                Stroke="LightGrey" StrokeThickness="0.5" BackgroundColor="White">
+
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="10" ColumnSpacing="10">
+                <StackLayout Orientation="Horizontal" Spacing="5">
+                    <Image Source="dateblue100.png" HeightRequest="14"></Image>
+                    <Label Text="PERIODE BULANAN" FontAttributes="Bold" TextColor="CornflowerBlue"></Label>
+                </StackLayout>
+
+
+                <Grid Grid.Row="1" ColumnDefinitions="*,*" Grid.ColumnSpan="2" ColumnSpacing="10">
+
+                    <Border Grid.Column="0" Padding="15,10" StrokeShape="RoundRectangle 10" VerticalOptions="Start"
+                            Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
+                        <StackLayout>
+                            <Label Text="TOTAL RENCANA" FontAttributes="Bold" TextColor="#444"></Label>
+                            <Label Text="Rp 50.000.000" FontAttributes="Bold" 
+                                   FontSize="16" HorizontalTextAlignment="Start"
+                                   TextColor="Goldenrod"></Label>
+                        </StackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Padding="15,10" StrokeShape="RoundRectangle 10" 
+                            VerticalOptions="Start" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
+                        <StackLayout>
+                            <Label Text="TOTAL PAKAI" HorizontalTextAlignment="End" FontAttributes="Bold" TextColor="#444"></Label>
+                            <Label Text="Rp 30.000.000" FontAttributes="Bold" 
+                                   FontSize="16" HorizontalTextAlignment="End"
+                                   TextColor="IndianRed" ></Label>
+                        </StackLayout>
+                    </Border>
+
+                </Grid>
+            </Grid>
+            
+        </Border>
+
+
+    </Grid>
+</ContentPage>

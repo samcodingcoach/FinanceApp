@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FinanceApp.Budget.List_Budget"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             BackgroundColor="#f8fafa" NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False"
+             >
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="10,40">
+        <Border Grid.Row="0" Padding="10" StrokeShape="RoundRectangle 10" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="White">
+            <Border.Shadow>
+                <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
+            </Border.Shadow>
+
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                <Border Grid.Column="0" Padding="0" StrokeShape="RoundRectangle 10"  Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
+                    <SearchBar Placeholder="Cari budget" x:Name="T_Search" TextChanged="T_Search_TextChanged"></SearchBar>
+                </Border>
+
+                <Image Source="date100.png" Grid.Column="1" HeightRequest="30"></Image>
+            </Grid>
+
+        </Border>
+        
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="0,10">
+            <Label Text="Daftar Budget Bulanan" FontSize="18" 
+                   FontAttributes="Bold" TextColor="#444"></Label>
+            <Label Text="4 Items" Grid.Column="1" VerticalTextAlignment="Center" 
+                   FontSize="Caption"
+                   TextColor="Grey"></Label>
+        </Grid>
+
+        <Border Grid.Row="2" Padding="20" StrokeShape="RoundRectangle 10" VerticalOptions="Start"
+                Stroke="LightGrey" StrokeThickness="0.5" BackgroundColor="White">
+
+            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="10">
+                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                    <StackLayout>
+                        <Label Text="Budget Plan September 2026" FontAttributes="Bold" FontSize="16"></Label>
+                        <Label Text="01 July 2026 - 31 July 2026" FontSize="Small" TextColor="Grey"></Label>
+                    </StackLayout>
+
+                    <Border Padding="10,0" HeightRequest="25" Grid.Column="1" StrokeShape="RoundRectangle 10" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="Green">
+                        <Label Text="AKTIF" VerticalTextAlignment="Center" FontSize="12" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="White"></Label>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10">
+
+                    <Border Grid.Column="0" Padding="15,10" StrokeShape="RoundRectangle 10" 
+                            VerticalOptions="Start"
+                            Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
+                        <StackLayout>
+                            <Label Text="TOTAL RENCANA" FontAttributes="Bold" TextColor="#444"></Label>
+                            <Label Text="Rp 50.000.000" FontAttributes="Bold" 
+                                   FontSize="16" HorizontalTextAlignment="Start"
+                                   TextColor="Goldenrod"></Label>
+                        </StackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Padding="15,10" StrokeShape="RoundRectangle 10" 
+                            VerticalOptions="Start"
+                            Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
+                        <StackLayout>
+                            <Label Text="TOTAL PAKAI" HorizontalTextAlignment="End" FontAttributes="Bold" TextColor="#444"></Label>
+                            <Label Text="Rp 30.000.000" FontAttributes="Bold" 
+                                   FontSize="16" HorizontalTextAlignment="End"
+                                   TextColor="IndianRed" ></Label>
+                        </StackLayout>
+                    </Border>
+
+                </Grid>
+
+                <Grid Grid.Row="2" ColumnDefinitions="*" RowDefinitions="Auto,Auto"  ColumnSpacing="10">
+
+                    <StackLayout Orientation="Horizontal" >
+                        <Label Text="Persentase Budget" FontAttributes="Bold" VerticalTextAlignment="Center" TextColor="Grey"></Label>
+                        <Label Text="30%" FontAttributes="Bold" FontSize="16" VerticalTextAlignment="Center"  HorizontalOptions="EndAndExpand" TextColor="Green"></Label>
+                    </StackLayout>
+
+                    <ProgressBar Grid.Row="1" Progress="0.3" ProgressColor="CornflowerBlue"></ProgressBar>
+
+
+                </Grid>
+            </Grid>
+
+        </Border>
+
+
+    </Grid>
+</ContentPage>
