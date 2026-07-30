@@ -8,22 +8,25 @@
              >
     <Grid RowDefinitions="*,Auto">
 
-        <StackLayout Grid.Row="0" Padding="20">
+        <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never">
+            <StackLayout Padding="20">
 
 
-            <toolkit:AvatarView BackgroundColor="WhiteSmoke" 
+            <toolkit:AvatarView x:Name="ImgPhoto" BackgroundColor="WhiteSmoke" 
                                 BorderColor="Grey" BorderWidth="0.3" CornerRadius="100"
                                 HeightRequest="100" WidthRequest="100"
                                 TextColor="WhiteSmoke" ImageSource="dotnet_bot.png">
-                
+                <toolkit:AvatarView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="SelectPhoto_Tapped" />
+                </toolkit:AvatarView.GestureRecognizers>
             </toolkit:AvatarView>
 
             <Label Text="Username" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
             <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
                     BackgroundColor="White">
                 <!--p_username--> <!--cegah jangan ada karakter simbol dan spasi max 15-->
-                <Entry x:Name="e_username" ClearButtonVisibility="WhileEditing" 
-                         VerticalTextAlignment="Center" Placeholder="Ex: Budiono"></Entry>
+                <Entry x:Name="e_username" ClearButtonVisibility="WhileEditing" MaxLength="15"
+                         VerticalTextAlignment="Center" Placeholder="Ex: Budiono" TextChanged="E_username_TextChanged"></Entry>
             </Border>
             
             <Label Text="Nama Lengkap" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
@@ -61,7 +64,7 @@
                     </Image>
 
                     <Entry x:Name="e_whatsapp" ClearButtonVisibility="WhileEditing" 
-                            VerticalTextAlignment="Center" Keyboard="Telephone" Placeholder="email@gmail.com"></Entry>
+                            VerticalTextAlignment="Center" Keyboard="Telephone" Placeholder="08123456789"></Entry>
 
                 </StackLayout>
             </Border>
@@ -78,11 +81,19 @@
                 </Grid>
             </Border>
 
-        </StackLayout>
+            </StackLayout>
+        </ScrollView>
 
 
-        <Button Text="SIMPAN USER" x:Name="BSimpan"
+        <Button Text="SIMPAN USER" x:Name="BSimpan" Clicked="BSimpan_Clicked"
                 FontAttributes="Bold" FontSize="18" CharacterSpacing="1" Grid.Row="1" Margin="20" 
                 CornerRadius="20" BackgroundColor="CornflowerBlue"></Button>
+
+        <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="White" WidthRequest="50" HeightRequest="50" />
+                <Label Text="Menyimpan Data..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>

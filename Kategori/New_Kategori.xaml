@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FinanceApp.Kategori.New_Kategori"
              BackgroundColor="#f8fafa"
-            
              Title="Buat Kategori Transaksi"
              >
     <Grid RowDefinitions="*,Auto">

@@ -201,7 +201,7 @@ public partial class List_Users : ContentPage
 
     private async void FAB_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new New_Users());
+        await Navigation.PushAsync(new FinanceApp.Users.New_Users());
     }
 
     private async void ListUsersCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
