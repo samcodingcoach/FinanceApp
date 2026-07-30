@@ -6,7 +6,7 @@ namespace FinanceApp.Kategori;
 
 public partial class New_Kategori : ContentPage
 {
-    private string _selectedImagePath;
+    private string? _selectedImagePath;
     private bool _isPemasukan = false;
 
     public New_Kategori()
@@ -14,10 +14,11 @@ public partial class New_Kategori : ContentPage
         InitializeComponent();
     }
 
+    [Obsolete]
     private async void SelectIcon_Tapped(object sender, TappedEventArgs e)
     {
-        await IconBorder.ScaleTo(0.95, 100);
-        await IconBorder.ScaleTo(1.0, 100);
+        await IconBorder.ScaleToAsync(0.95, 100);
+        await IconBorder.ScaleToAsync(1.0, 100);
 
         try
         {
@@ -68,7 +69,7 @@ public partial class New_Kategori : ContentPage
 
     private async void BSimpan_Clicked(object sender, EventArgs e)
     {
-        string namaKategori = e_nama_kategori.Text?.Trim();
+        string? namaKategori = e_nama_kategori.Text?.Trim();
 
         if (string.IsNullOrEmpty(namaKategori))
         {
