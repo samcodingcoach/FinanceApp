@@ -14,6 +14,15 @@ public partial class New_Users : ContentPage
         InitializeComponent();
     }
 
+    public class RegisterUserResult
+    {
+        public bool success { get; set; }
+        public string message { get; set; } = "";
+        public long user_id { get; set; }
+    }
+
+
+
     private void E_username_TextChanged(object sender, TextChangedEventArgs e)
     {
         if (string.IsNullOrEmpty(e.NewTextValue)) return;
@@ -141,25 +150,58 @@ public partial class New_Users : ContentPage
                     p_whatsapp = whatsapp ?? ""
                 };
 
-                var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), System.Text.Encoding.UTF8, "application/json");
+                var jsonContent = new StringContent(
+     JsonConvert.SerializeObject(payload),
+     System.Text.Encoding.UTF8,
+     "application/json");
+
                 var dbResponse = await client.PostAsync(dbUrl, jsonContent);
 
-                if (dbResponse.IsSuccessStatusCode || dbResponse.StatusCode == System.Net.HttpStatusCode.Created)
+                // HTTP Error
+                if (!dbResponse.IsSuccessStatusCode)
                 {
-                    await Toast.Make("Berhasil menyimpan user").Show();
-                    
-                    // Jeda 3 detik sesuai instruksi untuk propagasi data/storage
-                    await Task.Delay(3000);
+                    string errDb = await dbResponse.Content.ReadAsStringAsync();
 
-                    MainThread.BeginInvokeOnMainThread(async () =>
-                    {
-                        await Navigation.PopAsync();
-                    });
+                    await Toast.Make($"Gagal simpan user : {dbResponse.StatusCode}")
+                        .Show();
+
+                    return;
+                }
+
+                // Ambil JSON dari RPC
+                string responseJson = await dbResponse.Content.ReadAsStringAsync();
+
+                var result =
+                    JsonConvert.DeserializeObject<List<RegisterUserResult>>(responseJson);
+
+                if (result == null || result.Count == 0)
+                {
+                    await Toast.Make("Response server kosong").Show();
+                    return;
+                }
+
+                var data = result[0];
+
+                if (data.success)
+                {
+                    await Toast.Make(data.message).Show();
+
+                    await Task.Delay(1500);
+
+                    await Navigation.PopAsync();
                 }
                 else
                 {
-                    string errDb = await dbResponse.Content.ReadAsStringAsync();
-                    await Toast.Make($"Gagal simpan user: {dbResponse.StatusCode}").Show();
+                    await Toast.Make(data.message).Show();
+
+                    if (data.message.Contains("Username", StringComparison.OrdinalIgnoreCase))
+                    {
+                        e_username.Focus();
+                    }
+                    else if (data.message.Contains("Email", StringComparison.OrdinalIgnoreCase))
+                    {
+                        e_email.Focus();
+                    }
                 }
             }
         }
