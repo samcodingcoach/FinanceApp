@@ -99,8 +99,83 @@ public partial class Edit_User_by_Admin : ContentPage
         }
     }
 
+    private bool _isDeleting = false;
+
     private async void BDelete_Clicked(object sender, EventArgs e)
     {
-        // lakukan delete 
+        _isDeleting = true;
+        OverlayDelete.IsVisible = true;
+        BCancelDelete.IsVisible = true;
+        
+        for (int i = 5; i > 0; i--)
+        {
+            if (!_isDeleting) return; // dibatalkan
+            L_DeleteCountdown.Text = $"Menghapus dalam {i}...";
+            await Task.Delay(1000);
+        }
+
+        if (!_isDeleting) return; // dibatalkan pada detik terakhir
+        
+        // Mulai proses delete
+        L_DeleteCountdown.Text = "Menghapus...";
+        BCancelDelete.IsVisible = false; // Tombol batal dihilangkan
+        
+        await PerformDeleteAsync();
+    }
+
+    private void BCancelDelete_Clicked(object sender, EventArgs e)
+    {
+        _isDeleting = false;
+        OverlayDelete.IsVisible = false;
+    }
+
+    private async Task PerformDeleteAsync()
+    {
+        try
+        {
+            var app = Application.Current as App;
+            string tokenKey = app?.TOKEN_KEY ?? string.Empty;
+
+            using (var client = new HttpClient())
+            {
+                // DELETE: API_HOST + users?id_users=eq.X 
+                string deleteUrl = $"{App.API_HOST}/users?id_users=eq.{_user.id_users}";
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenKey);
+                client.DefaultRequestHeaders.Add("apikey", tokenKey);
+
+                var response = await client.DeleteAsync(deleteUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    await Toast.Make("Berhasil menghapus user").Show();
+                    
+                    // Jeda 3 detik
+                    await Task.Delay(3000);
+
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await Navigation.PopAsync();
+                    });
+                }
+                else
+                {
+                    string errDb = await response.Content.ReadAsStringAsync();
+                    await Toast.Make($"Gagal menghapus: {response.StatusCode}").Show();
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        OverlayDelete.IsVisible = false;
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await Toast.Make($"Terjadi kesalahan: {ex.Message}").Show();
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                OverlayDelete.IsVisible = false;
+            });
+        }
     }
 }

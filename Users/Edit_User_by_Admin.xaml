@@ -57,5 +57,12 @@
                 <Label Text="Menyimpan Data..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
             </VerticalStackLayout>
         </Grid>
+
+        <Grid x:Name="OverlayDelete" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#E6000000" IsVisible="False" ZIndex="1000">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="20">
+                <Label x:Name="L_DeleteCountdown" Text="Menghapus dalam 5..." TextColor="White" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+                <Button Text="BATALKAN" x:Name="BCancelDelete" Clicked="BCancelDelete_Clicked" BackgroundColor="Transparent" BorderColor="White" BorderWidth="2" TextColor="White" CornerRadius="20" WidthRequest="150" FontAttributes="Bold"></Button>
+            </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>
