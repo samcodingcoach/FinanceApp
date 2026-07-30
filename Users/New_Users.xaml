@@ -12,81 +12,106 @@
             <StackLayout Padding="20">
 
 
-            <toolkit:AvatarView x:Name="ImgPhoto" BackgroundColor="WhiteSmoke" 
-                                BorderColor="Grey" BorderWidth="0.3" CornerRadius="100"
-                                HeightRequest="100" WidthRequest="100"
-                                TextColor="WhiteSmoke" ImageSource="dotnet_bot.png">
-                <toolkit:AvatarView.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="SelectPhoto_Tapped" />
-                </toolkit:AvatarView.GestureRecognizers>
-            </toolkit:AvatarView>
+                <toolkit:AvatarView x:Name="ImgPhoto" BackgroundColor="WhiteSmoke" 
+                            BorderColor="Grey" BorderWidth="0.3" CornerRadius="100"
+                            HeightRequest="100" WidthRequest="100"
+                            TextColor="WhiteSmoke" ImageSource="dotnet_bot.png">
+                    <toolkit:AvatarView.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="SelectPhoto_Tapped" />
+                    </toolkit:AvatarView.GestureRecognizers>
+                </toolkit:AvatarView>
 
-            <Label Text="Username" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
-            <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                <Label Text="Username" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
+                <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                        BackgroundColor="White">
+                    <!--p_username-->
+                    <!--cegah jangan ada karakter simbol dan spasi max 15-->
+                    <Entry x:Name="e_username" ClearButtonVisibility="WhileEditing" MaxLength="15"
+                             VerticalTextAlignment="Center" Placeholder="Ex: Budiono" TextChanged="E_username_TextChanged"></Entry>
+                </Border>
+
+                <Label Text="Nama Lengkap" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
+                <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                        BackgroundColor="White">
+                    <!--p_nama_lengkap-->
+                    <Entry x:Name="e_nama_lengkap" ClearButtonVisibility="WhileEditing" 
+                             VerticalTextAlignment="Center" Placeholder="Ex: Budiono Siregar Kapal Laut"></Entry>
+                </Border>
+
+                <Label Text="Peran" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
+                <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
                     BackgroundColor="White">
-                <!--p_username--> <!--cegah jangan ada karakter simbol dan spasi max 15-->
-                <Entry x:Name="e_username" ClearButtonVisibility="WhileEditing" MaxLength="15"
-                         VerticalTextAlignment="Center" Placeholder="Ex: Budiono" TextChanged="E_username_TextChanged"></Entry>
-            </Border>
-            
-            <Label Text="Nama Lengkap" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
-            <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
-                    BackgroundColor="White">
-                <!--p_nama_lengkap--> 
-                <Entry x:Name="e_nama_lengkap" ClearButtonVisibility="WhileEditing" 
-                         VerticalTextAlignment="Center" Placeholder="Ex: Budiono Siregar Kapal Laut"></Entry>
-            </Border>
-            
-            <Label Text="Email" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
-            <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
-                    BackgroundColor="White">
-                <!--p_email--> <!--wajib gmail.com-->
-                <StackLayout Orientation="Horizontal" Spacing="5">
+                    <!--p_role-->
+                    <StackLayout Orientation="Horizontal">
+                        <Picker x:Name="e_picker_role" Title="Pilih Peran Role">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>AYAH</x:String>
+                                    <x:String>IBU</x:String>
+                                    <x:String>ANAK</x:String>
+                                    <x:String>LAINNYA</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
 
-                    <Image Source="email100.png" HeightRequest="20">
-                        
-                    </Image>
+                        <Image Source="chevron100.png" HeightRequest="20" Opacity="0.7" HorizontalOptions="EndAndExpand"></Image>
 
-                    <Entry x:Name="e_email" ClearButtonVisibility="WhileEditing" 
-                            VerticalTextAlignment="Center" Placeholder="email@gmail.com"></Entry>
 
-                </StackLayout>
-            </Border>
-            
-            <Label Text="Nomor Handphone" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
-            <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
-                    BackgroundColor="White">
-                <!--p_email--> <!--wajib gmail.com-->
-                <StackLayout Orientation="Horizontal" Spacing="5">
-
-                    <Image Source="phone100.png" HeightRequest="20">
-                        
-                    </Image>
-
-                    <Entry x:Name="e_whatsapp" ClearButtonVisibility="WhileEditing" 
-                            VerticalTextAlignment="Center" Keyboard="Telephone" Placeholder="08123456789"></Entry>
-
-                </StackLayout>
-            </Border>
-
-            <Border Padding="15" Margin="0,15" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
-                    BackgroundColor="White">
-                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                    <StackLayout VerticalOptions="Center">
-                        <Label Text="User Aktif" TextColor="#444" FontSize="16" FontAttributes="Bold"></Label>
-                        <Label Text="Izinkan pengguna user ini mengakses sistem" TextColor="Grey" FontSize="Small"></Label>
                     </StackLayout>
-                    <!--is_active-->
-                    <Switch x:Name="c_isactive" IsToggled="True" OnColor="CornflowerBlue" VerticalOptions="Center"></Switch>
-                </Grid>
-            </Border>
+
+                </Border>
+
+                <Label Text="Email" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
+                <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                        BackgroundColor="White">
+                    <!--p_email-->
+                    <!--wajib gmail.com-->
+                    <StackLayout Orientation="Horizontal" Spacing="5">
+
+                        <Image Source="email100.png" HeightRequest="20">
+
+                        </Image>
+
+                        <Entry x:Name="e_email"  
+                                VerticalTextAlignment="Center" Placeholder="email@gmail.com"></Entry>
+
+                    </StackLayout>
+                </Border>
+
+                <Label Text="Nomor Handphone" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
+                <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                        BackgroundColor="White">
+                    <!--p_email-->
+                    <!--wajib gmail.com-->
+                    <StackLayout Orientation="Horizontal" Spacing="5">
+
+                        <Image Source="phone100.png" HeightRequest="20">
+
+                        </Image>
+
+                        <Entry x:Name="e_whatsapp"
+                                VerticalTextAlignment="Center" Keyboard="Telephone" Placeholder="08123456789"></Entry>
+
+                    </StackLayout>
+                </Border>
+                <Border Padding="15" Margin="0,15" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                        BackgroundColor="White">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <StackLayout VerticalOptions="Center">
+                            <Label Text="User Aktif" TextColor="#444" FontSize="16" FontAttributes="Bold"></Label>
+                            <Label Text="Izinkan pengguna user ini mengakses sistem" TextColor="Grey" FontSize="Small"></Label>
+                        </StackLayout>
+                        <!--is_active-->
+                        <Switch x:Name="c_isactive" IsToggled="True" OnColor="CornflowerBlue" VerticalOptions="Center"></Switch>
+                    </Grid>
+                </Border>
 
             </StackLayout>
         </ScrollView>
 
 
         <Button Text="SIMPAN USER" x:Name="BSimpan" Clicked="BSimpan_Clicked"
-                FontAttributes="Bold" FontSize="18" CharacterSpacing="1" Grid.Row="1" Margin="20" 
+                FontAttributes="Bold" FontSize="18" CharacterSpacing="1" Grid.Row="1" Margin="20,10,20,60" 
                 CornerRadius="20" BackgroundColor="CornflowerBlue"></Button>
 
         <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">

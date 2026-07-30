@@ -6,7 +6,7 @@
              BackgroundColor="#f8fafa" NavigationPage.HasNavigationBar="False"
              Shell.NavBarIsVisible="False">
 
-    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="0" Margin="0,20">
+    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="0">
         <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20" ColumnSpacing="10" BackgroundColor="White">
             <!-- Title Mode -->
             <StackLayout x:Name="StackLayoutTitle" IsVisible="True">
@@ -66,7 +66,7 @@
         
         <!--collection view refresh view-->
         <RefreshView x:Name="UsersRefresh" Grid.Row="2" Refreshing="UsersRefresh_Refreshing">
-            <CollectionView x:Name="ListUsersCollection" SelectionMode="Single" SelectionChanged="ListUsersCollection_SelectionChanged" Margin="0,0,0,10">
+            <CollectionView x:Name="ListUsersCollection" SelectionMode="Single" SelectionChanged="ListUsersCollection_SelectionChanged" Margin="0,0,0,40">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
                 </CollectionView.ItemsLayout>
@@ -116,12 +116,12 @@
         </RefreshView>
 
         <!-- FAB -->
-        <ImageButton Source="add60.png" TranslationY="-20" 
+        <ImageButton Source="add60.png" 
                      Grid.Row="2"
                      BackgroundColor="CornflowerBlue" 
                      HorizontalOptions="End" 
                      VerticalOptions="End" 
-                     Margin="0,0,20,20"
+                     Margin="0,0,20,60"
                      WidthRequest="60" 
                      HeightRequest="60" 
                      CornerRadius="30"

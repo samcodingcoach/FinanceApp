@@ -26,6 +26,7 @@ public partial class New_Users : ContentPage
         }
     }
 
+    [Obsolete]
     private async void SelectPhoto_Tapped(object sender, TappedEventArgs e)
     {
         try
@@ -74,14 +75,12 @@ public partial class New_Users : ContentPage
             return;
         }
 
-        if (string.IsNullOrEmpty(_selectedImagePath))
+        string safeFileName = "";
+        if (!string.IsNullOrEmpty(_selectedImagePath))
         {
-            await Toast.Make("Silakan pilih foto profil terlebih dahulu").Show();
-            return;
+            string originalFileName = Path.GetFileName(_selectedImagePath);
+            safeFileName = originalFileName.Replace(" ", "");
         }
-
-        string originalFileName = Path.GetFileName(_selectedImagePath);
-        string safeFileName = originalFileName.Replace(" ", "");
 
         OverlayLoading.IsVisible = true;
 
@@ -92,38 +91,51 @@ public partial class New_Users : ContentPage
 
             using (var client = new HttpClient())
             {
-                // TAHAP 1: Upload Gambar ke photo_user/
-                string uploadUrl = $"https://oiotjlunbaohzypbslla.supabase.co/storage/v1/object/photo_user/{safeFileName}";
-                
+                // Pasang Header Wajib Supabase
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenKey);
                 client.DefaultRequestHeaders.Add("apikey", tokenKey);
-                client.DefaultRequestHeaders.Add("x-upsert", "true");
 
-                var content = new ByteArrayContent(File.ReadAllBytes(_selectedImagePath));
-                content.Headers.ContentType = new MediaTypeHeaderValue("image/png");
-
-                var uploadResponse = await client.PostAsync(uploadUrl, content);
-
-                if (!uploadResponse.IsSuccessStatusCode)
+                // TAHAP 1: Upload Gambar ke photo_user/ (jika ada)
+                if (!string.IsNullOrEmpty(_selectedImagePath))
                 {
-                    string err = await uploadResponse.Content.ReadAsStringAsync();
-                    await Toast.Make($"Gagal upload foto: {uploadResponse.StatusCode}").Show();
-                    OverlayLoading.IsVisible = false;
-                    return;
+                    string uploadUrl = $"{App.API_HOST}/object/photo_user/{safeFileName}";
+                    
+                    client.DefaultRequestHeaders.Add("x-upsert", "true");
+
+                    var content = new ByteArrayContent(File.ReadAllBytes(_selectedImagePath));
+                    content.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+
+                    var uploadResponse = await client.PostAsync(uploadUrl, content);
+
+                    if (!uploadResponse.IsSuccessStatusCode)
+                    {
+                        string err = await uploadResponse.Content.ReadAsStringAsync();
+                        await Toast.Make($"Gagal upload foto: {uploadResponse.StatusCode}").Show();
+                        OverlayLoading.IsVisible = false;
+                        return;
+                    }
                 }
 
                 // TAHAP 2: Simpan Data ke Table via RPC
                 client.DefaultRequestHeaders.Remove("x-upsert");
                 client.DefaultRequestHeaders.Add("Prefer", "return=representation");
 
-                string dbUrl = App.API_HOST_USER; 
+                string? selectedRole = e_picker_role.SelectedItem?.ToString();
+                if (string.IsNullOrEmpty(selectedRole))
+                {
+                    await Toast.Make("Silakan pilih peran (role) terlebih dahulu").Show();
+                    OverlayLoading.IsVisible = false;
+                    return;
+                }
+
+                string? dbUrl = App.API_HOST_USER;
                 var payload = new
                 {
                     p_username = username,
                     p_password = "123456", // default sesuai contoh
                     p_email = email,
                     p_is_active = c_isactive.IsToggled,
-                    p_role = "Lainnya", // default role
+                    p_role = selectedRole,
                     p_nama_lengkap = namaLengkap,
                     p_photo = safeFileName,
                     p_whatsapp = whatsapp ?? ""
