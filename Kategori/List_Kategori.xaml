@@ -57,7 +57,7 @@
 
         <!-- FAB -->
         <ImageButton Source="add60.png" 
-                     Grid.Row="1" 
+                     Grid.Row="1" Grid.RowSpan="2"
                      BackgroundColor="CornflowerBlue" 
                      HorizontalOptions="End" 
                      VerticalOptions="End" 

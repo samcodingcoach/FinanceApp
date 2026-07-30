@@ -8,12 +8,15 @@ namespace FinanceApp.Users;
 public partial class List_Users : ContentPage
 {
     private ObservableCollection<UserModel> _allUsers;
+    private ObservableCollection<UserModel> _displayUsers;
     private string _currentFilter = "Semua";
 
     public List_Users()
     {
-        InitializeComponent();
         _allUsers = new ObservableCollection<UserModel>();
+        _displayUsers = new ObservableCollection<UserModel>();
+        InitializeComponent();
+        ListUsersCollection.ItemsSource = _displayUsers;
     }
 
     protected override void OnAppearing()
@@ -131,6 +134,8 @@ public partial class List_Users : ContentPage
 
     private void RefreshLocalFilter()
     {
+        if (_allUsers == null || _displayUsers == null) return;
+
         var keyword = T_Search.Text?.ToLower() ?? string.Empty;
 
         var filtered = _allUsers.Where(u => 
@@ -144,10 +149,15 @@ public partial class List_Users : ContentPage
                  u.role?.Equals(_currentFilter, StringComparison.OrdinalIgnoreCase) == true))
         ).ToList();
 
-        ListUsersCollection.ItemsSource = filtered;
-        L_ItemCount.Text = $"{filtered.Count} Items";
+        _displayUsers.Clear();
+        foreach(var item in filtered)
+        {
+            _displayUsers.Add(item);
+        }
+
+        L_ItemCount.Text = $"{_displayUsers.Count} Items";
         
-        EmptyStateView.IsVisible = filtered.Count == 0;
+        EmptyStateView.IsVisible = _displayUsers.Count == 0;
     }
 
     private void T_Search_TextChanged(object sender, TextChangedEventArgs e)
@@ -160,8 +170,8 @@ public partial class List_Users : ContentPage
         var img = sender as Image;
         if (img == null) return;
 
-        await img.ScaleTo(0.8, 100);
-        await img.ScaleTo(1, 100);
+        await img.ScaleToAsync(0.8, 100);
+        await img.ScaleToAsync(1, 100);
 
         if (img.Source.ToString().Contains("close100.png"))
         {
@@ -173,7 +183,7 @@ public partial class List_Users : ContentPage
         }
         else
         {
-            string action = await DisplayActionSheet("Opsi", "Batal", null, "Search");
+            string action = await DisplayActionSheetAsync("Opsi", "Batal", null, "Search");
             if (action == "Search")
             {
                 StackLayoutTitle.IsVisible = false;
@@ -191,8 +201,7 @@ public partial class List_Users : ContentPage
 
     private async void FAB_Clicked(object sender, EventArgs e)
     {
-        // Akan navigasi ke New_Users di masa depan, saat ini dummy toast
-        await Toast.Make("Fungsi Tambah User belum tersedia").Show();
+        await Navigation.PushAsync(new New_Users());
     }
 
     private async void ListUsersCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)

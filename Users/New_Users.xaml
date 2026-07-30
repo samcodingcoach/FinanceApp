@@ -2,11 +2,87 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FinanceApp.Users.New_Users"
-             Title="New_Users">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             BackgroundColor="#f8fafa" NavigationPage.HasBackButton="False" 
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Title="Buat User Baru"
+             >
+    <Grid RowDefinitions="*,Auto">
+
+        <StackLayout Grid.Row="0" Padding="20">
+
+
+            <toolkit:AvatarView BackgroundColor="WhiteSmoke" 
+                                BorderColor="Grey" BorderWidth="0.3" CornerRadius="100"
+                                HeightRequest="100" WidthRequest="100"
+                                TextColor="WhiteSmoke" ImageSource="dotnet_bot.png">
+                
+            </toolkit:AvatarView>
+
+            <Label Text="Username" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
+            <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                    BackgroundColor="White">
+                <!--p_username--> <!--cegah jangan ada karakter simbol dan spasi max 15-->
+                <Entry x:Name="e_username" ClearButtonVisibility="WhileEditing" 
+                         VerticalTextAlignment="Center" Placeholder="Ex: Budiono"></Entry>
+            </Border>
+            
+            <Label Text="Nama Lengkap" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
+            <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                    BackgroundColor="White">
+                <!--p_nama_lengkap--> 
+                <Entry x:Name="e_nama_lengkap" ClearButtonVisibility="WhileEditing" 
+                         VerticalTextAlignment="Center" Placeholder="Ex: Budiono Siregar Kapal Laut"></Entry>
+            </Border>
+            
+            <Label Text="Email" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
+            <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                    BackgroundColor="White">
+                <!--p_email--> <!--wajib gmail.com-->
+                <StackLayout Orientation="Horizontal" Spacing="5">
+
+                    <Image Source="email100.png" HeightRequest="20">
+                        
+                    </Image>
+
+                    <Entry x:Name="e_email" ClearButtonVisibility="WhileEditing" 
+                            VerticalTextAlignment="Center" Placeholder="email@gmail.com"></Entry>
+
+                </StackLayout>
+            </Border>
+            
+            <Label Text="Nomor Handphone" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
+            <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                    BackgroundColor="White">
+                <!--p_email--> <!--wajib gmail.com-->
+                <StackLayout Orientation="Horizontal" Spacing="5">
+
+                    <Image Source="phone100.png" HeightRequest="20">
+                        
+                    </Image>
+
+                    <Entry x:Name="e_whatsapp" ClearButtonVisibility="WhileEditing" 
+                            VerticalTextAlignment="Center" Keyboard="Telephone" Placeholder="email@gmail.com"></Entry>
+
+                </StackLayout>
+            </Border>
+
+            <Border Padding="15" Margin="0,15" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                    BackgroundColor="White">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <StackLayout VerticalOptions="Center">
+                        <Label Text="User Aktif" TextColor="#444" FontSize="16" FontAttributes="Bold"></Label>
+                        <Label Text="Izinkan pengguna user ini mengakses sistem" TextColor="Grey" FontSize="Small"></Label>
+                    </StackLayout>
+                    <!--is_active-->
+                    <Switch x:Name="c_isactive" IsToggled="True" OnColor="CornflowerBlue" VerticalOptions="Center"></Switch>
+                </Grid>
+            </Border>
+
+        </StackLayout>
+
+
+        <Button Text="SIMPAN USER" x:Name="BSimpan"
+                FontAttributes="Bold" FontSize="18" CharacterSpacing="1" Grid.Row="1" Margin="20" 
+                CornerRadius="20" BackgroundColor="CornflowerBlue"></Button>
+    </Grid>
 </ContentPage>
