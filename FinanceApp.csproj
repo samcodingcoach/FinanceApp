@@ -91,6 +91,9 @@
 	  <MauiXaml Update="Rekening\New_Rekening.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Users\Edit_User_by_Admin.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Users\List_Users.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

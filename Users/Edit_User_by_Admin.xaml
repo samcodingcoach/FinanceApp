@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FinanceApp.Users.Edit_User_by_Admin"
+             BackgroundColor="#f8fafa" NavigationPage.HasBackButton="False" 
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Title="Edit User">
+    
+    <Grid RowDefinitions="*,Auto">
+
+        <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never">
+            <StackLayout Padding="20">
+
+
+                <toolkit:AvatarView x:Name="ImgPhoto" BackgroundColor="WhiteSmoke" 
+                            BorderColor="Grey" BorderWidth="0.3" CornerRadius="100"
+                            HeightRequest="100" WidthRequest="100"
+                            TextColor="WhiteSmoke" ImageSource="dotnet_bot.png">
+                    <toolkit:AvatarView.GestureRecognizers>
+                        <TapGestureRecognizer />
+                    </toolkit:AvatarView.GestureRecognizers>
+                </toolkit:AvatarView>
+
+                <Label Text="Username" Margin="0,15,0,10" FontAttributes="Bold" TextColor="#444"></Label>
+                <Border Padding="10,0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                        BackgroundColor="WhiteSmoke">
+                    <!--p_username: disabled/readonly usually for edit, but let's make it editable if admin wants-->
+                    <Entry x:Name="e_username" ClearButtonVisibility="WhileEditing" MaxLength="15" IsReadOnly="True"
+                             VerticalTextAlignment="Center" Placeholder="Ex: Budiono"></Entry>
+                </Border>
+                
+                <Border Padding="15" Margin="0,15" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                        BackgroundColor="White">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <StackLayout VerticalOptions="Center">
+                            <Label Text="User Aktif" TextColor="#444" FontSize="16" FontAttributes="Bold"></Label>
+                            <Label Text="Izinkan pengguna user ini mengakses sistem" TextColor="Grey" FontSize="Small"></Label>
+                        </StackLayout>
+                        <Switch x:Name="c_isactive" IsToggled="True" OnColor="CornflowerBlue" VerticalOptions="Center"></Switch>
+                    </Grid>
+                </Border>
+
+            </StackLayout>
+        </ScrollView>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10" Margin="20,10,20,60">
+            <Button Text="HAPUS" Grid.Column="0" x:Name="BDelete"  FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
+                    CornerRadius="20" BackgroundColor="IndianRed"></Button>
+            <Button Text="UPDATE" Grid.Column="1" x:Name="BSimpan"  FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
+                    CornerRadius="20" BackgroundColor="CornflowerBlue"></Button>
+
+        </Grid>
+
+        <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="White" WidthRequest="50" HeightRequest="50" />
+                <Label Text="Menyimpan Data..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>
