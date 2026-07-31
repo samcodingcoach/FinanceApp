@@ -6,4 +6,9 @@ public partial class New_Budget : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private void BSimpan_Clicked(object sender, EventArgs e)
+    {
+
+    }
 }
