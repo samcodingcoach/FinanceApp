@@ -90,6 +90,11 @@ public partial class List_Budget : ContentPage
         LoadData();
     }
 
+    private async void FAB_Clicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new FinanceApp.Budget.New_Budget());
+    }
+
     private void T_Search_TextChanged(object sender, TextChangedEventArgs e)
     {
         RefreshDisplay();

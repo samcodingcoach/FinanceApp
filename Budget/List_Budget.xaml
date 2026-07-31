@@ -90,6 +90,22 @@
             </CollectionView>
         </RefreshView>
 
+        <!-- FAB -->
+        <ImageButton Source="add60.png" 
+                     Grid.Row="2"
+                     BackgroundColor="CornflowerBlue" 
+                     HorizontalOptions="End" 
+                     VerticalOptions="End" 
+                     Margin="0,0,10,0"
+                     WidthRequest="60" 
+                     HeightRequest="60" 
+                     CornerRadius="30"
+                     Padding="15"
+                     Clicked="FAB_Clicked">
+            <ImageButton.Shadow>
+                <Shadow Brush="#000000" Opacity="0.3" Radius="8" Offset="0,4" />
+            </ImageButton.Shadow>
+        </ImageButton>
 
     </Grid>
 </ContentPage>
