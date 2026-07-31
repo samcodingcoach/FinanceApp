@@ -5,7 +5,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              BackgroundColor="#f8fafa"
              Title="Budget Baru">
-    <Grid RowDefinitions="Auto,*,Auto">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto">
 
         <StackLayout Grid.Row="0" Spacing="5" Padding="20">
             <Label Text="Buat Anggaran Baru" FontAttributes="Bold" 
@@ -28,22 +28,25 @@
 
                 <Grid Grid.Row="1" ColumnDefinitions="*,*" Grid.ColumnSpan="2" ColumnSpacing="10">
 
-                    <Border Grid.Column="0" Padding="15,10" StrokeShape="RoundRectangle 10" VerticalOptions="Start"
+                    <Border Grid.Column="0" HeightRequest="70" Padding="15,10" StrokeShape="RoundRectangle 10" VerticalOptions="Start"
                             Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
                         <StackLayout>
-                            <Label Text="TOTAL RENCANA" FontAttributes="Bold" TextColor="#444"></Label>
-                            <Label Text="Rp 50.000.000" FontAttributes="Bold" 
-                                   FontSize="16" HorizontalTextAlignment="Start"
-                                   TextColor="Goldenrod"></Label>
+                            <Label Text="Periode Awal" FontAttributes="Bold" TextColor="#444"></Label>
+                            <StackLayout Orientation="Horizontal" Spacing="5">
+                                <DatePicker x:Name="DateStart" Format="dd/MM/yyyy" VerticalOptions="Center"></DatePicker>
+                                <Image Source="date100.png" HeightRequest="16" TranslationY="-2"></Image>
+                            </StackLayout>
                         </StackLayout>
                     </Border>
-                    <Border Grid.Column="1" Padding="15,10" StrokeShape="RoundRectangle 10" 
+                    <Border Grid.Column="1" HeightRequest="70" Padding="15,10" StrokeShape="RoundRectangle 10" 
                             VerticalOptions="Start" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
                         <StackLayout>
-                            <Label Text="TOTAL PAKAI" HorizontalTextAlignment="End" FontAttributes="Bold" TextColor="#444"></Label>
-                            <Label Text="Rp 30.000.000" FontAttributes="Bold" 
-                                   FontSize="16" HorizontalTextAlignment="End"
-                                   TextColor="IndianRed" ></Label>
+                            <Label Text="Periode Akhir" HorizontalTextAlignment="Start" 
+                                   FontAttributes="Bold" TextColor="#444"></Label>
+                            <StackLayout Orientation="Horizontal" Spacing="5">
+                                <DatePicker x:Name="DateEnd" Format="dd/MM/yyyy" VerticalOptions="Center"></DatePicker>
+                                <Image Source="date100.png" HeightRequest="16" TranslationY="-2"></Image>
+                            </StackLayout>
                         </StackLayout>
                     </Border>
 
@@ -52,6 +55,49 @@
             
         </Border>
 
+        <Border Grid.Row="2" Padding="20" Margin="20,10,20,0" StrokeShape="RoundRectangle 10" VerticalOptions="Start"
+                 Stroke="LightGrey" StrokeThickness="0.5" BackgroundColor="White">
+
+            <StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="5">
+                    <Image Source="budget100.png" HeightRequest="14"></Image>
+                    <Label Text="NOMINAL ANGGARAN" FontAttributes="Bold" TextColor="CornflowerBlue"></Label>
+                </StackLayout>
+
+                <Label Margin="0,15,0,5" Text="Planned Budget (TOTAL RENCANA)" TextColor="#444" FontAttributes="Bold"></Label>
+                <Border Padding="10,0" StrokeShape="RoundRectangle 8" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                        BackgroundColor="WhiteSmoke">
+
+                    <Entry x:Name="e_totalrencana" Keyboard="Numeric" ClearButtonVisibility="WhileEditing" 
+                            VerticalTextAlignment="Center" Placeholder="Ex: 100000..." ></Entry>
+
+                </Border>
+            </StackLayout>
+
+        </Border>
+        
+        <Border Grid.Row="3" Padding="20" Margin="20,10,20,0" StrokeShape="RoundRectangle 10" VerticalOptions="Start"
+                 Stroke="LightGrey" StrokeThickness="0.5" BackgroundColor="White">
+
+            <StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="5">
+                    <Image Source="note48.png" HeightRequest="14"></Image>
+                    <Label Text="DETAILS" FontAttributes="Bold" TextColor="CornflowerBlue"></Label>
+                </StackLayout>
+
+                <Label Margin="0,15,0,5" Text="Keterangan Anggaran" TextColor="#444" FontAttributes="Bold"></Label>
+                <Border Padding="10,0"  StrokeShape="RoundRectangle 8" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                        BackgroundColor="WhiteSmoke">
+
+                    <Editor Placeholder="Optional" HeightRequest="80"></Editor>
+
+                </Border>
+            </StackLayout>
+
+        </Border>
+
+        <Button Grid.Row="4" Text="SIMPAN ANGGARAN BARU" x:Name="BSimpan" Clicked="BSimpan_Clicked" FontAttributes="Bold" FontSize="18" CharacterSpacing="1" Margin="20,10,20,10" 
+                CornerRadius="20" BackgroundColor="CornflowerBlue"></Button>
 
     </Grid>
 </ContentPage>
