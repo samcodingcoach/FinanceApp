@@ -18,6 +18,52 @@ public partial class New_Budget : ContentPage
         DateEnd.Date = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
     }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        LoadTotalSaldo();
+    }
+
+    private async void LoadTotalSaldo()
+    {
+        try
+        {
+            var app = Application.Current as App;
+            string tokenKey = app?.TOKEN_KEY ?? string.Empty;
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenKey);
+                client.DefaultRequestHeaders.Add("apikey", tokenKey);
+
+                string url = $"{App.API_HOST}/total_saldo_akhir";
+                var response = await client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var data = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(json);
+
+                    if (data != null && data.Count > 0 && data[0].ContainsKey("total"))
+                    {
+                        var totalVal = data[0]["total"];
+                        if (totalVal != null && double.TryParse(totalVal.ToString(), out double total))
+                        {
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                L_TotalSaldo.Text = $"Rp {total.ToString("N0", new System.Globalization.CultureInfo("id-ID"))}";
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"LoadTotalSaldo Error: {ex.Message}");
+        }
+    }
+
     private bool _isFormattingSaldo = false;
 
     private void e_totalrencana_TextChanged(object sender, TextChangedEventArgs e)
