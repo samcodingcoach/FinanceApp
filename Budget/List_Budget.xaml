@@ -31,7 +31,7 @@
         </Grid>
 
         <RefreshView x:Name="BudgetRefresh" Grid.Row="2" Refreshing="BudgetRefresh_Refreshing">
-            <CollectionView x:Name="ListBudgetCollection" SelectionMode="Single">
+            <CollectionView x:Name="ListBudgetCollection" SelectionMode="None">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
                 </CollectionView.ItemsLayout>
