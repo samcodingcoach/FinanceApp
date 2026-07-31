@@ -36,11 +36,14 @@
             <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="10">
                 <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
                     <StackLayout>
+                        <!--deskripsi-->
                         <Label Text="Budget Plan September 2026" FontAttributes="Bold" FontSize="16"></Label>
+                        <!--periode_awal - periode_akhir-->
                         <Label Text="01 July 2026 - 31 July 2026" FontSize="Small" TextColor="Grey"></Label>
                     </StackLayout>
 
                     <Border Padding="10,0" HeightRequest="25" Grid.Column="1" StrokeShape="RoundRectangle 10" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="Green">
+                        <!--is_active-->
                         <Label Text="AKTIF" VerticalTextAlignment="Center" FontSize="12" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="White"></Label>
                     </Border>
                 </Grid>
@@ -52,7 +55,8 @@
                             Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
                         <StackLayout>
                             <Label Text="TOTAL RENCANA" FontAttributes="Bold" TextColor="#444"></Label>
-                            <Label Text="Rp 50.000.000" FontAttributes="Bold" 
+                            <!--total_rencana-->
+                            <Label Text="Rp 0" FontAttributes="Bold" 
                                    FontSize="16" HorizontalTextAlignment="Start"
                                    TextColor="Goldenrod"></Label>
                         </StackLayout>
@@ -62,7 +66,8 @@
                             Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
                         <StackLayout>
                             <Label Text="TOTAL PAKAI" HorizontalTextAlignment="End" FontAttributes="Bold" TextColor="#444"></Label>
-                            <Label Text="Rp 30.000.000" FontAttributes="Bold" 
+                            <!--total_pemakaian-->
+                            <Label Text="Rp 0" FontAttributes="Bold" 
                                    FontSize="16" HorizontalTextAlignment="End"
                                    TextColor="IndianRed" ></Label>
                         </StackLayout>
@@ -71,7 +76,7 @@
                 </Grid>
 
                 <Grid Grid.Row="2" ColumnDefinitions="*" RowDefinitions="Auto,Auto"  ColumnSpacing="10">
-
+                    <!--kalkulasi budget-->
                     <StackLayout Orientation="Horizontal" >
                         <Label Text="Persentase Budget" FontAttributes="Bold" VerticalTextAlignment="Center" TextColor="Grey"></Label>
                         <Label Text="30%" FontAttributes="Bold" FontSize="16" VerticalTextAlignment="Center"  HorizontalOptions="EndAndExpand" TextColor="Green"></Label>
