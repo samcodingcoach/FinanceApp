@@ -18,6 +18,8 @@ public partial class New_Budget : ContentPage
         DateEnd.Date = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
     }
 
+    private decimal _totalSaldo = 0;
+
     protected override void OnAppearing()
     {
         base.OnAppearing();
@@ -47,8 +49,9 @@ public partial class New_Budget : ContentPage
                     if (data != null && data.Count > 0 && data[0].ContainsKey("total"))
                     {
                         var totalVal = data[0]["total"];
-                        if (totalVal != null && double.TryParse(totalVal.ToString(), out double total))
+                        if (totalVal != null && decimal.TryParse(totalVal.ToString(), out decimal total))
                         {
+                            _totalSaldo = total;
                             MainThread.BeginInvokeOnMainThread(() =>
                             {
                                 L_TotalSaldo.Text = $"Rp {total.ToString("N0", new System.Globalization.CultureInfo("id-ID"))}";
@@ -100,6 +103,12 @@ public partial class New_Budget : ContentPage
         if (!decimal.TryParse(rawNominal, out decimal totalRencana))
         {
             await Toast.Make("Total rencana tidak valid").Show();
+            return;
+        }
+
+        if (totalRencana > _totalSaldo)
+        {
+            await Toast.Make("Total rencana tidak boleh melebihi total saldo").Show();
             return;
         }
 

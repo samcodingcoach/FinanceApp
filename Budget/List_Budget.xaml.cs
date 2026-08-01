@@ -99,7 +99,27 @@ public partial class List_Budget : ContentPage
     {
         RefreshDisplay();
     }
-}
+
+    private async void TapFilterDate_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is Image image)
+        {
+            await image.FadeToAsync(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeToAsync(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+
+           
+
+                var page = new Budget.Bottom_Sheet_FilterDate();
+                page.HasHandle = true;
+                page.HasBackdrop = true;
+                //page.HandleColor = Color.FromArgb()
+                _ = page.ShowAsync(Window);
+
+
+            }
+        }
+    }
+
 
 public class BudgetModel
 {

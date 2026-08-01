@@ -17,7 +17,11 @@
                     <SearchBar Placeholder="Cari budget" x:Name="T_Search" TextChanged="T_Search_TextChanged"></SearchBar>
                 </Border>
 
-                <Image Source="date100.png" Grid.Column="1" HeightRequest="30"></Image>
+                <Image Source="date100.png" Grid.Column="1" HeightRequest="30">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="TapFilterDate" Tapped="TapFilterDate_Tapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
             </Grid>
 
         </Border>
