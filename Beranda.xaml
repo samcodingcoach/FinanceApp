@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+            
+             x:Class="FinanceApp.Beranda"
+             BackgroundColor="#f5fbf5" NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView Margin="0,30,0,0">
+        <StackLayout Padding="20" Spacing="20">
+            
+            <!-- Total Balance Card -->
+            <Border StrokeThickness="0" StrokeShape="RoundRectangle 20" BackgroundColor="CornflowerBlue" Padding="24" HeightRequest="180">
+                <Border.Shadow>
+                    <Shadow Brush="Chocolate" Opacity="0.4" Radius="10" Offset="0,4" />
+                </Border.Shadow>
+                <Grid>
+                    <!-- Background Icon -->
+                    <Image Source="wallet100.png" Opacity="0.1" HorizontalOptions="End" VerticalOptions="Start" 
+                           WidthRequest="120" HeightRequest="120" Margin="0,-30,-10,-30" Rotation="180" />
+
+                    <VerticalStackLayout>
+                        <Label Text="TOTAL SALDO" FontSize="12" FontAttributes="Bold" TextColor="#e6ffffff" CharacterSpacing="1" />
+                        <Label Text="Rp 5.250.000" FontSize="32" FontAttributes="Bold" TextColor="White" Margin="0,5,0,0" />
+                        
+                        <HorizontalStackLayout Spacing="16" Margin="0,24,0,0">
+                            <!-- Top Up Button -->
+                            <Border BackgroundColor="#33ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 8" Padding="16,8">
+                                <HorizontalStackLayout Spacing="8">
+                                    <Image Source="add_white.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center"/>
+                                    <Label Text="Isi Saldo" FontSize="12" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer />
+                                </Border.GestureRecognizers>
+                            </Border>
+
+                            <!-- Transfer Button -->
+                            <Border BackgroundColor="#33ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 8" Padding="16,8">
+                                <HorizontalStackLayout Spacing="8">
+                                    <Image Source="send_white.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center"/>
+                                    <Label Text="Kirim" FontSize="12" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer />
+                                </Border.GestureRecognizers>
+                            </Border>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Income & Expense Summary Bento -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+                <!-- Income -->
+                <Border Grid.Column="0" BackgroundColor="#ffffff" Stroke="#f1f5f9" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="5">
+                            <Image Source="arrow_down_green.png" WidthRequest="20" HeightRequest="20"/>
+                            <Label Text="Pemasukan" FontSize="12" FontAttributes="Bold" TextColor="#006948" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Label Text="Rp 12.000.000" FontSize="16" FontAttributes="Bold" TextColor="#171d19" />
+                    </VerticalStackLayout>
+                </Border>
+                
+                <!-- Expense -->
+                <Border Grid.Column="1" BackgroundColor="#ffffff" Stroke="#f1f5f9" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="5">
+                            <Image Source="arrow_up_red.png" WidthRequest="20" HeightRequest="20"/>
+                            <Label Text="Pengeluaran" FontSize="12" FontAttributes="Bold" TextColor="#ba5551" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Label Text="Rp 6.750.000" FontSize="16" FontAttributes="Bold" TextColor="#171d19" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- Budgeting Progress -->
+            <Border BackgroundColor="#ffffff" Stroke="#f1f5f9" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                <Border.Shadow>
+                    <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+                </Border.Shadow>
+                <VerticalStackLayout Spacing="16">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Anggaran Bulanan" FontSize="18" FontAttributes="Bold" TextColor="#171d19" />
+                        <Label Grid.Column="1" Text="Terpakai 65%" FontSize="14" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalOptions="Center" />
+                    </Grid>
+                    
+                    <ProgressBar Progress="0.65" ProgressColor="#006948" BackgroundColor="#e4eae4" HeightRequest="8" />
+                    
+                    <Label Text="Tersisa Rp 1.500.000 untuk bulan ini." FontSize="14" TextColor="#3d4a42" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Recent Documents Section (Horizontal) -->
+            <VerticalStackLayout Spacing="16">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Grid.Column="0" Text="Dokumen Terakhir" FontSize="18" FontAttributes="Bold" TextColor="#171d19" />
+                    <Label Grid.Column="1" Text="Lihat Semua" FontSize="14" FontAttributes="Bold" TextColor="#006948" VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+
+                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                    <HorizontalStackLayout x:Name="HS_DokumenTerakhir" Spacing="16" Padding="4">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="#ffffff" Stroke="#f1f5f9" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16" WidthRequest="160">
+                                    <Border.Shadow>
+                                        <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+                                    </Border.Shadow>
+                                    <VerticalStackLayout Spacing="12">
+                                        <Border BackgroundColor="{Binding IconBgColor}" StrokeThickness="0" StrokeShape="RoundRectangle 8" WidthRequest="120" HeightRequest="120" HorizontalOptions="Center">
+                                            <Image Source="{Binding IconImage}" WidthRequest="40" HeightRequest="40" VerticalOptions="Center" HorizontalOptions="Center" />
+                                        </Border>
+                                        <VerticalStackLayout Spacing="4">
+                                            <Label Text="{Binding Judul}" FontSize="16" FontAttributes="Bold" TextColor="#171d19" LineBreakMode="TailTruncation" />
+                                            <Label Text="{Binding Tanggal}" FontSize="14" TextColor="#3d4a42" />
+                                        </VerticalStackLayout>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </HorizontalStackLayout>
+                </ScrollView>
+            </VerticalStackLayout>
+
+            <!-- Recent Transactions Section (Vertical) -->
+            <VerticalStackLayout Spacing="16">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Grid.Column="0" Text="Transaksi Terakhir" FontSize="18" FontAttributes="Bold" TextColor="#171d19" />
+                    <Label Grid.Column="1" Text="Lihat Semua" FontSize="14" FontAttributes="Bold" TextColor="#006948" VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+
+                <VerticalStackLayout x:Name="VS_TransaksiTerakhir" Spacing="8">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <ContentView Padding="4">
+                                <Border BackgroundColor="#ffffff" Stroke="#f1f5f9" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                                    <Border.Shadow>
+                                        <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+                                    </Border.Shadow>
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16">
+                                        <Border Grid.Column="0" BackgroundColor="{Binding IconBgColor}" StrokeThickness="0" StrokeShape="RoundRectangle 20" WidthRequest="40" HeightRequest="40">
+                                            <Image Source="{Binding IconImage}" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" HorizontalOptions="Center" />
+                                        </Border>
+                                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                            <Label Text="{Binding Judul}" FontSize="16" FontAttributes="Bold" TextColor="#171d19" />
+                                            <Label Text="{Binding Tanggal}" FontSize="14" TextColor="#3d4a42" />
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="2" Text="{Binding Nominal}" FontSize="16" FontAttributes="Bold" TextColor="{Binding NominalColor}" VerticalOptions="Center" />
+                                    </Grid>
+                                </Border>
+                            </ContentView>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

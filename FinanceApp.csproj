@@ -74,6 +74,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Beranda.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Budget\Bottom_Sheet_FilterDate.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
