@@ -47,7 +47,7 @@
         </Grid>
 
         <Button Grid.Row="2" Margin="0,10" BackgroundColor="CornflowerBlue" Text="CARI PERIODE" Grid.ColumnSpan="2" 
-                FontSize="18"
+                FontSize="18" Clicked="BtnCari_Clicked"
                 FontAttributes="Bold"></Button>
     </Grid>
 </the49:BottomSheet>

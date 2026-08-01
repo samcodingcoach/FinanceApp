@@ -25,7 +25,7 @@ public partial class List_Budget : ContentPage
         LoadData();
     }
 
-    private async void LoadData()
+    private async void LoadData(string filterQuery = "")
     {
         BudgetRefresh.IsRefreshing = true;
         try
@@ -36,6 +36,11 @@ public partial class List_Budget : ContentPage
             using (var client = new HttpClient())
             {
                 string url = $"{App.API_HOST}/budget";
+                if (!string.IsNullOrEmpty(filterQuery))
+                {
+                    url += filterQuery;
+                }
+                
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenKey);
                 client.DefaultRequestHeaders.Add("apikey", tokenKey);
 
@@ -69,6 +74,12 @@ public partial class List_Budget : ContentPage
         {
             BudgetRefresh.IsRefreshing = false;
         }
+    }
+
+    public void LoadDataWithFilter(string startFormat, string endFormat)
+    {
+        string filter = $"?is_active=eq.true&periode_awal=lte.{endFormat}&periode_akhir=gte.{startFormat}";
+        LoadData(filter);
     }
 
     private void RefreshDisplay()
@@ -107,19 +118,14 @@ public partial class List_Budget : ContentPage
             await image.FadeToAsync(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
             await image.FadeToAsync(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
 
-           
-
-                var page = new Budget.Bottom_Sheet_FilterDate();
-                page.HasHandle = true;
-                page.HasBackdrop = true;
-                //page.HandleColor = Color.FromArgb()
-                _ = page.ShowAsync(Window);
-
-
-            }
+            var page = new Budget.Bottom_Sheet_FilterDate(this);
+            page.HasHandle = true;
+            page.HasBackdrop = true;
+            //page.HandleColor = Color.FromArgb()
+            _ = page.ShowAsync(Window);
         }
     }
-
+}
 
 public class BudgetModel
 {
