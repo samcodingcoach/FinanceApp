@@ -28,7 +28,7 @@
                             <!-- Top Up Button -->
                             <Border BackgroundColor="#33ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 8" Padding="16,8">
                                 <HorizontalStackLayout Spacing="8">
-                                    <Image Source="add_white.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center"/>
+                                    <Image Source="add60.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center"/>
                                     <Label Text="Isi Saldo" FontSize="12" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                                 <Border.GestureRecognizers>
@@ -39,7 +39,7 @@
                             <!-- Transfer Button -->
                             <Border BackgroundColor="#33ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 8" Padding="16,8">
                                 <HorizontalStackLayout Spacing="8">
-                                    <Image Source="send_white.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center"/>
+                                    <Image Source="transfer1.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center"/>
                                     <Label Text="Kirim" FontSize="12" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                                 <Border.GestureRecognizers>
@@ -99,32 +99,70 @@
                 </VerticalStackLayout>
             </Border>
 
+            <!-- Member Spending Ranking -->
+            <VerticalStackLayout Spacing="16">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Grid.Column="0" Text="Pengeluaran Anggota" FontSize="18" FontAttributes="Bold" TextColor="#171d19" />
+                    <Label Grid.Column="1" Text="View All" FontSize="14" FontAttributes="Bold" TextColor="#006948" VerticalOptions="Center" />
+                </Grid>
+
+                <Border BackgroundColor="#ffffff" Stroke="#dee4de" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+                    </Border.Shadow>
+                    <VerticalStackLayout x:Name="VS_PengeluaranAnggota" Spacing="16">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <VerticalStackLayout Spacing="8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <HorizontalStackLayout Grid.Column="0" Spacing="12">
+                                            <Border BackgroundColor="{Binding AvatarBgColor}" StrokeThickness="0" StrokeShape="RoundRectangle 16" WidthRequest="32" HeightRequest="32" VerticalOptions="Center">
+                                                <Label Text="{Binding Urutan}" FontSize="12" FontAttributes="Bold" TextColor="{Binding AvatarTextColor}" HorizontalOptions="Center" VerticalOptions="Center" />
+                                            </Border>
+                                            <Label Text="{Binding Nama}" FontSize="16" FontAttributes="Bold" TextColor="#171d19" VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                        <Label Grid.Column="1" Text="{Binding Nominal}" FontSize="18" FontAttributes="Bold" TextColor="{Binding NominalColor}" VerticalOptions="Center" />
+                                    </Grid>
+                                    <ProgressBar Progress="{Binding ProgressValue}" ProgressColor="{Binding ProgressColor}" BackgroundColor="#e9efe9" HeightRequest="8" />
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+
             <!-- Recent Documents Section (Horizontal) -->
             <VerticalStackLayout Spacing="16">
                 <Grid ColumnDefinitions="*,Auto">
                     <Label Grid.Column="0" Text="Dokumen Terakhir" FontSize="18" FontAttributes="Bold" TextColor="#171d19" />
-                    <Label Grid.Column="1" Text="Lihat Semua" FontSize="14" FontAttributes="Bold" TextColor="#006948" VerticalOptions="Center">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer />
-                        </Label.GestureRecognizers>
-                    </Label>
                 </Grid>
 
                 <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                     <HorizontalStackLayout x:Name="HS_DokumenTerakhir" Spacing="16" Padding="4">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
-                                <Border BackgroundColor="#ffffff" Stroke="#f1f5f9" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16" WidthRequest="160">
+                                <Border BackgroundColor="#ffffff" Stroke="#dee4de" StrokeThickness="1" StrokeShape="RoundRectangle 12" WidthRequest="256" Padding="0">
                                     <Border.Shadow>
                                         <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
                                     </Border.Shadow>
-                                    <VerticalStackLayout Spacing="12">
-                                        <Border BackgroundColor="{Binding IconBgColor}" StrokeThickness="0" StrokeShape="RoundRectangle 8" WidthRequest="120" HeightRequest="120" HorizontalOptions="Center">
-                                            <Image Source="{Binding IconImage}" WidthRequest="40" HeightRequest="40" VerticalOptions="Center" HorizontalOptions="Center" />
-                                        </Border>
-                                        <VerticalStackLayout Spacing="4">
+                                    <VerticalStackLayout>
+                                        <!-- Image Header -->
+                                        <Grid HeightRequest="128" BackgroundColor="#e9efe9">
+                                            <Image Source="{Binding ImageUrl}" Aspect="AspectFill" Opacity="0.8" />
+                                        </Grid>
+                                        
+                                        <!-- Content -->
+                                        <VerticalStackLayout Padding="16" Spacing="4">
                                             <Label Text="{Binding Judul}" FontSize="16" FontAttributes="Bold" TextColor="#171d19" LineBreakMode="TailTruncation" />
-                                            <Label Text="{Binding Tanggal}" FontSize="14" TextColor="#3d4a42" />
+                                            <Label Text="{Binding Subtitle}" FontSize="14" TextColor="#3d4a42" />
+                                            
+                                            <Grid ColumnDefinitions="Auto,*" Margin="0,8,0,0">
+                                                <Border Grid.Column="0" BackgroundColor="{Binding StatusBgColor}" StrokeThickness="0" StrokeShape="RoundRectangle 4" Padding="8,2" VerticalOptions="Center">
+                                                    <Label Text="{Binding StatusText}" FontSize="10" FontAttributes="Bold" TextColor="{Binding StatusTextColor}" TextTransform="Uppercase" />
+                                                </Border>
+                                                <!-- We'll use a text-based material icon approximation or an image if available -->
+                                                <Label Grid.Column="1" Text="{Binding ActionIcon}" FontFamily="MaterialIcons" FontSize="20" TextColor="#006948" HorizontalOptions="End" VerticalOptions="Center" />
+                                            </Grid>
                                         </VerticalStackLayout>
                                     </VerticalStackLayout>
                                 </Border>
