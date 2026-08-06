@@ -53,30 +53,34 @@
 
                     <Border StrokeShape="RoundRectangle 10" Padding="10,10,10,10"  Stroke="#ccc" StrokeThickness="0.5" BackgroundColor="White">
                         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" Padding="0"  RowDefinitions="Auto,Auto" RowSpacing="5">
-                            <!--gambar di kasih corner radius. pdf1.png jika gambar null--> 
+                            <!--foto_transaksi--> <!--gambar di kasih corner radius. pdf1.png jika gambar null--> 
                             <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="Transparent" HeightRequest="80" WidthRequest="80" VerticalOptions="Start" Padding="0">
                                 <Image Source="contohnota.jpg" Aspect="AspectFill"></Image>
                             </Border>
 
                             <StackLayout Grid.Column="1" Grid.Row="0" Spacing="5">
+                                <!--keterangan-->
                                 <Label Text="Makan Siang Nasi Padang di warung UPIK Samarinda Seberang" FontAttributes="Bold" FontSize="16" TextColor="#444" LineBreakMode="TailTruncation" MaxLines="2"></Label>
+                                <!--no_faktur--><!--created_at ambil jamnya format 24--> 
                                 <Label Text="#NOTA1234 / 11:30 WIB" FontSize="Small" TextColor="Grey" FontAttributes="Bold"></Label>
                             </StackLayout>
-
+                            <!--total transaksi--> <!--tipe true adalah pengeluaran makan simbol - dan warna orange red, tipe false adalah pemasukan makan simbol + dan warna green-->
                             <Label Text="- RP 10.030.000" Grid.Column="2" Grid.Row="0" 
                                    HorizontalOptions="End" HorizontalTextAlignment="End" 
                                    FontSize="18"
                                    FontAttributes="Bold" 
                                    TextColor="OrangeRed"></Label>
-
+                            <!--nama kategori-->
                             <Label Text="Makan &amp; Minum" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalOptions="Center"
                                    Grid.Column="1" Grid.Row="1"></Label>
-
+                            
                             <StackLayout Orientation="Horizontal" Spacing="10" Grid.Column="2" Grid.Row="1" HorizontalOptions="End">
+                                <!--role-->
                                 <Border  Padding="12,5"  StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
                                     <Label Text="Ayah" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
                                 </Border>
                                 <Border  Padding="12,5"  StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="MediumVioletRed">
+                                    <!--nama_rekening-->
                                     <Label Text="Shopee Pay" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
                                 </Border>
                             </StackLayout>
