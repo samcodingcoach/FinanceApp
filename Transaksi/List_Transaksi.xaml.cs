@@ -11,4 +11,9 @@ public partial class List_Transaksi : ContentPage
     {
 
     }
+
+    private async void BtnAdd_Clicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new New_Transaksi());
+    }
 }
