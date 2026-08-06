@@ -24,71 +24,84 @@
                 <Border Grid.Row="1" Padding="10,-7"  HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="#ccc" StrokeThickness="1" BackgroundColor="WhiteSmoke">
                     <StackLayout Orientation="Horizontal" Spacing="4">
                         <Image Source="date100.png" HeightRequest="16"></Image>
-                        <DatePicker Format="MMMM yyyy" FontAttributes="Bold" VerticalOptions="Center" TextColor="#444" FontSize="14"></DatePicker>
+                        <DatePicker x:Name="MonthPicker" Format="MMMM yyyy" FontAttributes="Bold" VerticalOptions="Center" TextColor="#444" FontSize="14" DateSelected="MonthPicker_DateSelected"></DatePicker>
                         <Image Source="chevron100.png" HeightRequest="16" Margin="10,0,0,0"></Image>
                     </StackLayout>
                 </Border>
 
                 <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="5">
-                    <Border Grid.Column="0" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
+                    <Border x:Name="TabSemua" Grid.Column="0" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TabFilter_Tapped" CommandParameter="Semua" />
+                        </Border.GestureRecognizers>
                         <Label Text="Semua" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
                     </Border>
-                    <Border Grid.Column="1" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="#bccbe6">
+                    <Border x:Name="TabPemasukan" Grid.Column="1" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="#bccbe6">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TabFilter_Tapped" CommandParameter="Pemasukan" />
+                        </Border.GestureRecognizers>
                         <Label Text="Pemasukan" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
                     </Border>
-                    <Border Grid.Column="2" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="#bccbe6">
+                    <Border x:Name="TabPengeluaran" Grid.Column="2" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="#bccbe6">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TabFilter_Tapped" CommandParameter="Pengeluaran" />
+                        </Border.GestureRecognizers>
                         <Label Text="Pengeluaran" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
                     </Border>
                 </Grid>
                 
                 
                 <!--data list-->
-                <StackLayout Grid.Row="3" Spacing="10">
-                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="5">
-                        <Label Text="Hari ini" FontAttributes="Bold" Grid.Column="0" Grid.Row="0" TextColor="Grey" FontSize="16"></Label>
-                        <Label Text="6 Agustus 2026" FontAttributes="Bold" Grid.Column="1" HorizontalOptions="End" HorizontalTextAlignment="End" Grid.Row="0" TextColor="Grey" FontSize="16"></Label>
-                        <BoxView Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
-                                 BackgroundColor="Grey" HeightRequest="0.5" Opacity="0.3"></BoxView>
-                    </Grid>
+                <StackLayout Grid.Row="3" Spacing="10" x:Name="ListContainer">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Spacing="10">
+                                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="5">
+                                    <Label Text="{Binding DateRelative}" FontAttributes="Bold" Grid.Column="0" Grid.Row="0" TextColor="Grey" FontSize="16"></Label>
+                                    <Label Text="{Binding DateDisplay}" FontAttributes="Bold" Grid.Column="1" HorizontalOptions="End" HorizontalTextAlignment="End" Grid.Row="0" TextColor="Grey" FontSize="16"></Label>
+                                    <BoxView Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
+                                             BackgroundColor="Grey" HeightRequest="0.5" Opacity="0.3"></BoxView>
+                                </Grid>
+                                
+                                <StackLayout BindableLayout.ItemsSource="{Binding Items}">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border StrokeShape="RoundRectangle 10" Padding="0,10,10,10" Margin="0,0,0,10" Stroke="#ccc" StrokeThickness="0.5" BackgroundColor="White">
+                                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" Padding="0"  RowDefinitions="Auto,Auto" RowSpacing="5">
+                                                    <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="#f0f0f0" HeightRequest="80" WidthRequest="80" VerticalOptions="Start" Padding="0">
+                                                        <Image Source="{Binding ImageSource}" Aspect="AspectFill"></Image>
+                                                    </Border>
+                                                    
+                                                    <StackLayout Grid.Column="1" Grid.Row="0" Spacing="5">
+                                                        <Label Text="{Binding TitleDisplay}" FontAttributes="Bold" FontSize="16" TextColor="#444" LineBreakMode="TailTruncation" MaxLines="2"></Label>
+                                                        <Label Text="{Binding SubtitleDisplay}" FontSize="Small" TextColor="Grey" FontAttributes="Bold"></Label>
+                                                    </StackLayout>
 
-                    <Border StrokeShape="RoundRectangle 10" Padding="10,10,10,10"  Stroke="#ccc" StrokeThickness="0.5" BackgroundColor="White">
-                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" Padding="0"  RowDefinitions="Auto,Auto" RowSpacing="5">
-                            <!--foto_transaksi--> <!--gambar di kasih corner radius. pdf1.png jika gambar null--> 
-                            <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="Transparent" HeightRequest="80" WidthRequest="80" VerticalOptions="Start" Padding="0">
-                                <Image Source="contohnota.jpg" Aspect="AspectFill"></Image>
-                            </Border>
+                                                    <Label Text="{Binding NominalDisplay}" Grid.Column="2" Grid.Row="0" 
+                                                           HorizontalOptions="End" HorizontalTextAlignment="End" 
+                                                           FontSize="18"
+                                                           FontAttributes="Bold" 
+                                                           TextColor="{Binding NominalColor}"></Label>
 
-                            <StackLayout Grid.Column="1" Grid.Row="0" Spacing="5">
-                                <!--keterangan-->
-                                <Label Text="Makan Siang Nasi Padang di warung UPIK Samarinda Seberang" FontAttributes="Bold" FontSize="16" TextColor="#444" LineBreakMode="TailTruncation" MaxLines="2"></Label>
-                                <!--no_faktur--><!--created_at ambil jamnya format 24--> 
-                                <Label Text="#NOTA1234 / 11:30 WIB" FontSize="Small" TextColor="Grey" FontAttributes="Bold"></Label>
+                                                    <Label Text="{Binding nama_kategori}" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalOptions="Center"
+                                                           Grid.Column="1" Grid.Row="1"></Label>
+
+                                                    <StackLayout Orientation="Horizontal" Spacing="10" Grid.Column="2" Grid.Row="1" HorizontalOptions="End">
+                                                        <Border Padding="12,5" StrokeShape="RoundRectangle 10" Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
+                                                            <Label Text="{Binding role}" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
+                                                        </Border>
+                                                        <Border Padding="12,5" StrokeShape="RoundRectangle 10" Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="MediumVioletRed">
+                                                            <Label Text="{Binding nama_rekening}" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
+                                                        </Border>
+                                                    </StackLayout>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </StackLayout>
                             </StackLayout>
-                            <!--total transaksi--> <!--tipe true adalah pengeluaran makan simbol - dan warna orange red, tipe false adalah pemasukan makan simbol + dan warna green-->
-                            <Label Text="- RP 10.030.000" Grid.Column="2" Grid.Row="0" 
-                                   HorizontalOptions="End" HorizontalTextAlignment="End" 
-                                   FontSize="18"
-                                   FontAttributes="Bold" 
-                                   TextColor="OrangeRed"></Label>
-                            <!--nama kategori-->
-                            <Label Text="Makan &amp; Minum" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalOptions="Center"
-                                   Grid.Column="1" Grid.Row="1"></Label>
-                            
-                            <StackLayout Orientation="Horizontal" Spacing="10" Grid.Column="2" Grid.Row="1" HorizontalOptions="End">
-                                <!--role-->
-                                <Border  Padding="12,5"  StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
-                                    <Label Text="Ayah" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
-                                </Border>
-                                <Border  Padding="12,5"  StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="MediumVioletRed">
-                                    <!--nama_rekening-->
-                                    <Label Text="Shopee Pay" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
-                                </Border>
-                            </StackLayout>
-                            
-                            <!--data selanjutnya pakai hr line jika ada data selanjutnya-->
-                        </Grid>
-                    </Border>
-
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
                 </StackLayout>
             </Grid>
         </ScrollView>
