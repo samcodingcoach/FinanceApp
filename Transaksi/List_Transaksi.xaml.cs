@@ -6,4 +6,9 @@ public partial class List_Transaksi : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private void T_Search_TextChanged(object sender, TextChangedEventArgs e)
+    {
+
+    }
 }

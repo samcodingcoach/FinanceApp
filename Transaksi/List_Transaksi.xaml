@@ -2,11 +2,81 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FinanceApp.Transaksi.List_Transaksi"
-             Title="List_Transaksi">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             BackgroundColor="#f8fafa"
+             NavigationPage.HasNavigationBar="False" Shell.NavBarIsVisible="False">
+
+    <ScrollView Margin="0,30,0,30">
+        <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="10" RowSpacing="7">
+            <Border Grid.Row="0" Padding="10" StrokeShape="RoundRectangle 10"  Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="White">
+                <Border.Shadow>
+                    <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
+                </Border.Shadow>
+
+                <Grid ColumnDefinitions="*" ColumnSpacing="10">
+                    <Border Grid.Column="0" Padding="0" StrokeShape="RoundRectangle 10"  Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
+                        <SearchBar Placeholder="Cari Transaksi" x:Name="T_Search" TextChanged="T_Search_TextChanged"></SearchBar>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1" Padding="10,-7"  HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="#ccc" StrokeThickness="1" BackgroundColor="WhiteSmoke">
+                <StackLayout Orientation="Horizontal" Spacing="4">
+                    <Image Source="date100.png" HeightRequest="16"></Image>
+                    <DatePicker Format="MMMM yyyy" FontAttributes="Bold" VerticalOptions="Center" TextColor="#444" FontSize="14"></DatePicker>
+                    <Image Source="chevron100.png" HeightRequest="16" Margin="10,0,0,0"></Image>
+                </StackLayout>
+            </Border>
+
+            <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="5">
+                <Border Grid.Column="0" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
+                    <Label Text="Semua" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
+                </Border>
+                <Border Grid.Column="1" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="#bccbe6">
+                    <Label Text="Pemasukan" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
+                </Border>
+                <Border Grid.Column="2" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="#bccbe6">
+                    <Label Text="Pengeluaran" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
+                </Border>
+            </Grid>
+            
+            
+            <!--data list-->
+            <StackLayout Grid.Row="3" Spacing="10">
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="5">
+                    <Label Text="Hari ini" FontAttributes="Bold" Grid.Column="0" Grid.Row="0" TextColor="Grey" FontSize="16"></Label>
+                    <Label Text="6 Agustus 2026" FontAttributes="Bold" Grid.Column="1" HorizontalOptions="End" HorizontalTextAlignment="End" Grid.Row="0" TextColor="Grey" FontSize="16"></Label>
+                    <BoxView Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
+                             BackgroundColor="Grey" HeightRequest="0.5" Opacity="0.3"></BoxView>
+                </Grid>
+
+                <Border StrokeShape="RoundRectangle 10" Padding="0,10,10,10"  Stroke="#ccc" StrokeThickness="0.5" BackgroundColor="White">
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="5" Padding="0"  RowDefinitions="Auto,Auto" RowSpacing="5">
+                        <!--gambar di kasih corner radius. pdf1.png jika gambar null--> 
+                        <Image Source="pdf1.png" VerticalOptions="Start" HeightRequest="80" WidthRequest="80" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"></Image>
+                        <StackLayout Grid.Column="1" Grid.Row="0" Spacing="5">
+                            <Label Text="Makan Siang Nasi Padang di warung UPIK Samarinda Seberang" FontAttributes="Bold" FontSize="16" TextColor="#444" LineBreakMode="TailTruncation" MaxLines="2"></Label>
+                            <Label Text="#NOTA1234 / 11:30 WIB" FontSize="Small" TextColor="Grey" FontAttributes="Bold"></Label>
+                        </StackLayout>
+
+                        <Label Text="- RP 10.030.000" Grid.Column="2" Grid.Row="0" 
+                               HorizontalOptions="End" HorizontalTextAlignment="End" 
+                               FontSize="18"
+                               FontAttributes="Bold" 
+                               TextColor="OrangeRed"></Label>
+
+                        <Label Text="Makan &amp; Minum" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalOptions="Center"
+                               Grid.Column="1" Grid.Row="1"></Label>
+
+                        <Border Grid.Column="2" Grid.Row="1" Padding="12,5" HorizontalOptions="End" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
+                            <Label Text="AYAH" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
+                        </Border>
+                        
+                        <!--data selanjutnya pakai hr line jika ada data selanjutnya-->
+                    </Grid>
+                </Border>
+
+            </StackLayout>
+        </Grid>
+    </ScrollView>
 </ContentPage>
