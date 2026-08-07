@@ -76,7 +76,7 @@ public partial class List_Kategori : ContentPage
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await DisplayAlert("Error", ex.Message, "OK");
+                await DisplayAlertAsync("Error", ex.Message, "OK");
             });
         }
         finally
@@ -160,13 +160,13 @@ public class KategoriModel
 {
     public int id_kategori { get; set; }
     public DateTime created_at { get; set; }
-    public string nama_kategori { get; set; }
+    public string? nama_kategori { get; set; }
     public bool tipe { get; set; }
     public bool is_active { get; set; }
-    public string icon { get; set; }
+    public string? icon { get; set; }
 
     [JsonIgnore]
-    public string BaseBucketUrl { get; set; }
+    public string? BaseBucketUrl { get; set; }
 
     [JsonIgnore]
     public Color BgColor
@@ -195,7 +195,7 @@ public class KategoriModel
             if (string.IsNullOrEmpty(icon)) return "nopic100.png";
             
             string cleanIcon = icon.StartsWith("/") ? icon.Substring(1) : icon;
-            string cleanBucket = BaseBucketUrl.EndsWith("/") ? BaseBucketUrl : BaseBucketUrl + "/";
+            string? cleanBucket = BaseBucketUrl.EndsWith("/") ? BaseBucketUrl : BaseBucketUrl + "/";
             
             return $"{cleanBucket}icon/{cleanIcon}";
         }

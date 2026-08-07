@@ -13,9 +13,18 @@
                 <Label Text="Tambahkan Transaksi" FontAttributes="Bold" FontSize="16" 
                        TextColor="CornflowerBlue"
                        VerticalTextAlignment="Center"></Label>
+
+                <Border HorizontalOptions="EndAndExpand"  Padding="15,5" StrokeShape="RoundRectangle 10" Stroke="Transparent" StrokeThickness="0.5" 
+                        BackgroundColor="CornflowerBlue">
+                    <StackLayout Orientation="Horizontal" Spacing="15">
+                        <Image Source="wallet100.png" HeightRequest="14"></Image>
+                        <Label Text="Pilih Rekening" TextColor="White"></Label>
+                    </StackLayout>
+                </Border>
+
             </StackLayout>
 
-            <Border Grid.Row="1" Margin="0,10,0,0"  Padding="5" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+            <Border Grid.Row="1" Margin="0,15,0,0"  Padding="5" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
                 BackgroundColor="WhiteSmoke">
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                     <!--tipe-->
@@ -33,50 +42,37 @@
 
             <!--katagori-->
 
-            <Grid Grid.Row="3" RowDefinitions="Auto,Auto" RowSpacing="10">
-                <Label Text="Pilih Kategori" ></Label>
-                <!--pilihan kategori sesuai pemasukan atau pengeluaran 4 card per row-->
-                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="10" Grid.Row="1">
-                    <Border WidthRequest="90" HorizontalOptions="Center" Padding="5,10" 
-                            StrokeShape="RoundRectangle 15" 
-                            Stroke="LightGrey" StrokeThickness="0.5" Grid.Column="0"
-                            BackgroundColor="White">
-                        <Border.Shadow>
-                            <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
-                        </Border.Shadow>
+            <Grid Grid.Row="3" RowDefinitions="Auto,*" RowSpacing="10" HeightRequest="190">
+                <Label Text="Pilih Kategori" Grid.Row="0"></Label>
+                <CollectionView x:Name="KategoriCollectionView" Grid.Row="1" SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="4" VerticalItemSpacing="10" HorizontalItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border WidthRequest="75" HorizontalOptions="Center" Padding="5,10" 
+                                    StrokeShape="RoundRectangle 15" 
+                                    Stroke="LightGrey" StrokeThickness="0.5"
+                                    BackgroundColor="White">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="Kategori_Tapped" CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Border.Shadow>
+                                    <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
+                                </Border.Shadow>
 
-                        <StackLayout Spacing="7" VerticalOptions="Center">
-                            <Border WidthRequest="50" HeightRequest="50" HorizontalOptions="Center" 
-                                    Padding="5" StrokeShape="RoundRectangle 60" Stroke="LightGrey" StrokeThickness="0.3" BackgroundColor="CornflowerBlue">
-                                <Image Source="sampelicon1.png" HeightRequest="30"></Image>
+                                <StackLayout Spacing="7" VerticalOptions="Center">
+                                    <Border WidthRequest="40" HeightRequest="40" HorizontalOptions="Center" 
+                                            Padding="5" StrokeShape="RoundRectangle 60" Stroke="LightGrey" StrokeThickness="0.3" BackgroundColor="{Binding IconBackgroundColor}">
+                                        <Image Source="{Binding DisplayIcon}" HeightRequest="25"></Image>
+                                    </Border>
+                                    <Label Text="{Binding nama_kategori}" LineBreakMode="TailTruncation" TextColor="#444" FontSize="10" 
+                                           HorizontalTextAlignment="Center" FontAttributes="Bold"></Label>
+                                </StackLayout>
                             </Border>
-                            <Label Text="Kategori" LineBreakMode="TailTruncation" TextColor="#444" FontSize="12" 
-                                   HorizontalTextAlignment="Center" FontAttributes="Bold"></Label>
-
-                        </StackLayout>
-                    </Border>
-
-
-                    <Border WidthRequest="90" HorizontalOptions="Center" Padding="5,10" 
-                            StrokeShape="RoundRectangle 15"  Grid.Column="1"
-                            Stroke="LightGrey" StrokeThickness="0.5" 
-                            BackgroundColor="White">
-                        <Border.Shadow>
-                            <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
-                        </Border.Shadow>
-                        <!--kondisi tidak terselect-->
-                        <StackLayout Spacing="7" VerticalOptions="Center">
-                            <Border WidthRequest="50" HeightRequest="50" HorizontalOptions="Center" 
-                                    StrokeShape="RoundRectangle 60" Stroke="LightGrey" StrokeThickness="0.3" BackgroundColor="LightGray">
-                                <Image Source="edit10.png" HeightRequest="30"></Image>
-                            </Border>
-                            <Label Text="Kategori 2" LineBreakMode="TailTruncation" TextColor="#444" FontSize="12" 
-                                        HorizontalTextAlignment="Center" FontAttributes="Bold"></Label>
-
-                        </StackLayout>
-                    </Border>
-
-                </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </Grid>
 
             <Border Grid.Row="4" Margin="0,10,0,0"  Padding="20,13" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
