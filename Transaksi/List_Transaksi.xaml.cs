@@ -32,8 +32,15 @@ public partial class List_Transaksi : ContentPage
         LoadData();
     }
 
-    private async void LoadData()
+    private async void LoadData(bool isRefresh = false)
     {
+        if (!isRefresh)
+        {
+            LoadingOverlay.IsVisible = true;
+            // Delay 3 detik sesuai instruksi
+            await Task.Delay(3000);
+        }
+
         try
         {
             var app = Application.Current as App;
@@ -48,7 +55,6 @@ public partial class List_Transaksi : ContentPage
                 p_tanggal_awal = p_tanggal_awal,
                 p_tanggal_akhir = p_tanggal_akhir,
                 p_keyword = T_Search.Text
-                // p_role can be omitted if null, let's just pass what's needed or pass null
             };
 
             using (var client = new HttpClient())
@@ -82,6 +88,16 @@ public partial class List_Transaksi : ContentPage
         {
             await Toast.Make($"Error: {ex.Message}").Show();
         }
+        finally
+        {
+            LoadingOverlay.IsVisible = false;
+            RefreshViewContainer.IsRefreshing = false;
+        }
+    }
+
+    private void RefreshViewContainer_Refreshing(object sender, EventArgs e)
+    {
+        LoadData(true);
     }
 
     private void RefreshDisplay()

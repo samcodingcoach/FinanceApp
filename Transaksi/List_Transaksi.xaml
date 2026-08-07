@@ -7,7 +7,8 @@
              NavigationPage.HasNavigationBar="False" Shell.NavBarIsVisible="False">
 
     <Grid>
-        <ScrollView Margin="0,30,0,30">
+        <RefreshView x:Name="RefreshViewContainer" Refreshing="RefreshViewContainer_Refreshing">
+            <ScrollView Margin="0,30,0,30">
             <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="10" RowSpacing="7">
                 <Border Grid.Row="0" Padding="10" StrokeShape="RoundRectangle 10"  Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="White">
                     <Border.Shadow>
@@ -104,7 +105,8 @@
                     </BindableLayout.ItemTemplate>
                 </StackLayout>
             </Grid>
-        </ScrollView>
+            </ScrollView>
+        </RefreshView>
         
         <!-- FAB -->
         <Button x:Name="BtnAdd"
@@ -124,5 +126,11 @@
                 <Shadow Brush="Black" Opacity="0.3" Offset="0,4" Radius="5" />
             </Button.Shadow>
         </Button>
+
+        <!-- Loading Overlay -->
+        <Grid x:Name="LoadingOverlay" BackgroundColor="#80000000" IsVisible="False">
+            <ActivityIndicator IsRunning="{Binding Source={x:Reference LoadingOverlay}, Path=IsVisible}" Color="White" HorizontalOptions="Center" VerticalOptions="Center" />
+            <Label Text="Tunggu sebentar..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,60,0,0" />
+        </Grid>
     </Grid>
 </ContentPage>
