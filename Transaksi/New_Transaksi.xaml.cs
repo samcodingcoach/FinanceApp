@@ -101,12 +101,37 @@ public partial class New_Transaksi : ContentPage
 
         await Toast.Make($"Memilih {selectedItem.nama_kategori} (ID: {selectedItem.id_kategori})").Show();
     }
+
+    private int? _id_rekening = null;
+
+    private async void TapRekening_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is StackLayout stackLayout)
+        {
+            await stackLayout.FadeToAsync(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await stackLayout.FadeToAsync(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+
+            var page = new Transaksi.PilihRekening_BottomSheet();
+            page.HasHandle = true;
+            page.HasBackdrop = true;
+            
+            page.RekeningSelected += async (s, rekening) => 
+            {
+                _id_rekening = rekening.id_rekening;
+                LabelPilihRekening.Text = rekening.nama_rekening;
+                
+                await Toast.Make($"Rekening terpilih: {rekening.nama_rekening} (ID: {rekening.id_rekening})").Show();
+            };
+
+            _ = page.ShowAsync(Window);
+        }
+    }
 }
 
 public class KategoriData : INotifyPropertyChanged
 {
     public int id_kategori { get; set; }
-    public string nama_kategori { get; set; }
+    public string? nama_kategori { get; set; }
     public bool tipe { get; set; }
     public bool is_active { get; set; }
     public string icon { get; set; }

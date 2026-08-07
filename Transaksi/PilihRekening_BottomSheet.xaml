@@ -1,26 +1,55 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<the49:BottomSheet xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FinanceApp.Transaksi.PilihRekening_BottomSheet"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             Title="PilihRekening_BottomSheet">
-    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
-        <Label Text="Pilih Rekening"></Label>
-        <Border VerticalOptions="Start" Margin="0,0,0,10" StrokeShape="RoundRectangle 10" 
-        Stroke="#CCCCCC" StrokeThickness="0.2" BackgroundColor="White">
-            <Grid ColumnDefinitions="Auto,*,Auto" Padding="20" ColumnSpacing="15">
-                <toolkit:AvatarView ImageSource="tunai100.png" Grid.Column="0" 
-                            WidthRequest="50" HeightRequest="50" CornerRadius="25"
-                            BackgroundColor="CornflowerBlue" />
+             xmlns:the49="https://schemas.the49.com/dotnet/2023/maui"
+             BackgroundColor="White" Padding="20,20,20,0"
+             >
 
-                <StackLayout Grid.Column="1" VerticalOptions="Center">
-                    <Label Text="Tunai" FontSize="16" FontAttributes="Bold" TextColor="#444"></Label>
-                    <Label Text="08 Agustus 2026" FontSize="Small" TextColor="Grey"></Label>
-                </StackLayout>
+    <the49:BottomSheet.Detents>
+        <the49:RatioDetent Ratio="0.60" />
+    </the49:BottomSheet.Detents>
+    
+    <Grid RowDefinitions="Auto,*,Auto" Padding="10,20,10,20" RowSpacing="15">
+        <Label Text="Pilih Rekening" FontAttributes="Bold" FontSize="18"></Label>
+        
+        <RefreshView x:Name="AkunRefresh" Refreshing="AkunRefresh_Refreshing" Grid.Row="1">
+            <CollectionView x:Name="ListAkunCollection" SelectionMode="None" RemainingItemsThreshold="2" RemainingItemsThresholdReached="ListAkunCollection_RemainingItemsThresholdReached">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border VerticalOptions="Start" Margin="0,0,0,10" StrokeShape="RoundRectangle 10" 
+                                Stroke="#CCCCCC" StrokeThickness="0.2" BackgroundColor="White">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Rekening_Tapped" CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="Auto,*,Auto" Padding="20,15" ColumnSpacing="15">
+                                <toolkit:AvatarView ImageSource="{Binding AvatarImage}" Grid.Column="0" 
+                                            WidthRequest="60" HeightRequest="60" CornerRadius="60"
+                                            BackgroundColor="{Binding AvatarColor}" />
 
-                <Label Grid.Column="2" FontAttributes="Bold" FontSize="22" TextColor="Goldenrod"
-                       Text="Rp 1.000.000" VerticalOptions="Center"></Label>
-            </Grid>
-        </Border>
+                                <StackLayout Grid.Column="1" VerticalOptions="Center">
+                                    <Label Text="{Binding nama_rekening}" FontSize="16" FontAttributes="Bold" TextColor="#444"></Label>
+                                    <Label Text="{Binding FormattedDate}" FontSize="Small" TextColor="Grey"></Label>
+                                </StackLayout>
+
+                                <Label Grid.Column="2" FontAttributes="Bold" FontSize="22" TextColor="Goldenrod"
+                                       Text="{Binding FormattedSaldo}" VerticalOptions="Center"></Label>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <Button x:Name="BtnPilih" Clicked="BtnPilih_Clicked" Text="PILIH REKENING" CharacterSpacing="2" Grid.Row="2" CornerRadius="10" 
+                FontSize="18"
+                FontAttributes="Bold" BackgroundColor="CornflowerBlue"></Button>
+        
+        <!-- Loading Overlay -->
+        <Grid x:Name="OverlayLoading" BackgroundColor="#80FFFFFF" IsVisible="False" Grid.RowSpan="2">
+            <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="CornflowerBlue" HorizontalOptions="Center" VerticalOptions="Center" />
+            <Label Text="Memuat..." TextColor="CornflowerBlue" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,60,0,0" />
+        </Grid>
     </Grid>
-</ContentPage>
+</the49:BottomSheet>

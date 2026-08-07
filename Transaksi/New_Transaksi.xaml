@@ -17,8 +17,11 @@
                 <Border HorizontalOptions="EndAndExpand"  Padding="15,5" StrokeShape="RoundRectangle 10" Stroke="Transparent" StrokeThickness="0.5" 
                         BackgroundColor="CornflowerBlue">
                     <StackLayout Orientation="Horizontal" Spacing="15">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="TapRekening" Tapped="TapRekening_Tapped"></TapGestureRecognizer>
+                        </StackLayout.GestureRecognizers>
                         <Image Source="wallet100.png" HeightRequest="14"></Image>
-                        <Label Text="Pilih Rekening" TextColor="White"></Label>
+                        <Label x:Name="LabelPilihRekening" Text="Pilih Rekening" VerticalTextAlignment="Center" TextColor="White"></Label>
                     </StackLayout>
                 </Border>
 
