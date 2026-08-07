@@ -66,9 +66,9 @@
                                 <StackLayout BindableLayout.ItemsSource="{Binding Items}">
                                     <BindableLayout.ItemTemplate>
                                         <DataTemplate>
-                                            <Border StrokeShape="RoundRectangle 10" Padding="0,10,10,10" Margin="0,0,0,10" Stroke="#ccc" StrokeThickness="0.5" BackgroundColor="White">
+                                            <Border StrokeShape="RoundRectangle 10" Padding="10,10,10,10" Margin="0,0,0,10" Stroke="#ccc" StrokeThickness="0.5" BackgroundColor="White">
                                                 <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" Padding="0"  RowDefinitions="Auto,Auto" RowSpacing="5">
-                                                    <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="#f0f0f0" HeightRequest="80" WidthRequest="80" VerticalOptions="Start" Padding="0">
+                                                    <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="Transparent" HeightRequest="80" WidthRequest="80" VerticalOptions="Start" Padding="0">
                                                         <Image Source="{Binding ImageSource}" Aspect="AspectFill"></Image>
                                                     </Border>
                                                     
@@ -87,11 +87,11 @@
                                                            Grid.Column="1" Grid.Row="1"></Label>
 
                                                     <StackLayout Orientation="Horizontal" Spacing="10" Grid.Column="2" Grid.Row="1" HorizontalOptions="End">
-                                                        <Border Padding="12,5" StrokeShape="RoundRectangle 10" Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
-                                                            <Label Text="{Binding role}" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
+                                                        <Border Padding="12,0" StrokeShape="RoundRectangle 10" Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
+                                                            <Label Text="{Binding role}" VerticalTextAlignment="Center" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
                                                         </Border>
-                                                        <Border Padding="12,5" StrokeShape="RoundRectangle 10" Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="MediumVioletRed">
-                                                            <Label Text="{Binding nama_rekening}" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
+                                                        <Border Padding="12,0" StrokeShape="RoundRectangle 10" Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="MediumVioletRed">
+                                                            <Label Text="{Binding nama_rekening}" FontAttributes="Bold" VerticalTextAlignment="Center"  FontSize="Small" TextColor="White"></Label>
                                                         </Border>
                                                     </StackLayout>
                                                 </Grid>
