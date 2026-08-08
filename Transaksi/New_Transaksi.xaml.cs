@@ -353,12 +353,15 @@ public partial class New_Transaksi : ContentPage
 
         OverlayLoading.IsVisible = true;
         
-        // Sesuai arahan, delay 3 detik agar smooth
-        await Task.Delay(3000);
+        OverlayText.Text = "Menyiapkan Data... 10%";
+        await Task.Delay(500); // Sebagian dari 3 detik delay
 
         // 1. Upload photo first if it exists
         if (_strukBytes != null)
         {
+            OverlayText.Text = "Upload Image... 30%";
+            await Task.Delay(500); // Simulasi delay
+            
             bool uploadSuccess = await UploadPhotoToSupabase();
             if (!uploadSuccess)
             {
@@ -366,6 +369,9 @@ public partial class New_Transaksi : ContentPage
                 return; // Batalkan simpan transaksi jika upload gambar gagal
             }
         }
+        
+        OverlayText.Text = "Simpan Transaksi... 60%";
+        await Task.Delay(1500); // Sebagian dari 3 detik delay
         
         // 2. Simpan data transaksi API_HOST + transaksi method post
         try
@@ -381,9 +387,7 @@ public partial class New_Transaksi : ContentPage
                 id_kategori = selectedKategori.id_kategori,
                 foto_transaksi = _uploadedKey ?? "",
                 keterangan = T_Catatan.Text ?? "",
-                nominal = nominalValue,
-                tanggal = string.Format("{0:yyyy-MM-dd}", DP_Tanggal.Date),
-                tipe_transaksi = _isPemasukan
+                created_at = string.Format("{0:yyyy-MM-dd}", DP_Tanggal.Date)
             };
 
             string trxJson = JsonConvert.SerializeObject(trxData);
@@ -402,6 +406,9 @@ public partial class New_Transaksi : ContentPage
                 
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
                 {
+                    OverlayText.Text = "Simpan Detail Transaksi... 90%";
+                    await Task.Delay(500); // Tambahan smooth delay
+
                     string resJson = await response.Content.ReadAsStringAsync();
                     var insertedTrx = JsonConvert.DeserializeObject<List<dynamic>>(resJson);
                     
@@ -409,7 +416,7 @@ public partial class New_Transaksi : ContentPage
                     {
                         int id_transaksi = insertedTrx[0].id_transaksi;
                         
-                        // 3. Simpan detail transaksi API_HOST + detail_transaksi method post
+                        // 3. Simpan detail transaksi API_HOST + transaksi_detail method post
                         if (New_Transaksi_Detail.TempDetailItems != null && New_Transaksi_Detail.TempDetailItems.Count > 0)
                         {
                             var listDetail = new List<object>();
@@ -426,7 +433,9 @@ public partial class New_Transaksi : ContentPage
                             
                             string detailJson = JsonConvert.SerializeObject(listDetail);
                             var detailContent = new StringContent(detailJson, System.Text.Encoding.UTF8, "application/json");
-                            string urlDetail = $"{App.API_HOST}/detail_transaksi";
+                            
+                            // Endpoint yang benar adalah transaksi_detail
+                            string urlDetail = $"{App.API_HOST}/transaksi_detail";
                             
                             // Send batch insert for details
                             await client.PostAsync(urlDetail, detailContent);
@@ -435,6 +444,9 @@ public partial class New_Transaksi : ContentPage
                             New_Transaksi_Detail.TempDetailItems.Clear();
                         }
                     }
+                    
+                    OverlayText.Text = "Selesai... 100%";
+                    await Task.Delay(500);
                 }
                 else
                 {

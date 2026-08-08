@@ -160,9 +160,9 @@
         </ScrollView>
         
         <!-- Loading Overlay -->
-        <Grid x:Name="OverlayLoading" BackgroundColor="#80FFFFFF" IsVisible="False">
-            <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="CornflowerBlue" HorizontalOptions="Center" VerticalOptions="Center" />
-            <Label Text="Menyimpan..." TextColor="CornflowerBlue" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,60,0,0" />
+        <Grid x:Name="OverlayLoading" BackgroundColor="#80000000" IsVisible="False">
+            <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="White" HorizontalOptions="Center" VerticalOptions="Center" />
+            <Label x:Name="OverlayText" Text="Menyimpan..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,60,0,0" />
         </Grid>
         
         <!-- FAB Simpan -->

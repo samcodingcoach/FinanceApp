@@ -161,21 +161,21 @@ public class TransaksiRowModel
 {
     public int id_transaksi { get; set; }
     public DateTime created_at { get; set; }
-    public string no_faktur { get; set; }
+    public string? no_faktur { get; set; }
     public int id_users { get; set; }
-    public string nama_lengkap { get; set; }
-    public string role { get; set; }
+    public string? nama_lengkap { get; set; }
+    public string? role { get; set; }
     public int id_rekening { get; set; }
-    public string nama_rekening { get; set; }
+    public string? nama_rekening { get; set; }
     public int id_kategori { get; set; }
-    public string nama_kategori { get; set; }
+    public string? nama_kategori { get; set; }
     public bool tipe { get; set; } // true = pengeluaran, false = pemasukan
-    public string keterangan { get; set; }
-    public string foto_transaksi { get; set; }
+    public string? keterangan { get; set; }
+    public string? foto_transaksi { get; set; }
     public decimal total_transaksi { get; set; }
 
     [JsonIgnore]
-    public string ImageSource => string.IsNullOrEmpty(foto_transaksi) ? "pdf1.png" : foto_transaksi;
+    public string ImageSource => string.IsNullOrEmpty(foto_transaksi) ? "pdf1.png" : ((App)Application.Current).BUCKET_URL + "/transaksi/" + foto_transaksi;
     
     [JsonIgnore]
     public string NominalDisplay => $"{(tipe ? "-" : "+")} Rp {total_transaksi:N0}";
@@ -187,7 +187,7 @@ public class TransaksiRowModel
     public string SubtitleDisplay => $"#{no_faktur ?? "TRX"} / {created_at:HH:mm} WIB";
     
     [JsonIgnore]
-    public string TitleDisplay => string.IsNullOrEmpty(keterangan) ? nama_kategori : keterangan;
+    public string? TitleDisplay => string.IsNullOrEmpty(keterangan) ? nama_kategori : keterangan;
 }
 
 public class TransaksiGroup
