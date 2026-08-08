@@ -132,6 +132,18 @@ public partial class New_Transaksi : ContentPage
         await Navigation.PopAsync();
     }
 
+    private async void DetailItem_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is View view)
+        {
+            _ = view.ScaleTo(0.95, 100).ContinueWith(t => view.ScaleTo(1, 100));
+            _ = view.FadeTo(0.5, 100).ContinueWith(t => view.FadeTo(1, 100));
+        }
+
+        await Task.Delay(150); // Menunggu sejenak agar animasi klik terlihat sebelum berpindah halaman
+        await Navigation.PushAsync(new New_Transaksi_Detail());
+    }
+
     private byte[] _strukBytes = null;
     private string _strukFilename = null;
     private string _uploadedKey = null;

@@ -81,17 +81,32 @@
                     </CollectionView>
                 </Grid>
 
-                <Border Grid.Row="4" Margin="0,10,0,0"  Padding="20,13" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
-                        BackgroundColor="WhiteSmoke" HeightRequest="75">
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                        <StackLayout Grid.Column="0">
-                            <Label Text="TANGGAL" FontSize="Caption" FontAttributes="Bold" TextColor="Grey"></Label>
-                            <DatePicker x:Name="DP_Tanggal" Format="dd MMMM yyyy" FontSize="16" TranslationY="-5" FontAttributes="Bold" TextColor="#444"></DatePicker>
-                        </StackLayout>
+                <Grid ColumnDefinitions="*,*" Grid.Row="4" Margin="0,10,0,0" ColumnSpacing="10">
+                    <Border Grid.Column="0" Padding="20,10" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                            BackgroundColor="WhiteSmoke" HeightRequest="75">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                            <StackLayout Grid.Column="0">
+                                <Label Text="NO. STRUK (OPSIONAL)" FontSize="Caption" FontAttributes="Bold" TextColor="Grey"></Label>
+                                <Entry x:Name="NoFaktur" Placeholder="Ex: 20260808"></Entry>
+                            </StackLayout>
 
-                        <Image Source="date100.png" HeightRequest="24" Grid.Column="1"></Image>
-                    </Grid>
-                </Border>
+                            <Image Source="faktur12.png" HeightRequest="24" Grid.Column="1"></Image>
+                        </Grid>
+                    </Border>
+                    <Border Grid.Column="1" Padding="20,10" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                            BackgroundColor="WhiteSmoke" HeightRequest="75">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                            <StackLayout Grid.Column="0">
+                                <Label Text="TANGGAL" FontSize="Caption" FontAttributes="Bold" TextColor="Grey"></Label>
+                                <DatePicker x:Name="DP_Tanggal" Format="dd MMMM yyyy" FontSize="16" TranslationY="-5" FontAttributes="Bold" TextColor="#444"></DatePicker>
+                            </StackLayout>
+
+                            <Image Source="date100.png" HeightRequest="24" Grid.Column="1"></Image>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                
                 <Border Grid.Row="5" Margin="0,10,0,0"  Padding="20,13" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
                         BackgroundColor="WhiteSmoke" HeightRequest="75">
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
@@ -106,6 +121,9 @@
                 
                 <Border Grid.Row="6" Margin="0,10,0,0"  Padding="20,13" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
                         BackgroundColor="WhiteSmoke" HeightRequest="75">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="DetailItem_Tapped" />
+                    </Border.GestureRecognizers>
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                         <StackLayout Grid.Column="0" Spacing="10">
                             <Label Text="DETAIL ITEM" FontSize="Caption" FontAttributes="Bold" TextColor="Grey"></Label>
