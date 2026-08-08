@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Maui.Alerts;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace FinanceApp.Transaksi;
 
@@ -24,6 +25,26 @@ public partial class New_Transaksi : ContentPage
         base.OnAppearing();
         // Load data pengeluaran (karena _isPemasukan = false secara default)
         LoadKategori();
+
+        // Update ringkasan detail item jika ada (jumlah item & total nominal)
+        if (New_Transaksi_Detail.TempDetailItems != null && New_Transaksi_Detail.TempDetailItems.Count > 0)
+        {
+            int jumlahItem = New_Transaksi_Detail.TempDetailItems.Count;
+            decimal grandTotal = New_Transaksi_Detail.TempDetailItems.Sum(x => x.Subtotal);
+
+            LabelDetailCount.Text = $"{jumlahItem} Item Detail Barang / Jasa";
+            LabelDetailCount.TextColor = Colors.CornflowerBlue;
+
+            if (grandTotal > 0)
+            {
+                T_Nominal.Text = grandTotal.ToString("N0");
+            }
+        }
+        else
+        {
+            LabelDetailCount.Text = "Tambah Detail Barang / Jasa";
+            LabelDetailCount.TextColor = Colors.Grey;
+        }
     }
 
     private async void LoadKategori()
@@ -303,8 +324,38 @@ public partial class New_Transaksi : ContentPage
 
     private async void BSimpan_Clicked(object sender, EventArgs e)
     {
+        // Validasi form
+        if (string.IsNullOrWhiteSpace(T_Nominal.Text) || T_Nominal.Text == "0")
+        {
+            await Toast.Make("Nominal transaksi harus diisi!").Show();
+            return;
+        }
+
+        var selectedKategori = _kategoris.FirstOrDefault(k => k.IsSelected);
+        if (selectedKategori == null)
+        {
+            await Toast.Make("Pilih kategori terlebih dahulu!").Show();
+            return;
+        }
+
+        if (_id_rekening == null)
+        {
+            await Toast.Make("Pilih rekening terlebih dahulu!").Show();
+            return;
+        }
+        
+        string cleanNominal = new string(T_Nominal.Text.Where(char.IsDigit).ToArray());
+        if (!decimal.TryParse(cleanNominal, out decimal nominalValue) || nominalValue <= 0)
+        {
+            await Toast.Make("Nominal transaksi tidak valid!").Show();
+            return;
+        }
+
         OverlayLoading.IsVisible = true;
         
+        // Sesuai arahan, delay 3 detik agar smooth
+        await Task.Delay(3000);
+
         // 1. Upload photo first if it exists
         if (_strukBytes != null)
         {
@@ -316,10 +367,95 @@ public partial class New_Transaksi : ContentPage
             }
         }
         
-        // 2. Simulasikan simpan API (tunggu data sampai tersimpan status 201)
-        await Task.Delay(3000); // Dummy delay sesuai instruksi "selama 3 detik"
+        // 2. Simpan data transaksi API_HOST + transaksi method post
+        try
+        {
+            var app = Application.Current as App;
+            string tokenKey = app?.TOKEN_KEY ?? string.Empty;
+
+            var trxData = new
+            {
+                no_faktur = NoFaktur.Text ?? "",
+                id_users = Preferences.Get("id_user", 3), // Default 3 sesuai agy.txt
+                id_rekening = _id_rekening,
+                id_kategori = selectedKategori.id_kategori,
+                foto_transaksi = _uploadedKey ?? "",
+                keterangan = T_Catatan.Text ?? "",
+                nominal = nominalValue,
+                tanggal = string.Format("{0:yyyy-MM-dd}", DP_Tanggal.Date),
+                tipe_transaksi = _isPemasukan
+            };
+
+            string trxJson = JsonConvert.SerializeObject(trxData);
+            
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenKey);
+                client.DefaultRequestHeaders.Add("apikey", tokenKey);
+                // Minta return row untuk mendapatkan id_transaksi (Supabase PostgREST)
+                client.DefaultRequestHeaders.Add("Prefer", "return=representation");
+                
+                var content = new StringContent(trxJson, System.Text.Encoding.UTF8, "application/json");
+                string urlTrx = $"{App.API_HOST}/transaksi";
+                
+                var response = await client.PostAsync(urlTrx, content);
+                
+                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    string resJson = await response.Content.ReadAsStringAsync();
+                    var insertedTrx = JsonConvert.DeserializeObject<List<dynamic>>(resJson);
+                    
+                    if (insertedTrx != null && insertedTrx.Count > 0)
+                    {
+                        int id_transaksi = insertedTrx[0].id_transaksi;
+                        
+                        // 3. Simpan detail transaksi API_HOST + detail_transaksi method post
+                        if (New_Transaksi_Detail.TempDetailItems != null && New_Transaksi_Detail.TempDetailItems.Count > 0)
+                        {
+                            var listDetail = new List<object>();
+                            foreach(var item in New_Transaksi_Detail.TempDetailItems)
+                            {
+                                listDetail.Add(new {
+                                    id_transaksi = id_transaksi,
+                                    nama_barang_jasa = item.NamaBarang ?? "",
+                                    harga = item.HargaNumeric ?? 0,
+                                    jumlah = item.JumlahNumeric ?? 0,
+                                    subtotal = item.Subtotal
+                                });
+                            }
+                            
+                            string detailJson = JsonConvert.SerializeObject(listDetail);
+                            var detailContent = new StringContent(detailJson, System.Text.Encoding.UTF8, "application/json");
+                            string urlDetail = $"{App.API_HOST}/detail_transaksi";
+                            
+                            // Send batch insert for details
+                            await client.PostAsync(urlDetail, detailContent);
+                            
+                            // Bersihkan temporary detail setelah sukses
+                            New_Transaksi_Detail.TempDetailItems.Clear();
+                        }
+                    }
+                }
+                else
+                {
+                    string err = await response.Content.ReadAsStringAsync();
+                    await DisplayAlert("Error", $"Gagal menyimpan transaksi: {err}", "OK");
+                    OverlayLoading.IsVisible = false;
+                    return;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Terjadi kesalahan: {ex.Message}", "OK");
+            OverlayLoading.IsVisible = false;
+            return;
+        }
         
         OverlayLoading.IsVisible = false;
+        
+        await Toast.Make("Transaksi berhasil disimpan!").Show();
+        
         await Navigation.PopAsync();
     }
 }

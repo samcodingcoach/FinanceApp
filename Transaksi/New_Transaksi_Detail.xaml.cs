@@ -121,6 +121,64 @@ public partial class New_Transaksi_Detail : ContentPage, INotifyPropertyChanged
         await Toast.Make("Detail transaksi disimpan secara temporary").Show();
         await Navigation.PopAsync();
     }
+
+    private bool _isFormatting = false;
+
+    private void Harga_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (_isFormatting) return;
+
+        if (sender is Entry entry)
+        {
+            string raw = (e.NewTextValue ?? "").Replace(".", "").Replace(",", "").Trim();
+            if (string.IsNullOrEmpty(raw)) return;
+
+            if (decimal.TryParse(raw, out decimal nominal))
+            {
+                if (nominal < 0) nominal = 0;
+                string formatted = nominal.ToString("N0");
+
+                if (formatted != (e.NewTextValue ?? ""))
+                {
+                    Dispatcher.Dispatch(() =>
+                    {
+                        _isFormatting = true;
+                        entry.Text = formatted;
+                        entry.CursorPosition = formatted.Length;
+                        _isFormatting = false;
+                    });
+                }
+            }
+        }
+    }
+
+    private void Jumlah_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (_isFormatting) return;
+
+        if (sender is Entry entry)
+        {
+            string raw = (e.NewTextValue ?? "").Replace(".", "").Replace(",", "").Trim();
+            if (string.IsNullOrEmpty(raw)) return;
+
+            if (int.TryParse(raw, out int nominal))
+            {
+                if (nominal < 0) nominal = 0;
+                string formatted = nominal.ToString("N0");
+
+                if (formatted != (e.NewTextValue ?? ""))
+                {
+                    Dispatcher.Dispatch(() =>
+                    {
+                        _isFormatting = true;
+                        entry.Text = formatted;
+                        entry.CursorPosition = formatted.Length;
+                        _isFormatting = false;
+                    });
+                }
+            }
+        }
+    }
 }
 
 public class FormDetailItem : INotifyPropertyChanged
@@ -140,33 +198,28 @@ public class FormDetailItem : INotifyPropertyChanged
         get => _hargaString;
         set 
         {
+            if (_hargaString == value) return;
+            _hargaString = value;
+
             if (string.IsNullOrWhiteSpace(value))
             {
                 HargaNumeric = null;
-                _hargaString = null;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(Subtotal));
-                return;
-            }
-
-            // Bersihkan format selain angka
-            string cleanStr = new string(value.Where(char.IsDigit).ToArray());
-            
-            if (decimal.TryParse(cleanStr, out decimal parsedValue))
-            {
-                // Cegah minus secara logis meski tanda minus sudah di-filter
-                if (parsedValue < 0) parsedValue = 0;
-                
-                HargaNumeric = parsedValue;
-                _hargaString = parsedValue.ToString("N0"); // Format Ribuan
             }
             else
             {
-                HargaNumeric = null;
-                _hargaString = null;
+                string cleanStr = new string(value.Where(char.IsDigit).ToArray());
+                if (decimal.TryParse(cleanStr, out decimal parsedValue))
+                {
+                    if (parsedValue < 0) parsedValue = 0;
+                    HargaNumeric = parsedValue;
+                }
+                else
+                {
+                    HargaNumeric = null;
+                }
             }
 
-            OnPropertyChanged();
+            OnPropertyChanged(); // Beritahu UI
             OnPropertyChanged(nameof(Subtotal));
         }
     }
@@ -179,28 +232,25 @@ public class FormDetailItem : INotifyPropertyChanged
         get => _jumlahString;
         set 
         { 
+            if (_jumlahString == value) return;
+            _jumlahString = value;
+
             if (string.IsNullOrWhiteSpace(value))
             {
                 JumlahNumeric = null;
-                _jumlahString = null;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(Subtotal));
-                return;
-            }
-
-            string cleanStr = new string(value.Where(char.IsDigit).ToArray());
-            
-            if (int.TryParse(cleanStr, out int parsedValue))
-            {
-                if (parsedValue < 0) parsedValue = 0;
-                
-                JumlahNumeric = parsedValue;
-                _jumlahString = parsedValue.ToString("N0");
             }
             else
             {
-                JumlahNumeric = null;
-                _jumlahString = null;
+                string cleanStr = new string(value.Where(char.IsDigit).ToArray());
+                if (int.TryParse(cleanStr, out int parsedValue))
+                {
+                    if (parsedValue < 0) parsedValue = 0;
+                    JumlahNumeric = parsedValue;
+                }
+                else
+                {
+                    JumlahNumeric = null;
+                }
             }
 
             OnPropertyChanged();

@@ -127,7 +127,7 @@
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                         <StackLayout Grid.Column="0" Spacing="10">
                             <Label Text="DETAIL ITEM" FontSize="Caption" FontAttributes="Bold" TextColor="Grey"></Label>
-                            <Label Text="Tambah Detail Barang / Jasa"></Label>
+                            <Label x:Name="LabelDetailCount" Text="Tambah Detail Barang / Jasa"></Label>
                         </StackLayout>
                             
                         <Image Source="chevron100.png" Rotation="-90" HeightRequest="24" Grid.Column="1"></Image>

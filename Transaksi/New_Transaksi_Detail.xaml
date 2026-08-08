@@ -50,13 +50,13 @@
                                         <StackLayout Grid.Column="0" Spacing="5">
                                             <Label Text="HARGA"></Label>
                                             <Border Padding="15,0" StrokeShape="RoundRectangle 10" VerticalOptions="Start" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
-                                                <Entry Text="{Binding HargaString}" Placeholder="0" HorizontalTextAlignment="End" Keyboard="Numeric" />
+                                                <Entry Text="{Binding HargaString}" TextChanged="Harga_TextChanged" Placeholder="0" HorizontalTextAlignment="End" Keyboard="Numeric" />
                                             </Border>
                                         </StackLayout>
                                         <StackLayout Grid.Column="1" Spacing="5">
                                             <Label Text="JUMLAH"></Label>
                                             <Border Padding="15,0" StrokeShape="RoundRectangle 10" VerticalOptions="Start" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
-                                                <Entry Text="{Binding JumlahString}" Placeholder="0" HorizontalTextAlignment="End" Keyboard="Numeric" />
+                                                <Entry Text="{Binding JumlahString}" TextChanged="Jumlah_TextChanged" Placeholder="0" HorizontalTextAlignment="End" Keyboard="Numeric" />
                                             </Border>
                                         </StackLayout>
                                     </Grid>
