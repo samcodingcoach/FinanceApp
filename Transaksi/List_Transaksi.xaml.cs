@@ -175,7 +175,7 @@ public class TransaksiRowModel
     public decimal total_transaksi { get; set; }
 
     [JsonIgnore]
-    public string ImageSource => string.IsNullOrEmpty(foto_transaksi) ? "pdf1.png" : ((App)Application.Current).BUCKET_URL + "/transaksi/" + foto_transaksi;
+    public string? ImageSource => string.IsNullOrEmpty(foto_transaksi) ? "nopic_nota.jpg" : ((App)Application.Current).BUCKET_URL + "/transaksi/" + foto_transaksi;
     
     [JsonIgnore]
     public string NominalDisplay => $"{(tipe ? "-" : "+")} Rp {total_transaksi:N0}";

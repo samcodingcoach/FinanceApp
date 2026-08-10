@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FinanceApp.Transaksi.List_TransaksiDetail" NavigationPage.HasNavigationBar="False"
+             >
+    <Grid RowDefinitions="Auto,Auto,*,Auto" RowSpacing="10">
+
+        <StackLayout Orientation="Horizontal" Grid.Row="0">
+            <Label Text="Detail Item Transaksi" FontAttributes="Bold" FontSize="16"></Label>
+            <Image Source="close100.png" HeightRequest="24" HorizontalOptions="EndAndExpand"></Image>
+        </StackLayout>
+        
+        <Grid Grid.Row="1" ColumnDefinitions="*" ColumnSpacing="10">
+            <Border Grid.Column="0" Padding="0" StrokeShape="RoundRectangle 10"  Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
+                <SearchBar Placeholder="Cari Item" x:Name="T_Search"></SearchBar>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="10" ColumnSpacing="10">
+    
+            <StackLayout Grid.Column="0" Grid.Row="0">
+                <!--nama_barang_jasa-->
+                <Label Text="Nama Item Barang atau Jasa" FontSize="16" FontAttributes="Bold" ></Label>
+                <!--jumlah * harga-->
+                <Label TextColor="Gray" FontAttributes="Bold" Text="2 X Rp 100.000" ></Label>
+            </StackLayout>
+            <!--subtotal-->
+            <Label Text="Rp 200.000" FontSize="18" TextColor="Goldenrod" FontAttributes="Bold" Grid.Column="1" Grid.Row="0" HorizontalOptions="End"></Label>
+            <BoxView HeightRequest="1" BackgroundColor="WhiteSmoke" 
+                     Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"></BoxView>
+        </Grid>
+
+
+
+        <Button Grid.Row="3" Text="EXPORT KE PDF" x:Name="B_Export" 
+                FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
+                CornerRadius="20" Margin="0,15,0,0" BackgroundColor="CornflowerBlue"></Button>
+    </Grid>
+</ContentPage>

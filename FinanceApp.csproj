@@ -111,6 +111,9 @@
 	  <MauiXaml Update="Transaksi\List_Transaksi.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Transaksi\List_TransaksiDetail.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Transaksi\New_Transaksi.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
