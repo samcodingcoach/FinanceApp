@@ -60,14 +60,12 @@ public partial class List_TransaksiDetail : BottomSheet
                     
                     if (data != null)
                     {
-                        decimal sumTotal = 0;
                         foreach (var item in data)
                         {
                             _allData.Add(item);
                             _filteredData.Add(item);
-                            sumTotal += item.subtotal;
                         }
-                        L_TotalSubtotal.Text = $"Rp {sumTotal:N0}";
+                        UpdateTotal();
                     }
                 }
                 else
@@ -86,6 +84,20 @@ public partial class List_TransaksiDetail : BottomSheet
         }
     }
 
+    private void UpdateTotal()
+    {
+        decimal sumTotal = 0;
+        foreach (var item in _filteredData)
+        {
+            sumTotal += item.subtotal;
+        }
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            string formattedTotal = sumTotal == 0 ? "0" : sumTotal.ToString("N0");
+            L_TotalSubtotal.Text = "Rp " + formattedTotal;
+        });
+    }
+
     private void T_Search_TextChanged(object sender, TextChangedEventArgs e)
     {
         string keyword = (e.NewTextValue ?? "").ToLower();
@@ -99,11 +111,12 @@ public partial class List_TransaksiDetail : BottomSheet
                 _filteredData.Add(item);
             }
         }
+        UpdateTotal();
     }
 
     private async void Close_Tapped(object sender, TappedEventArgs e)
     {
-        await Navigation.PopAsync();
+        await this.DismissAsync();
     }
 
     private async void B_Export_Clicked(object sender, EventArgs e)

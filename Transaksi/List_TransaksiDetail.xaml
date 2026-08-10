@@ -49,10 +49,10 @@
                 </CollectionView.EmptyView>
             </CollectionView>
 
-            <StackLayout Grid.Row="3" Orientation="Horizontal">
-                <Label Text="Total Keseluruhan" FontAttributes="Bold" FontSize="16" VerticalOptions="Center" TextColor="#444"></Label>
-                <Label x:Name="L_TotalSubtotal" Text="Rp 0" FontAttributes="Bold" FontSize="18" TextColor="DarkCyan" VerticalOptions="Center" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand"></Label>
-            </StackLayout>
+            <Grid Grid.Row="3" ColumnDefinitions="Auto,*">
+                <Label Grid.Column="0" Text="Total Keseluruhan" FontAttributes="Bold" FontSize="16" VerticalOptions="Center" TextColor="#444"></Label>
+                <Label Grid.Column="1" x:Name="L_TotalSubtotal" Text="Rp 0" FontAttributes="Bold" FontSize="18" TextColor="DarkCyan" VerticalOptions="Center" HorizontalOptions="Fill" HorizontalTextAlignment="End"></Label>
+            </Grid>
 
             <Button Grid.Row="4" Text="EXPORT KE PDF" x:Name="B_Export" 
                     FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
