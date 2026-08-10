@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<the49:BottomSheet xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FinanceApp.Transaksi.List_TransaksiDetail" NavigationPage.HasNavigationBar="False" BackgroundColor="#f8fafa">
-    
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:the49="https://schemas.the49.com/dotnet/2023/maui"
+             BackgroundColor="White" Padding="0"
+             x:Class="FinanceApp.Transaksi.List_TransaksiDetail">
+
+    <the49:BottomSheet.Detents>
+        <the49:RatioDetent Ratio="0.60" />
+    </the49:BottomSheet.Detents>
+
     <Grid>
-        <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" RowSpacing="10" Padding="15">
+        <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" RowSpacing="10" Padding="20,30,20,20">
 
             <StackLayout Orientation="Horizontal" Grid.Row="0">
                 <Label Text="Detail Item Transaksi" FontAttributes="Bold" FontSize="16" VerticalOptions="Center"></Label>
@@ -22,8 +29,8 @@
             <CollectionView Grid.Row="2" x:Name="DetailCollection">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Spacing="10" Padding="0,10">
-                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="5">
+                        <StackLayout Spacing="5" Padding="0,10">
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="0">
                                 <!--nama_barang_jasa-->
                                 <Label Text="{Binding nama_barang_jasa}" FontSize="16" FontAttributes="Bold" Grid.Column="0" Grid.Row="0" TextColor="#444"></Label>
                                 <!--jumlah * harga-->
@@ -60,4 +67,4 @@
             </StackLayout>
         </Grid>
     </Grid>
-</ContentPage>
+</the49:BottomSheet>

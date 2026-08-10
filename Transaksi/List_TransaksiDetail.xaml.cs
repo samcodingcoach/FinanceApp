@@ -1,11 +1,12 @@
+using CommunityToolkit.Maui.Alerts;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Net.Http.Headers;
-using Newtonsoft.Json;
-using CommunityToolkit.Maui.Alerts;
+using The49.Maui.BottomSheet;
 
 namespace FinanceApp.Transaksi;
 
-public partial class List_TransaksiDetail : ContentPage
+public partial class List_TransaksiDetail : BottomSheet
 {
     private int _id_transaksi;
     private ObservableCollection<TransaksiDetailModel> _allData;
@@ -19,13 +20,11 @@ public partial class List_TransaksiDetail : ContentPage
         _filteredData = new ObservableCollection<TransaksiDetailModel>();
         
         DetailCollection.ItemsSource = _filteredData;
+
+        _ = LoadData();
     }
 
-    protected override async void OnAppearing()
-    {
-        base.OnAppearing();
-        await LoadData();
-    }
+    
 
     private async Task LoadData()
     {

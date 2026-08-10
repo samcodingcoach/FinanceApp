@@ -161,12 +161,19 @@ public partial class List_Transaksi : ContentPage
         if (sender is Border border)
         {
             // Efek animasi tap
-            await border.ScaleTo(0.95, 100);
-            await border.ScaleTo(1.0, 100);
+            await border.ScaleToAsync(0.95, 100);
+            await border.ScaleToAsync(1.0, 100);
 
             if (e.Parameter is int id_transaksi)
             {
-                await Navigation.PushAsync(new List_TransaksiDetail(id_transaksi));
+                //await Navigation.PushAsync(new );
+
+                var page = new List_TransaksiDetail(id_transaksi);
+                page.HasHandle = true;
+                page.HasBackdrop = true;
+                _ = page.ShowAsync(Window);
+            
+
             }
         }
     }
