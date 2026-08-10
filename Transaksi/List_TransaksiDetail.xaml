@@ -1,39 +1,63 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FinanceApp.Transaksi.List_TransaksiDetail" NavigationPage.HasNavigationBar="False"
-             >
-    <Grid RowDefinitions="Auto,Auto,*,Auto" RowSpacing="10">
-
-        <StackLayout Orientation="Horizontal" Grid.Row="0">
-            <Label Text="Detail Item Transaksi" FontAttributes="Bold" FontSize="16"></Label>
-            <Image Source="close100.png" HeightRequest="24" HorizontalOptions="EndAndExpand"></Image>
-        </StackLayout>
-        
-        <Grid Grid.Row="1" ColumnDefinitions="*" ColumnSpacing="10">
-            <Border Grid.Column="0" Padding="0" StrokeShape="RoundRectangle 10"  Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
-                <SearchBar Placeholder="Cari Item" x:Name="T_Search"></SearchBar>
-            </Border>
-        </Grid>
-
-        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="10" ColumnSpacing="10">
+             x:Class="FinanceApp.Transaksi.List_TransaksiDetail" NavigationPage.HasNavigationBar="False" BackgroundColor="#f8fafa">
     
-            <StackLayout Grid.Column="0" Grid.Row="0">
-                <!--nama_barang_jasa-->
-                <Label Text="Nama Item Barang atau Jasa" FontSize="16" FontAttributes="Bold" ></Label>
-                <!--jumlah * harga-->
-                <Label TextColor="Gray" FontAttributes="Bold" Text="2 X Rp 100.000" ></Label>
+    <Grid>
+        <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" RowSpacing="10" Padding="15">
+
+            <StackLayout Orientation="Horizontal" Grid.Row="0">
+                <Label Text="Detail Item Transaksi" FontAttributes="Bold" FontSize="16" VerticalOptions="Center"></Label>
+                <Image Source="close100.png" HeightRequest="24" HorizontalOptions="EndAndExpand" VerticalOptions="Center">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Close_Tapped" />
+                    </Image.GestureRecognizers>
+                </Image>
             </StackLayout>
-            <!--subtotal-->
-            <Label Text="Rp 200.000" FontSize="18" TextColor="Goldenrod" FontAttributes="Bold" Grid.Column="1" Grid.Row="0" HorizontalOptions="End"></Label>
-            <BoxView HeightRequest="1" BackgroundColor="WhiteSmoke" 
-                     Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"></BoxView>
+            
+            <Border Grid.Row="1" Padding="0" StrokeShape="RoundRectangle 10"  Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
+                <SearchBar Placeholder="Cari Item" x:Name="T_Search" TextChanged="T_Search_TextChanged"></SearchBar>
+            </Border>
+
+            <CollectionView Grid.Row="2" x:Name="DetailCollection">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Spacing="10" Padding="0,10">
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="5">
+                                <!--nama_barang_jasa-->
+                                <Label Text="{Binding nama_barang_jasa}" FontSize="16" FontAttributes="Bold" Grid.Column="0" Grid.Row="0" TextColor="#444"></Label>
+                                <!--jumlah * harga-->
+                                <Label TextColor="Gray" FontAttributes="Bold" Text="{Binding DetailHarga}" Grid.Column="0" Grid.Row="1"></Label>
+                                <!--subtotal-->
+                                <Label Text="{Binding SubtotalDisplay}" FontSize="18" TextColor="Goldenrod" FontAttributes="Bold" Grid.Column="1" Grid.Row="0" HorizontalOptions="End" VerticalOptions="Center"></Label>
+                            </Grid>
+                            <BoxView HeightRequest="1" BackgroundColor="WhiteSmoke"></BoxView>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Margin="0,50,0,0">
+                        <Label Text="Tidak ada detail transaksi." TextColor="Grey" FontSize="16" HorizontalTextAlignment="Center"></Label>
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+
+            <StackLayout Grid.Row="3" Orientation="Horizontal">
+                <Label Text="Total Keseluruhan" FontAttributes="Bold" FontSize="16" VerticalOptions="Center" TextColor="#444"></Label>
+                <Label x:Name="L_TotalSubtotal" Text="Rp 0" FontAttributes="Bold" FontSize="18" TextColor="DarkCyan" VerticalOptions="Center" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand"></Label>
+            </StackLayout>
+
+            <Button Grid.Row="4" Text="EXPORT KE PDF" x:Name="B_Export" 
+                    FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
+                    CornerRadius="20" BackgroundColor="CornflowerBlue"></Button>
         </Grid>
 
-
-
-        <Button Grid.Row="3" Text="EXPORT KE PDF" x:Name="B_Export" 
-                FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
-                CornerRadius="20" Margin="0,15,0,0" BackgroundColor="CornflowerBlue"></Button>
+        <!-- Loading Overlay -->
+        <Grid x:Name="LoadingOverlay" BackgroundColor="#80000000" IsVisible="True">
+            <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="15">
+                <ActivityIndicator IsRunning="{Binding Source={x:Reference LoadingOverlay}, Path=IsVisible}" Color="White" />
+                <Label Text="Memuat Detail..." TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+            </StackLayout>
+        </Grid>
     </Grid>
 </ContentPage>

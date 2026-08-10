@@ -155,6 +155,21 @@ public partial class List_Transaksi : ContentPage
     {
         await Navigation.PushAsync(new New_Transaksi());
     }
+
+    private async void TransaksiItem_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is Border border)
+        {
+            // Efek animasi tap
+            await border.ScaleTo(0.95, 100);
+            await border.ScaleTo(1.0, 100);
+
+            if (e.Parameter is int id_transaksi)
+            {
+                await Navigation.PushAsync(new List_TransaksiDetail(id_transaksi));
+            }
+        }
+    }
 }
 
 public class TransaksiRowModel
