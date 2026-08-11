@@ -5,107 +5,115 @@
              BackgroundColor="#f8fafa" NavigationPage.HasNavigationBar="False"
              Shell.NavBarIsVisible="False"
              >
- 
+    <Grid>
+        <ScrollView>
+            <Grid Padding="20,40" RowDefinitions="Auto,Auto,Auto" RowSpacing="30" VerticalOptions="Center">
+                
 
-    <ScrollView>
-        <Grid Padding="20,40" RowDefinitions="Auto,Auto,Auto" RowSpacing="30" VerticalOptions="Center">
-            
-
-            <!-- Header -->
-            <VerticalStackLayout Grid.Row="0" Spacing="10" HorizontalOptions="Center">
-                <Label Text="Finance Manager" FontSize="32" FontAttributes="Bold" TextColor="CornflowerBlue" HorizontalOptions="Center" />
-                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
-                    <Label Text="Selamat Datang" FontSize="20" FontAttributes="Bold" TextColor="#171d19" HorizontalOptions="Center" />
-                    <Label Text="Log in untuk kontrol keuanganmu" FontSize="14" TextColor="#3d4a42" HorizontalOptions="Center" />
-                </VerticalStackLayout>
-            </VerticalStackLayout>
-
-            <!-- Card -->
-            <Border Grid.Row="1" BackgroundColor="#ffffff" Stroke="#CCC" StrokeThickness="0.5" StrokeShape="RoundRectangle 12" Padding="24">
-                <Border.Shadow>
-                    <Shadow Brush="Black" Opacity="0.05" Offset="0,2" Radius="8" />
-                </Border.Shadow>
-
-                <VerticalStackLayout Spacing="20">
-                    
-                    <!-- Email -->
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Username atau Email" FontAttributes="Bold" TextColor="#444" Margin="5,0,0,0"/>
-                        <Border BackgroundColor="WhiteSmoke" Stroke="#CCC" StrokeThickness="0.5" StrokeShape="RoundRectangle 12" HeightRequest="50" Padding="15,0">
-                            <Grid ColumnDefinitions="Auto,*">
-                                <Image Grid.Column="0" Source="email100.png" WidthRequest="20" HeightRequest="20" Margin="0,0,10,0" VerticalOptions="Center" />
-                                <Entry Grid.Column="1" Placeholder="name@example.com" PlaceholderColor="#6d7a72" TextColor="#171d19" BackgroundColor="Transparent" VerticalOptions="Center" Keyboard="Email"/>
-                            </Grid>
-                        </Border>
+                <!-- Header -->
+                <VerticalStackLayout Grid.Row="0" Spacing="10" HorizontalOptions="Center">
+                    <Label Text="Finance Manager" FontSize="32" FontAttributes="Bold" TextColor="CornflowerBlue" HorizontalOptions="Center" />
+                    <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                        <Label Text="Selamat Datang" FontSize="20" FontAttributes="Bold" TextColor="#171d19" HorizontalOptions="Center" />
+                        <Label Text="Log in untuk kontrol keuanganmu" FontSize="14" TextColor="#3d4a42" HorizontalOptions="Center" />
                     </VerticalStackLayout>
+                </VerticalStackLayout>
 
-                    <!-- Password -->
-                    <VerticalStackLayout Spacing="8">
-                        <Grid ColumnDefinitions="*,Auto" Padding="5,0">
-                            <Label Grid.Column="0" Text="Password" FontAttributes="Bold" TextColor="#444"/>
-                            <Label Grid.Column="1" Text="Lupa Password?" FontSize="12" FontAttributes="Bold" TextColor="#006948">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer />
-                                </Label.GestureRecognizers>
-                            </Label>
-                        </Grid>
-                        <Border BackgroundColor="WhiteSmoke" Stroke="#CCC" StrokeThickness="0.5" StrokeShape="RoundRectangle 12" HeightRequest="50" Padding="15,0">
-                            <Grid ColumnDefinitions="Auto,*,Auto">
-                                <Image Grid.Column="0" Source="password100.png" WidthRequest="20" HeightRequest="20" Margin="0,0,10,0" VerticalOptions="Center" />
-                                <Entry Grid.Column="1" Placeholder="••••••••" IsPassword="True" PlaceholderColor="#6d7a72" TextColor="#171d19" BackgroundColor="Transparent" VerticalOptions="Center"/>
-                                <Image Grid.Column="2" Source="visibility.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center">
-                                    <Image.GestureRecognizers>
+                <!-- Card -->
+                <Border Grid.Row="1" BackgroundColor="#ffffff" Stroke="#CCC" StrokeThickness="0.5" StrokeShape="RoundRectangle 12" Padding="24">
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.05" Offset="0,2" Radius="8" />
+                    </Border.Shadow>
+
+                    <VerticalStackLayout Spacing="20">
+                        
+                        <!-- Email -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Username atau Email" FontAttributes="Bold" TextColor="#444" Margin="5,0,0,0"/>
+                            <Border BackgroundColor="WhiteSmoke" Stroke="#CCC" StrokeThickness="0.5" StrokeShape="RoundRectangle 12" HeightRequest="50" Padding="15,0">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <Image Grid.Column="0" Source="email100.png" WidthRequest="20" HeightRequest="20" Margin="0,0,10,0" VerticalOptions="Center" />
+                                    <Entry x:Name="UsernameEntry" Grid.Column="1" Placeholder="name@example.com" PlaceholderColor="#6d7a72" TextColor="#171d19" BackgroundColor="Transparent" VerticalOptions="Center" Keyboard="Email"/>
+                                </Grid>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Password -->
+                        <VerticalStackLayout Spacing="8">
+                            <Grid ColumnDefinitions="*,Auto" Padding="5,0">
+                                <Label Grid.Column="0" Text="Password" FontAttributes="Bold" TextColor="#444"/>
+                                <Label Grid.Column="1" Text="Lupa Password?" FontSize="12" FontAttributes="Bold" TextColor="#006948">
+                                    <Label.GestureRecognizers>
                                         <TapGestureRecognizer />
-                                    </Image.GestureRecognizers>
-                                </Image>
+                                    </Label.GestureRecognizers>
+                                </Label>
                             </Grid>
-                        </Border>
+                            <Border BackgroundColor="WhiteSmoke" Stroke="#CCC" StrokeThickness="0.5" StrokeShape="RoundRectangle 12" HeightRequest="50" Padding="15,0">
+                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <Image Grid.Column="0" Source="password100.png" WidthRequest="20" HeightRequest="20" Margin="0,0,10,0" VerticalOptions="Center" />
+                                    <Entry x:Name="PasswordEntry" Grid.Column="1" Placeholder="••••••••" IsPassword="True" PlaceholderColor="#6d7a72" TextColor="#171d19" BackgroundColor="Transparent" VerticalOptions="Center"/>
+                                    <Image Grid.Column="2" Source="visibility.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer />
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </Grid>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Login Button -->
+                        <Button x:Name="LoginBtn" Text="LOGIN" Clicked="OnLoginClicked" CharacterSpacing="2" BackgroundColor="CornflowerBlue" TextColor="White" FontSize="18" FontAttributes="Bold" CornerRadius="12" HeightRequest="55" Margin="0,10,0,0">
+                            <Button.Shadow>
+                                <Shadow Brush="Black" Opacity="0.1" Offset="0,2" Radius="4" />
+                            </Button.Shadow>
+                        </Button>
+
+                        <!-- Divider -->
+                        <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="10" Margin="0,15,0,5">
+                            <BoxView Grid.Column="0" HeightRequest="1" Color="#bccac0" VerticalOptions="Center" />
+                            <Label Grid.Column="1" Text="ALTERNATIF LOGIN DENGAN" FontSize="12" FontAttributes="Bold" TextColor="#3d4a42" VerticalOptions="Center" />
+                            <BoxView Grid.Column="2" HeightRequest="1" Color="#bccac0" VerticalOptions="Center" />
+                        </Grid>
+
+                        <!-- Social Buttons -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                            <Border Grid.Column="0" BackgroundColor="White" Stroke="#bccac0" StrokeThickness="1" StrokeShape="RoundRectangle 12" HeightRequest="45">
+                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                                    <Image Source="google10.png" HeightRequest="22"></Image>
+                                    <Label Text="Google" VerticalOptions="Center" FontAttributes="Bold" 
+                                           TextColor="Grey"></Label>
+                                </HorizontalStackLayout>
+                            </Border>
+                            <Border Grid.Column="1" BackgroundColor="White" Stroke="#bccac0" StrokeThickness="1" StrokeShape="RoundRectangle 12" HeightRequest="45">
+                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                                    <Image Source="fingerprint1.png" HeightRequest="22"></Image>
+                                    <Label Text="Biometric" VerticalOptions="Center" FontAttributes="Bold" 
+                                        TextColor="Grey"></Label>
+                                </HorizontalStackLayout>
+                            </Border>
+                        </Grid>
                     </VerticalStackLayout>
+                </Border>
 
-                    <!-- Login Button -->
-                    <Button Text="LOGIN" CharacterSpacing="2" BackgroundColor="CornflowerBlue" TextColor="White" FontSize="18" FontAttributes="Bold" CornerRadius="12" HeightRequest="55" Margin="0,10,0,0">
-                        <Button.Shadow>
-                            <Shadow Brush="Black" Opacity="0.1" Offset="0,2" Radius="4" />
-                        </Button.Shadow>
-                    </Button>
+                <!-- Footer -->
+                <HorizontalStackLayout Grid.Row="2" Spacing="5" HorizontalOptions="Center">
+                    <Label Text="Belum ada akun?" FontSize="14" TextColor="#3d4a42" VerticalOptions="Center"/>
+                    <Label Text="Daftar disini" FontSize="14" FontAttributes="Bold" TextColor="DeepPink" VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </HorizontalStackLayout>
 
-                    <!-- Divider -->
-                    <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="10" Margin="0,15,0,5">
-                        <BoxView Grid.Column="0" HeightRequest="1" Color="#bccac0" VerticalOptions="Center" />
-                        <Label Grid.Column="1" Text="ALTERNATIF LOGIN DENGAN" FontSize="12" FontAttributes="Bold" TextColor="#3d4a42" VerticalOptions="Center" />
-                        <BoxView Grid.Column="2" HeightRequest="1" Color="#bccac0" VerticalOptions="Center" />
-                    </Grid>
+            </Grid>
+        </ScrollView>
 
-                    <!-- Social Buttons -->
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
-                        <Border Grid.Column="0" BackgroundColor="White" Stroke="#bccac0" StrokeThickness="1" StrokeShape="RoundRectangle 12" HeightRequest="45">
-                            <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
-                                <Image Source="google10.png" HeightRequest="22"></Image>
-                                <Label Text="Google" VerticalOptions="Center" FontAttributes="Bold" 
-                                       TextColor="Grey"></Label>
-                            </HorizontalStackLayout>
-                        </Border>
-                        <Border Grid.Column="1" BackgroundColor="White" Stroke="#bccac0" StrokeThickness="1" StrokeShape="RoundRectangle 12" HeightRequest="45">
-                            <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
-                                <Image Source="fingerprint1.png" HeightRequest="22"></Image>
-                                <Label Text="Biometric" VerticalOptions="Center" FontAttributes="Bold" 
-                                    TextColor="Grey"></Label>
-                            </HorizontalStackLayout>
-                        </Border>
-                    </Grid>
-                </VerticalStackLayout>
-            </Border>
-
-            <!-- Footer -->
-            <HorizontalStackLayout Grid.Row="2" Spacing="5" HorizontalOptions="Center">
-                <Label Text="Belum ada akun?" FontSize="14" TextColor="#3d4a42" VerticalOptions="Center"/>
-                <Label Text="Daftar disini" FontSize="14" FontAttributes="Bold" TextColor="DeepPink" VerticalOptions="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer />
-                    </Label.GestureRecognizers>
-                </Label>
-            </HorizontalStackLayout>
-
+        <!-- Overlay Loading -->
+        <Grid x:Name="OverlayLoading" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="White" WidthRequest="50" HeightRequest="50" />
+                <Label x:Name="OverlayPercentage" Text="Cek Otentikasi... 0%" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+            </VerticalStackLayout>
         </Grid>
-    </ScrollView>
+    </Grid>
 </ContentPage>
