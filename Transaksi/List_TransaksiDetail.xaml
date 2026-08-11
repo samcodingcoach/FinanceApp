@@ -54,7 +54,7 @@
                 <Label Grid.Column="1" x:Name="L_TotalSubtotal" Text="Rp 0" FontAttributes="Bold" FontSize="18" TextColor="DarkCyan" VerticalOptions="Center" HorizontalOptions="Fill" HorizontalTextAlignment="End"></Label>
             </Grid>
 
-            <Button Grid.Row="4" Text="EXPORT KE PDF" x:Name="B_Export" 
+            <Button Grid.Row="4" Text="EXPORT KE PDF" x:Name="B_Export" Clicked="B_Export_Clicked"
                     FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
                     CornerRadius="20" BackgroundColor="CornflowerBlue"></Button>
         </Grid>
