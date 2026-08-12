@@ -141,8 +141,14 @@
                     <Label Grid.Column="0" Text="Dokumen Terakhir" FontSize="18" FontAttributes="Bold" TextColor="#171d19" />
                 </Grid>
 
-                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                <ScrollView x:Name="SV_Dokumen" Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                     <HorizontalStackLayout x:Name="HS_DokumenTerakhir" Spacing="10" Padding="4">
+                        <BindableLayout.EmptyView>
+                            <VerticalStackLayout WidthRequest="{Binding Width, Source={x:Reference SV_Dokumen}}" HorizontalOptions="Center" VerticalOptions="Center" Spacing="10" Margin="0, 20">
+                                <Image Source="empty2.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                <Label Text="Data tidak ditemukan" TextColor="#666" FontSize="14" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </BindableLayout.EmptyView>
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <Border BackgroundColor="#ffffff" Stroke="#dee4de" StrokeThickness="1" StrokeShape="RoundRectangle 12" WidthRequest="256" Padding="0">
@@ -188,6 +194,12 @@
                 </Grid>
 
                 <VerticalStackLayout x:Name="VS_TransaksiTerakhir" Spacing="0">
+                    <BindableLayout.EmptyView>
+                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10" Margin="0, 20">
+                            <Image Source="empty2.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                            <Label Text="Data tidak ditemukan" TextColor="#666" FontSize="14" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </BindableLayout.EmptyView>
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <ContentView Padding="4">

@@ -11,6 +11,8 @@ namespace FinanceApp;
 
 public partial class Beranda : ContentPage
 {
+    private static DateTime _lastFetchTime = DateTime.MinValue;
+
 	public Beranda()
 	{
 		InitializeComponent();
@@ -25,6 +27,12 @@ public partial class Beranda : ContentPage
 
     private async Task LoadApiDataAsync()
     {
+        // Hanya memanggil API jika sudah berlalu 30 menit dari fetch terakhir
+        if ((DateTime.Now - _lastFetchTime).TotalMinutes < 30)
+        {
+            return;
+        }
+
         try
         {
             var app = Application.Current as App;
@@ -230,6 +238,9 @@ public partial class Beranda : ContentPage
                         BindableLayout.SetItemsSource(HS_DokumenTerakhir, mappedList);
                     }
                 }
+                
+                // Jika semua API dieksekusi tanpa error, catat waktu terakhirnya
+                _lastFetchTime = DateTime.Now;
             }
         }
         catch (Exception ex)
