@@ -20,7 +20,8 @@
 
                     <VerticalStackLayout>
                         <Label Text="TOTAL SALDO" FontSize="12" FontAttributes="Bold" TextColor="#e6ffffff" CharacterSpacing="1" />
-                        <Label Text="Rp 5.250.000" FontSize="32" FontAttributes="Bold" TextColor="White" Margin="0,5,0,0" />
+                        <!--total_saldo_akhir : total-->
+                        <Label x:Name="L_TotalSaldo" Text="Rp 0" FontSize="32" FontAttributes="Bold" TextColor="White" Margin="0,5,0,0" />
                         
                         <HorizontalStackLayout Spacing="16" Margin="0,24,0,0">
                             <!-- Top Up Button -->
@@ -58,10 +59,11 @@
                     </Border.Shadow>
                     <VerticalStackLayout Spacing="8">
                         <HorizontalStackLayout Spacing="5">
-                            <Image Source="arrow_down_green.png" WidthRequest="20" HeightRequest="20"/>
+                            <Image Source="arrowdown.png" WidthRequest="20" HeightRequest="20"/>
                             <Label Text="Pemasukan" FontSize="12" FontAttributes="Bold" TextColor="#006948" VerticalOptions="Center" />
                         </HorizontalStackLayout>
-                        <Label Text="Rp 12.000.000" FontSize="16" FontAttributes="Bold" TextColor="#171d19" />
+                        <!--dashboard_pengeluaran_pemasukan, pemasukan-->
+                        <Label x:Name="L_Pemasukan" Text="Rp 0" FontSize="16" FontAttributes="Bold" TextColor="#171d19" />
                     </VerticalStackLayout>
                 </Border>
                 
@@ -72,10 +74,11 @@
                     </Border.Shadow>
                     <VerticalStackLayout Spacing="8">
                         <HorizontalStackLayout Spacing="5">
-                            <Image Source="arrow_up_red.png" WidthRequest="20" HeightRequest="20"/>
+                            <Image Source="arrowup1.png" WidthRequest="20" HeightRequest="20"/>
                             <Label Text="Pengeluaran" FontSize="12" FontAttributes="Bold" TextColor="#ba5551" VerticalOptions="Center" />
                         </HorizontalStackLayout>
-                        <Label Text="Rp 6.750.000" FontSize="16" FontAttributes="Bold" TextColor="#171d19" />
+                        <!--dashboard_pengeluaran_pemasukan, pengeluaran-->
+                        <Label x:Name="L_Pengeluaran" Text="Rp 0" FontSize="16" FontAttributes="Bold" TextColor="#171d19" />
                     </VerticalStackLayout>
                 </Border>
             </Grid>
@@ -88,12 +91,12 @@
                 <VerticalStackLayout Spacing="16">
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Grid.Column="0" Text="Anggaran Bulanan" FontSize="18" FontAttributes="Bold" TextColor="#171d19" />
-                        <Label Grid.Column="1" Text="Terpakai 65%" FontSize="14" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalOptions="Center" />
+                        <Label x:Name="L_AnggaranTerpakaiPersen" Grid.Column="1" Text="Terpakai 65%" FontSize="14" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalOptions="Center" />
                     </Grid>
                     
-                    <ProgressBar Progress="0.65" ProgressColor="#006948" BackgroundColor="#e4eae4" HeightRequest="8" />
+                    <ProgressBar x:Name="PB_Anggaran" Progress="0.65" ProgressColor="#006948" BackgroundColor="#e4eae4" HeightRequest="8" />
                     
-                    <Label Text="Tersisa Rp 1.500.000 untuk bulan ini." FontSize="14" TextColor="#3d4a42" />
+                    <Label x:Name="L_AnggaranTersisa" Text="Tersisa Rp 1.500.000 untuk bulan ini." FontSize="14" TextColor="#3d4a42" />
                 </VerticalStackLayout>
             </Border>
 
@@ -114,10 +117,13 @@
                                 <VerticalStackLayout Spacing="8">
                                     <Grid ColumnDefinitions="*,Auto">
                                         <HorizontalStackLayout Grid.Column="0" Spacing="12">
+                                            
                                             <Border BackgroundColor="{Binding AvatarBgColor}" StrokeThickness="0" StrokeShape="RoundRectangle 16" WidthRequest="32" HeightRequest="32" VerticalOptions="Center">
-                                                <Label Text="{Binding Urutan}" FontSize="12" FontAttributes="Bold" TextColor="{Binding AvatarTextColor}" HorizontalOptions="Center" VerticalOptions="Center" />
+                                                <Image Source="{Binding PhotoUrl}" Aspect="AspectFill"></Image>
                                             </Border>
-                                            <Label Text="{Binding Nama}" FontSize="16" FontAttributes="Bold" TextColor="#171d19" VerticalOptions="Center" />
+
+                                            <Label Text="{Binding Urutan}" FontSize="12" FontAttributes="Bold" TextColor="{Binding AvatarTextColor}" HorizontalOptions="Center" VerticalOptions="Center" />
+                                            <Label Text="{Binding Nama}" FontSize="16" FontAttributes="Bold" TextColor="#444" VerticalOptions="Center" />
                                         </HorizontalStackLayout>
                                         <Label Grid.Column="1" Text="{Binding Nominal}" FontSize="18" FontAttributes="Bold" TextColor="{Binding NominalColor}" VerticalOptions="Center" />
                                     </Grid>
