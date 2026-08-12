@@ -240,6 +240,18 @@ public partial class Beranda : ContentPage
 
     private async void Download_Tapped(object sender, TappedEventArgs e)
     {
+        if (sender is View view)
+        {
+            await Task.WhenAll(
+                view.ScaleTo(0.8, 100),
+                view.FadeTo(0.2, 100)
+            );
+            await Task.WhenAll(
+                view.ScaleTo(1.0, 100),
+                view.FadeTo(0.6, 100)
+            );
+        }
+
         if (e.Parameter is string url && !string.IsNullOrEmpty(url) && url.StartsWith("http"))
         {
             try
