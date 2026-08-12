@@ -1,5 +1,11 @@
+using CommunityToolkit.Maui.Alerts;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+
+#if ANDROID
+using Android.Content;
+using Android.Provider;
+#endif
 
 namespace FinanceApp;
 
@@ -189,11 +195,94 @@ public partial class Beranda : ContentPage
                         BindableLayout.SetItemsSource(VS_TransaksiTerakhir, mappedList);
                     }
                 }
+
+                // 6. Dokumen Terakhir
+                string urlDokumen = $"{App.API_HOST}/transaksi?select=no_faktur,keterangan,foto_transaksi&order=id_transaksi.desc&limit=4";
+                var resDokumen = await client.GetAsync(urlDokumen);
+                if (resDokumen.IsSuccessStatusCode)
+                {
+                    string json = await resDokumen.Content.ReadAsStringAsync();
+                    var list = JsonConvert.DeserializeObject<List<DashboardDokumenTerakhirResponse>>(json);
+                    if (list != null)
+                    {
+                        var mappedList = new ObservableCollection<DokumenModel>();
+                        
+                        foreach (var item in list)
+                        {
+                            string bucketUrl = app?.BUCKET_URL ?? "";
+                            string imageUrl = "nopic100.png";
+                            bool isDownloadVisible = false;
+
+                            if (!string.IsNullOrEmpty(item.foto_transaksi))
+                            {
+                                imageUrl = $"{bucketUrl}/transaksi/{item.foto_transaksi}";
+                                isDownloadVisible = true;
+                            }
+                            
+                            mappedList.Add(new DokumenModel {
+                                ImageUrl = imageUrl,
+                                Judul = item.no_faktur ?? "Dokumen",
+                                Subtitle = item.keterangan ?? "-",
+                                IsDownloadVisible = isDownloadVisible
+                            });
+                        }
+                        
+                        BindableLayout.SetItemsSource(HS_DokumenTerakhir, mappedList);
+                    }
+                }
             }
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Error fetching data: {ex.Message}");
+        }
+    }
+
+    private async void Download_Tapped(object sender, TappedEventArgs e)
+    {
+        if (e.Parameter is string url && !string.IsNullOrEmpty(url) && url.StartsWith("http"))
+        {
+            try
+            {
+#if ANDROID
+                string fileName = System.IO.Path.GetFileName(new Uri(url).AbsolutePath);
+                if (string.IsNullOrEmpty(fileName)) fileName = "foto_transaksi.jpg";
+                
+                string downloadsPath = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDownloads).AbsolutePath;
+                string filePath = System.IO.Path.Combine(downloadsPath, fileName);
+
+                // Jika sudah ada tidak usah ditanyakan, hapus saja yang lama agar tertimpa dengan yang baru
+                if (System.IO.File.Exists(filePath))
+                {
+                    try { System.IO.File.Delete(filePath); } catch { }
+                }
+
+                using var hc = new HttpClient();
+                var imgBytes = await hc.GetByteArrayAsync(url);
+                
+                var context = Android.App.Application.Context;
+                var values = new ContentValues();
+                values.Put(MediaStore.IMediaColumns.DisplayName, fileName);
+                values.Put(MediaStore.IMediaColumns.MimeType, "image/jpeg");
+                values.Put(MediaStore.IMediaColumns.RelativePath, Android.OS.Environment.DirectoryDownloads);
+
+                var uri = context.ContentResolver.Insert(MediaStore.Downloads.ExternalContentUri, values);
+                if (uri != null)
+                {
+                    using (var stream = context.ContentResolver.OpenOutputStream(uri))
+                    {
+                        await stream.WriteAsync(imgBytes, 0, imgBytes.Length);
+                    }
+                    await Toast.Make($"Foto {fileName} berhasil diunduh ke folder Downloads").Show();
+                }
+#else
+                await Launcher.OpenAsync(new Uri(url));
+#endif
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", "Gagal mengunduh foto: " + ex.Message, "OK");
+            }
         }
     }
 
@@ -253,6 +342,7 @@ public class DokumenModel
     public Color StatusBgColor { get; set; }
     public Color StatusTextColor { get; set; }
     public string ActionIcon { get; set; }
+    public bool IsDownloadVisible { get; set; }
 }
 
 public class TransaksiModel
@@ -299,4 +389,11 @@ public class DashboardTransaksiAkhirResponse
     public string icon { get; set; }
     public decimal subtotal { get; set; }
     public string nama_barang_jasa { get; set; }
+}
+
+public class DashboardDokumenTerakhirResponse
+{
+    public string no_faktur { get; set; }
+    public string keterangan { get; set; }
+    public string foto_transaksi { get; set; }
 }

@@ -136,13 +136,13 @@
             </VerticalStackLayout>
 
             <!-- Recent Documents Section (Horizontal) -->
-            <VerticalStackLayout Spacing="16">
+            <VerticalStackLayout Spacing="15">
                 <Grid ColumnDefinitions="*,Auto">
                     <Label Grid.Column="0" Text="Dokumen Terakhir" FontSize="18" FontAttributes="Bold" TextColor="#171d19" />
                 </Grid>
 
                 <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
-                    <HorizontalStackLayout x:Name="HS_DokumenTerakhir" Spacing="16" Padding="4">
+                    <HorizontalStackLayout x:Name="HS_DokumenTerakhir" Spacing="10" Padding="4">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <Border BackgroundColor="#ffffff" Stroke="#dee4de" StrokeThickness="1" StrokeShape="RoundRectangle 12" WidthRequest="256" Padding="0">
@@ -151,23 +151,23 @@
                                     </Border.Shadow>
                                     <VerticalStackLayout>
                                         <!-- Image Header -->
-                                        <Grid HeightRequest="128" BackgroundColor="#e9efe9">
+                                        <Grid HeightRequest="125" BackgroundColor="#e9efe9">
                                             <Image Source="{Binding ImageUrl}" Aspect="AspectFill" Opacity="0.8" />
                                         </Grid>
                                         
                                         <!-- Content -->
-                                        <VerticalStackLayout Padding="16" Spacing="4">
-                                            <Label Text="{Binding Judul}" FontSize="16" FontAttributes="Bold" TextColor="#171d19" LineBreakMode="TailTruncation" />
-                                            <Label Text="{Binding Subtitle}" FontSize="14" TextColor="#3d4a42" />
-                                            
-                                            <Grid ColumnDefinitions="Auto,*" Margin="0,8,0,0">
-                                                <Border Grid.Column="0" BackgroundColor="{Binding StatusBgColor}" StrokeThickness="0" StrokeShape="RoundRectangle 4" Padding="8,2" VerticalOptions="Center">
-                                                    <Label Text="{Binding StatusText}" FontSize="10" FontAttributes="Bold" TextColor="{Binding StatusTextColor}" TextTransform="Uppercase" />
-                                                </Border>
-                                                <!-- We'll use a text-based material icon approximation or an image if available -->
-                                                <Label Grid.Column="1" Text="{Binding ActionIcon}" FontFamily="MaterialIcons" FontSize="20" TextColor="#006948" HorizontalOptions="End" VerticalOptions="Center" />
-                                            </Grid>
-                                        </VerticalStackLayout>
+                                        <StackLayout Orientation="Horizontal" Padding="16" Spacing="4">
+                                            <StackLayout>
+                                                <Label Text="{Binding Judul}" FontSize="16" FontAttributes="Bold" TextColor="#171d19" LineBreakMode="TailTruncation" />
+                                                <Label Text="{Binding Subtitle}" FontSize="14" TextColor="#3d4a42" />
+                                            </StackLayout>
+
+                                            <Image Source="download1.png" HeightRequest="20" TranslationX="-5" HorizontalOptions="EndAndExpand" Opacity="0.6" IsVisible="{Binding IsDownloadVisible}">
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="Download_Tapped" CommandParameter="{Binding ImageUrl}" />
+                                                </Image.GestureRecognizers>
+                                            </Image>                                           
+                                        </StackLayout>
                                     </VerticalStackLayout>
                                 </Border>
                             </DataTemplate>
