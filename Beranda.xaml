@@ -187,7 +187,7 @@
                     </Label>
                 </Grid>
 
-                <VerticalStackLayout x:Name="VS_TransaksiTerakhir" Spacing="8">
+                <VerticalStackLayout x:Name="VS_TransaksiTerakhir" Spacing="0">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <ContentView Padding="4">

@@ -148,6 +148,47 @@ public partial class Beranda : ContentPage
                         BindableLayout.SetItemsSource(VS_PengeluaranAnggota, mappedList);
                     }
                 }
+
+                // 5. Transaksi Terakhir
+                string urlTransaksi = $"{App.API_HOST}/dashboard_transaksi_akhir";
+                var resTransaksi = await client.GetAsync(urlTransaksi);
+                if (resTransaksi.IsSuccessStatusCode)
+                {
+                    string json = await resTransaksi.Content.ReadAsStringAsync();
+                    var list = JsonConvert.DeserializeObject<List<DashboardTransaksiAkhirResponse>>(json);
+                    if (list != null)
+                    {
+                        var mappedList = new ObservableCollection<TransaksiModel>();
+                        
+                        foreach (var item in list)
+                        {
+                            // Berdasarkan sample data JSON, "tipe": false untuk "Ambeven" (obat) yang berarti pengeluaran.
+                            // Jadi jika tipe == false maka itu adalah Pengeluaran, jika true maka Pemasukan.
+                            bool isPengeluaran = !item.tipe;
+                            
+                            string bucketUrl = app?.BUCKET_URL ?? "";
+                            string iconUrl = string.IsNullOrEmpty(item.icon) ? "cart.png" : $"{bucketUrl}/icon/{item.icon}";
+                            
+                            // Karena icon berwarna putih, gunakan warna latar (background) yang lebih gelap muda (solid)
+                            Color bgColor = isPengeluaran ? Color.FromArgb("#ba5551") : Color.FromArgb("#006948");
+                            if (string.IsNullOrEmpty(item.icon)) bgColor = Color.FromArgb("#d0e1fb");
+
+                            string prefix = isPengeluaran ? "- Rp" : "+ Rp";
+                            Color textColor = isPengeluaran ? Color.FromArgb("#ba5551") : Color.FromArgb("#006948");
+                            
+                            mappedList.Add(new TransaksiModel {
+                                IconImage = iconUrl,
+                                IconBgColor = bgColor,
+                                Judul = item.nama_barang_jasa ?? "Transaksi",
+                                Tanggal = item.created_at.ToString("dd MMM yyyy"),
+                                Nominal = $"{prefix} {item.subtotal:N0}",
+                                NominalColor = textColor
+                            });
+                        }
+                        
+                        BindableLayout.SetItemsSource(VS_TransaksiTerakhir, mappedList);
+                    }
+                }
             }
         }
         catch (Exception ex)
@@ -248,4 +289,14 @@ public class DashboardPengeluaranAnggotaResponse
     public string photo { get; set; }
     public string role { get; set; }
     public decimal total_nominal { get; set; }
+}
+
+public class DashboardTransaksiAkhirResponse
+{
+    public int id_transaksi { get; set; }
+    public DateTime created_at { get; set; }
+    public bool tipe { get; set; }
+    public string icon { get; set; }
+    public decimal subtotal { get; set; }
+    public string nama_barang_jasa { get; set; }
 }
