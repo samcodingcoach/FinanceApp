@@ -17,8 +17,11 @@ public partial class PilihRekening_BottomSheet : BottomSheet
     // Optional event if we want to return data to parent
     public event EventHandler<AkunRekening> RekeningSelected;
 
-    public PilihRekening_BottomSheet()
+    private bool _isPengeluaran;
+
+    public PilihRekening_BottomSheet(bool isPengeluaran = false)
     {
+        _isPengeluaran = isPengeluaran;
         InitializeComponent();
         _allAkun = new ObservableCollection<AkunRekening>();
         ListAkunCollection.ItemsSource = _allAkun;
@@ -54,6 +57,12 @@ public partial class PilihRekening_BottomSheet : BottomSheet
             var app = Application.Current as App;
             string tokenKey = app?.TOKEN_KEY ?? string.Empty;
             string apiUrl = App.API_HOST + $"akun_rekening?limit={_limit}&offset={_offset}";
+            
+            // Jika transaksi pengeluaran, jangan tampilkan rekening bersaldo 0 atau minus
+            if (_isPengeluaran)
+            {
+                apiUrl += "&saldo=gt.0";
+            }
 
             using (var client = new HttpClient())
             {
@@ -111,17 +120,33 @@ public partial class PilihRekening_BottomSheet : BottomSheet
 
     private AkunRekening _selectedRekening;
     
-    private void Rekening_Tapped(object sender, TappedEventArgs e)
+    private Border _lastSelectedBorder;
+
+    private async void Rekening_Tapped(object sender, TappedEventArgs e)
     {
         var selectedItem = e.Parameter as AkunRekening;
-        if (selectedItem != null)
+        if (selectedItem != null && sender is Border currentBorder)
         {
-            _selectedRekening = selectedItem;
-            
-            // Optional: Beri efek visual tap (fading) untuk memberi tahu user bahwa ini terpilih
-            if (sender is Border border)
+            if (_selectedRekening == selectedItem)
             {
-                _ = border.FadeTo(0.5, 100).ContinueWith((t) => border.FadeTo(1, 100));
+                // Tap ke-2 pada item yang sama: Konfirmasi pilihan dan kembali ke New_Transaksi
+                RekeningSelected?.Invoke(this, _selectedRekening);
+                await this.DismissAsync();
+            }
+            else
+            {
+                // Tap ke-1 pada item ini: Tandai sebagai terpilih (Ubah Warna)
+                _selectedRekening = selectedItem;
+                
+                // Kembalikan warna item sebelumnya ke putih
+                if (_lastSelectedBorder != null)
+                {
+                    _lastSelectedBorder.BackgroundColor = Colors.White;
+                }
+                
+                // Ubah warna item yang baru di-tap menjadi biru muda sebagai indikasi terpilih
+                currentBorder.BackgroundColor = Color.FromArgb("#e6f2ff"); 
+                _lastSelectedBorder = currentBorder;
             }
         }
     }

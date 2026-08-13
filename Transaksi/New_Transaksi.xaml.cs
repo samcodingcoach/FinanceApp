@@ -132,7 +132,7 @@ public partial class New_Transaksi : ContentPage
             await stackLayout.FadeToAsync(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
             await stackLayout.FadeToAsync(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
 
-            var page = new Transaksi.PilihRekening_BottomSheet();
+            var page = new Transaksi.PilihRekening_BottomSheet(!_isPemasukan);
             page.HasHandle = true;
             page.HasBackdrop = true;
             

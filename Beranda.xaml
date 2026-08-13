@@ -11,7 +11,7 @@
             <!-- Total Balance Card -->
             <Border StrokeThickness="0" StrokeShape="RoundRectangle 20" BackgroundColor="CornflowerBlue" Padding="24" HeightRequest="180">
                 <Border.Shadow>
-                    <Shadow Brush="Chocolate" Opacity="0.4" Radius="10" Offset="0,4" />
+                    <Shadow Brush="DarkSlateBlue" Opacity="0.4" Radius="20" Offset="0,4" />
                 </Border.Shadow>
                 <Grid>
                     <!-- Background Icon -->
@@ -100,11 +100,41 @@
                 </VerticalStackLayout>
             </Border>
 
+            <!-- Budgeting Progress -->
+            <Border BackgroundColor="#ffffff" Stroke="#f1f5f9" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                <Border.Shadow>
+                    <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+                </Border.Shadow>
+                <Grid ColumnDefinitions="*,*,*,*,*" ColumnSpacing="10" RowDefinitions="Auto,Auto">
+                    <StackLayout Grid.Column="0" Grid.Row="0">
+                        <Image Source="menu_akun.png" HeightRequest="42"></Image>
+                        <Label Text="Rekening" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444"></Label>
+                    </StackLayout>
+                    <StackLayout Grid.Column="1" Grid.Row="0">
+                        <Image Source="menu_kategori.png" HeightRequest="42"></Image>
+                        <Label Text="Kategori" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444"></Label>
+                    </StackLayout>
+                    <StackLayout Grid.Column="2" Grid.Row="0">
+                        <Image Source="menu_budget.png" HeightRequest="42"></Image>
+                        <Label Text="Anggaran" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444"></Label>
+                    </StackLayout>
+                    <StackLayout Grid.Column="3" Grid.Row="0">
+                        <Image Source="menu_user.png" HeightRequest="42"></Image>
+                        <Label Text="Pengguna" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444"></Label>
+                    </StackLayout>
+                    <StackLayout Grid.Column="4" Grid.Row="0">
+                        <Image Source="menu_config.png" HeightRequest="42"></Image>
+                        <Label Text="Pengaturan" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444"></Label>
+                    </StackLayout>
+                    
+                </Grid>
+            </Border>
+
             <!-- Member Spending Ranking -->
             <VerticalStackLayout Spacing="16">
                 <Grid ColumnDefinitions="*,Auto">
                     <Label Grid.Column="0" Text="Pengeluaran Anggota" FontSize="18" FontAttributes="Bold" TextColor="#171d19" />
-                    <Label Grid.Column="1" Text="View All" FontSize="14" FontAttributes="Bold" TextColor="#006948" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="Lihat Semua" FontSize="14" FontAttributes="Bold" TextColor="#006948" VerticalOptions="Center" />
                 </Grid>
 
                 <Border BackgroundColor="#ffffff" Stroke="#dee4de" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">

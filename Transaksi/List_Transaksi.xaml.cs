@@ -26,9 +26,19 @@ public partial class List_Transaksi : ContentPage
         MonthPicker.Date = DateTime.Now;
     }
 
+    private static DateTime _lastFetchTime = DateTime.MinValue;
+
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        
+        // Cache selama 30 menit agar tidak reload tiap pindah tab
+        if ((DateTime.Now - _lastFetchTime).TotalMinutes < 30)
+        {
+            return;
+        }
+        
+        _lastFetchTime = DateTime.Now;
         LoadData();
     }
 

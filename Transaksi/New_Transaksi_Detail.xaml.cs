@@ -179,6 +179,11 @@ public partial class New_Transaksi_Detail : ContentPage, INotifyPropertyChanged
             }
         }
     }
+
+    private async void Back_Tapped(object sender, TappedEventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
 }
 
 public class FormDetailItem : INotifyPropertyChanged

@@ -3,14 +3,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FinanceApp.Transaksi.New_Transaksi_Detail"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             BackgroundColor="#f8fafa" Shell.TabBarIsVisible="False" 
+             BackgroundColor="#f8fafa" 
+             NavigationPage.HasNavigationBar="False" Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="False"
              Title="Transaksi Detail">
     <Grid>
-        <ScrollView>
-            <Grid RowDefinitions="Auto,*,Auto,Auto" Padding="20,10" RowSpacing="5">
+        <ScrollView Margin="0,30,0,0">
+            <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" Padding="20,10" RowSpacing="5">
                 
+                <!-- Custom Navbar -->
+                <StackLayout Orientation="Horizontal" Spacing="10" Grid.Row="0">
+                    <Image Source="backbiru1.png" HeightRequest="24">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Back_Tapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Transaksi Detail" FontAttributes="Bold" FontSize="16" 
+                           TextColor="CornflowerBlue"
+                           VerticalTextAlignment="Center"></Label>
+                </StackLayout>
+
                 <!-- Info Section -->
-                <Border Grid.Row="0" Margin="0,10,0,0" 
+                <Border Grid.Row="1" Margin="0,10,0,0" 
                         Padding="10" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.3" 
                         BackgroundColor="White">
                     <StackLayout Orientation="Horizontal" Spacing="10">
@@ -23,7 +36,7 @@
                 </Border>
                 
                 <!-- Form Detail List (Dynamic) -->
-                <StackLayout Grid.Row="1" BindableLayout.ItemsSource="{Binding DetailItems}" Spacing="10" Margin="0,10,0,0">
+                <StackLayout Grid.Row="2" BindableLayout.ItemsSource="{Binding DetailItems}" Spacing="10" Margin="0,10,0,0">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <Border VerticalOptions="Start" Padding="20,15" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.3" BackgroundColor="White">
@@ -75,8 +88,8 @@
                     </BindableLayout.ItemTemplate>
                 </StackLayout>
 
-                <!-- Grand Total -->
-                <Border Grid.Row="2" Margin="0,10,0,0" 
+                <!-- Footer (Total) -->
+                <Border Grid.Row="3" Margin="0,10,0,0" 
                         Padding="10" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.3" 
                         BackgroundColor="White">
                     <StackLayout Orientation="Horizontal" Spacing="10">
@@ -86,8 +99,8 @@
                     </StackLayout>
                 </Border>
 
-                <!-- Simpan Button -->
-                <Button Grid.Row="3" Text="SIMPAN DETAIL TRANSAKSI" x:Name="BSimpan" Clicked="BSimpan_Clicked" FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
+                <!-- Button Add Item -->
+                <Button Grid.Row="4" Text="SIMPAN DETAIL TRANSAKSI" x:Name="BSimpan" Clicked="BSimpan_Clicked" FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
                         CornerRadius="20" Margin="0,15,0,0" BackgroundColor="CornflowerBlue"></Button>
             </Grid>
         </ScrollView>
