@@ -108,6 +108,9 @@
 	  <MauiXaml Update="Rekening\New_Rekening.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Report.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Transaksi\List_Transaksi.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

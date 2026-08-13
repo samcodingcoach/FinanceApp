@@ -1,10 +1,34 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FinanceApp.MainPage">
+<?xml version="1.0" encoding="utf-8" ?>
+<!--x:Class="FinanceApp.MainPage"-->
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:FinanceApp"
+       xmlns:transaksi="clr-namespace:FinanceApp.Transaksi"
+       FlyoutBehavior="Disabled"
+       Shell.TabBarUnselectedColor="#80808080"
+       x:Class="FinanceApp.MainPage">
 
-    <ScrollView>
-        
-    </ScrollView>
+    <!--Bottom navigation : Beranda, Transaksi, Pengaturan, Profil-->
+    <TabBar>
+        <Tab Title="Beranda" Icon="navhome50.png">
+            <ShellContent ContentTemplate="{DataTemplate local:Beranda}" />
+        </Tab>
+        <Tab Title="Transaksi" Icon="navtx50.png">
+            <ShellContent ContentTemplate="{DataTemplate transaksi:List_Transaksi}" />
+        </Tab>
+        <Tab Title="Laporan" Icon="navreport50.png">
+            <!--ContentTemplate masih kosong, nanti disetting-->
+            <ShellContent>
+                <ContentPage />
+            </ShellContent>
+        </Tab>
+        <Tab Title="Profil" Icon="navprofil50.png">
+            <!--ContentTemplate masih kosong, nanti disetting-->
+            <ShellContent>
+                <ContentPage />
+            </ShellContent>
+        </Tab>
+    </TabBar>
 
-</ContentPage>
+</Shell>
+

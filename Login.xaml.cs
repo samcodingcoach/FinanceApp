@@ -74,7 +74,7 @@ public partial class Login : ContentPage
                         {
                             _failedAttempts = 0;
                             Preferences.Set("user_data", JsonConvert.SerializeObject(result));
-                            Application.Current.MainPage = new NavigationPage(new Beranda());
+                            Application.Current.MainPage = new MainPage();
                         }
                         else
                         {
