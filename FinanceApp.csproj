@@ -99,6 +99,9 @@
 	  <MauiXaml Update="Login.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="ProfilesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Rekening\Edit_Rekening.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

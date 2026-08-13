@@ -24,9 +24,9 @@
         </Tab>
         <Tab Title="Profil" Icon="navprofil50.png">
             <!--ContentTemplate masih kosong, nanti disetting-->
-            <ShellContent>
-                <ContentPage />
-            </ShellContent>
+           
+                <ShellContent ContentTemplate="{DataTemplate local:ProfilesPage}" />
+            
         </Tab>
     </TabBar>
 
