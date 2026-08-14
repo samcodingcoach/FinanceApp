@@ -2,11 +2,159 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FinanceApp.Report"
-             Title="Report">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             BackgroundColor="#f5fbf5"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
+             
+    <ScrollView>
+        <StackLayout Padding="16,40,16,32" Spacing="24">
+            
+            <!-- Time Period Selector -->
+            <Border BackgroundColor="#e4eae4" Padding="4" StrokeShape="RoundRectangle 12" StrokeThickness="0">
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="4">
+                    <Button x:Name="BtnMingguan"
+                            Text="Mingguan" 
+                            BackgroundColor="#006948" 
+                            TextColor="#ffffff" 
+                            FontAttributes="Bold" 
+                            FontSize="12" 
+                            CornerRadius="8"
+                            HeightRequest="40" 
+                            Clicked="Tab_Clicked" />
+                            
+                    <Button x:Name="BtnBulanan"
+                            Grid.Column="1" 
+                            Text="Bulanan" 
+                            BackgroundColor="Transparent" 
+                            TextColor="#3d4a42" 
+                            FontAttributes="Bold" 
+                            FontSize="12" 
+                            CornerRadius="8"
+                            HeightRequest="40" 
+                            Clicked="Tab_Clicked" />
+                            
+                    <Button x:Name="BtnTahunan"
+                            Grid.Column="2" 
+                            Text="Tahunan" 
+                            BackgroundColor="Transparent" 
+                            TextColor="#3d4a42" 
+                            FontAttributes="Bold" 
+                            FontSize="12" 
+                            CornerRadius="8"
+                            HeightRequest="40" 
+                            Clicked="Tab_Clicked" />
+                </Grid>
+            </Border>
+
+            <!-- Trend Pengeluaran -->
+            <Border BackgroundColor="#ffffff" Stroke="#bccac0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                <Border.Shadow>
+                    <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+                </Border.Shadow>
+                
+                <StackLayout>
+                    <Grid>
+                        <Label Text="Trend Pengeluaran" FontAttributes="Bold" FontSize="18" TextColor="#171d19" HorizontalOptions="Start" VerticalOptions="Center" />
+                        <HorizontalStackLayout HorizontalOptions="End" VerticalOptions="Center" Spacing="4">
+                            <Label x:Name="LabelTahunIni" Text="Tahun Ini" FontSize="12" TextColor="#3d4a42" VerticalOptions="Center" IsVisible="False" />
+                            <Picker x:Name="PickerTahun" Title="Tahun" FontSize="12" TextColor="#3d4a42" WidthRequest="80" />
+                            <Picker x:Name="PickerBulan" Title="Bulan" FontSize="12" TextColor="#3d4a42" WidthRequest="80" />
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <!-- Bar Chart Area -->
+                    <Grid ColumnDefinitions="*,*,*,*,*" HeightRequest="160" Margin="0,24,0,0" ColumnSpacing="12">
+                        
+                        <!-- Bar W1 -->
+                        <VerticalStackLayout Grid.Column="0" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
+                            <Label Text="10" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            <BoxView BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="60" CornerRadius="0" HorizontalOptions="Center" />
+                            <Label x:Name="LblBar1" Text="W1" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                        
+                        <!-- Bar W2 -->
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
+                            <Label Text="20" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            <BoxView BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="100" CornerRadius="0" HorizontalOptions="Center" />
+                            <Label x:Name="LblBar2" Text="W2" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+
+                        <!-- Bar W3 (Active) -->
+                        <VerticalStackLayout Grid.Column="2" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
+                            <Label Text="25" FontSize="10" TextColor="#006948" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            <BoxView BackgroundColor="#006948" WidthRequest="30" HeightRequest="130" CornerRadius="0" HorizontalOptions="Center" />
+                            <Label x:Name="LblBar3" Text="W3" FontSize="10" TextColor="#006948" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+
+                        <!-- Bar W4 -->
+                        <VerticalStackLayout Grid.Column="3" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
+                            <Label Text="18" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            <BoxView BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="85" CornerRadius="0" HorizontalOptions="Center" />
+                            <Label x:Name="LblBar4" Text="W4" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+
+                        <!-- Bar W5 -->
+                        <VerticalStackLayout Grid.Column="4" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
+                            <Label Text="8" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            <BoxView BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="45" CornerRadius="0" HorizontalOptions="Center" />
+                            <Label x:Name="LblBar5" Text="W5" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                        
+                    </Grid>
+                </StackLayout>
+            </Border>
+
+            <!-- Rincian Kategori -->
+            <StackLayout Spacing="16">
+                <Grid>
+                    <Label Text="Rincian Kategori" FontAttributes="Bold" FontSize="20" TextColor="#171d19" HorizontalOptions="Start" />
+                    <Label Text="View All" FontSize="12" FontAttributes="Bold" TextColor="#006948" HorizontalOptions="End" VerticalOptions="Center" />
+                </Grid>
+
+                <Border BackgroundColor="#ffffff" Stroke="#bccac0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+                    </Border.Shadow>
+                    
+                    <Grid ColumnDefinitions="100, *" ColumnSpacing="24">
+                        
+                        <!-- Fake Donut Chart (Menggunakan Shapes MAUI) -->
+                        <Grid WidthRequest="100" HeightRequest="100" VerticalOptions="Center" HorizontalOptions="Center">
+                            <Ellipse Stroke="#e9efe9" StrokeThickness="12" Fill="Transparent" />
+                            <Ellipse Stroke="#006948" StrokeThickness="12" StrokeDashArray="2,4" Fill="Transparent" />
+                            <Ellipse Stroke="#505f76" StrokeThickness="12" StrokeDashArray="1,5" StrokeDashOffset="3" Fill="Transparent" />
+                            <Ellipse Stroke="#ba1a1a" StrokeThickness="12" StrokeDashArray="0.5,5.5" StrokeDashOffset="5" Fill="Transparent" />
+                            <Label Text="100%" FontAttributes="Bold" FontSize="12" TextColor="#171d19" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Grid>
+                        
+                        <!-- Legend -->
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="12">
+                            <!-- Legend Item 1 -->
+                            <Grid ColumnDefinitions="Auto, *, Auto">
+                                <BoxView Color="#006948" WidthRequest="10" HeightRequest="10" CornerRadius="5" VerticalOptions="Center" />
+                                <Label Grid.Column="1" Text="Food" FontSize="14" TextColor="#3d4a42" Margin="8,0,0,0" VerticalOptions="Center" />
+                                <Label Grid.Column="2" Text="40%" FontAttributes="Bold" FontSize="14" TextColor="#171d19" VerticalOptions="Center" />
+                            </Grid>
+                            
+                            <!-- Legend Item 2 -->
+                            <Grid ColumnDefinitions="Auto, *, Auto">
+                                <BoxView Color="#505f76" WidthRequest="10" HeightRequest="10" CornerRadius="5" VerticalOptions="Center" />
+                                <Label Grid.Column="1" Text="Rent" FontSize="14" TextColor="#3d4a42" Margin="8,0,0,0" VerticalOptions="Center" />
+                                <Label Grid.Column="2" Text="30%" FontAttributes="Bold" FontSize="14" TextColor="#171d19" VerticalOptions="Center" />
+                            </Grid>
+                            
+                            <!-- Legend Item 3 -->
+                            <Grid ColumnDefinitions="Auto, *, Auto">
+                                <BoxView Color="#ba1a1a" WidthRequest="10" HeightRequest="10" CornerRadius="5" VerticalOptions="Center" />
+                                <Label Grid.Column="1" Text="Entertainment" FontSize="14" TextColor="#3d4a42" Margin="8,0,0,0" VerticalOptions="Center" />
+                                <Label Grid.Column="2" Text="20%" FontAttributes="Bold" FontSize="14" TextColor="#171d19" VerticalOptions="Center" />
+                            </Grid>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </Border>
+            </StackLayout>
+            
+        </StackLayout>
+    </ScrollView>
 </ContentPage>
