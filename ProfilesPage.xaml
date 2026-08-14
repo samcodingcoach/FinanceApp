@@ -6,7 +6,8 @@
              NavigationPage.HasNavigationBar="False"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              >
-    <StackLayout Padding="20,70,20,0">
+    <Grid>
+        <StackLayout Padding="20,70,20,0">
         <toolkit:AvatarView x:Name="ImgPhoto" BackgroundColor="WhiteSmoke" 
             BorderColor="Grey" BorderWidth="0.3" CornerRadius="100"
             HeightRequest="100" WidthRequest="100"
@@ -106,8 +107,18 @@
                        VerticalTextAlignment="Center"></Label>
                 <Label Text="Logout" HorizontalOptions="EndAndExpand" FontAttributes="Bold" 
                        VerticalTextAlignment="Center" TextColor="OrangeRed" TranslationX="-10"
-                       FontSize="16"></Label>
+                       FontSize="16">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Logout_Tapped" />
+                    </Label.GestureRecognizers>
+                </Label>
             </StackLayout>
         </Border>
-    </StackLayout>
+        </StackLayout>
+        
+        <!-- Loading Overlay -->
+        <Grid x:Name="LoadingOverlay" BackgroundColor="#80000000" IsVisible="False">
+            <ActivityIndicator IsRunning="True" Color="White" HorizontalOptions="Center" VerticalOptions="Center" />
+        </Grid>
+    </Grid>
 </ContentPage>
