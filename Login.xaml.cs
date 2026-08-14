@@ -74,7 +74,10 @@ public partial class Login : ContentPage
                         {
                             _failedAttempts = 0;
                             Preferences.Set("user_data", JsonConvert.SerializeObject(result));
-                            Application.Current.MainPage = new MainPage();
+                            MainThread.BeginInvokeOnMainThread(() => 
+                            {
+                                Application.Current.MainPage = new MainPage();
+                            });
                         }
                         else
                         {

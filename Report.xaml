@@ -4,7 +4,8 @@
              x:Class="FinanceApp.Report"
              BackgroundColor="#f5fbf5"
              NavigationPage.HasNavigationBar="False"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="True">
              
     <Grid>
         <ScrollView>
@@ -120,36 +121,14 @@
                     <Grid ColumnDefinitions="100, *" ColumnSpacing="24">
                         
                         <!-- Fake Donut Chart (Menggunakan Shapes MAUI) -->
-                        <Grid WidthRequest="100" HeightRequest="100" VerticalOptions="Center" HorizontalOptions="Center">
+                        <Grid x:Name="DonutContainer" WidthRequest="100" HeightRequest="100" VerticalOptions="Center" HorizontalOptions="Center">
                             <Ellipse Stroke="#e9efe9" StrokeThickness="12" Fill="Transparent" />
-                            <Ellipse Stroke="#006948" StrokeThickness="12" StrokeDashArray="11.52, 100" Fill="Transparent" />
-                            <Ellipse Stroke="#505f76" StrokeThickness="12" StrokeDashArray="0, 11.52, 6.91, 100" Fill="Transparent" />
-                            <Ellipse Stroke="#ba1a1a" StrokeThickness="12" StrokeDashArray="0, 18.43, 4.61, 100" Fill="Transparent" />
                             <Label Text="100%" FontAttributes="Bold" FontSize="12" TextColor="#171d19" HorizontalOptions="Center" VerticalOptions="Center" />
                         </Grid>
                         
                         <!-- Legend -->
-                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="12">
-                            <!-- Legend Item 1 -->
-                            <Grid ColumnDefinitions="Auto, *, Auto">
-                                <BoxView Color="#006948" WidthRequest="10" HeightRequest="10" CornerRadius="5" VerticalOptions="Center" />
-                                <Label Grid.Column="1" Text="Food" FontSize="14" TextColor="#3d4a42" Margin="8,0,0,0" VerticalOptions="Center" />
-                                <Label Grid.Column="2" Text="50%" FontAttributes="Bold" FontSize="14" TextColor="#171d19" VerticalOptions="Center" />
-                            </Grid>
-                            
-                            <!-- Legend Item 2 -->
-                            <Grid ColumnDefinitions="Auto, *, Auto">
-                                <BoxView Color="#505f76" WidthRequest="10" HeightRequest="10" CornerRadius="5" VerticalOptions="Center" />
-                                <Label Grid.Column="1" Text="Rent" FontSize="14" TextColor="#3d4a42" Margin="8,0,0,0" VerticalOptions="Center" />
-                                <Label Grid.Column="2" Text="30%" FontAttributes="Bold" FontSize="14" TextColor="#171d19" VerticalOptions="Center" />
-                            </Grid>
-                            
-                            <!-- Legend Item 3 -->
-                            <Grid ColumnDefinitions="Auto, *, Auto">
-                                <BoxView Color="#ba1a1a" WidthRequest="10" HeightRequest="10" CornerRadius="5" VerticalOptions="Center" />
-                                <Label Grid.Column="1" Text="Entertainment" FontSize="14" TextColor="#3d4a42" Margin="8,0,0,0" VerticalOptions="Center" />
-                                <Label Grid.Column="2" Text="20%" FontAttributes="Bold" FontSize="14" TextColor="#171d19" VerticalOptions="Center" />
-                            </Grid>
+                        <VerticalStackLayout x:Name="LegendContainer" Grid.Column="1" VerticalOptions="Center" Spacing="12">
+                            <!-- Items will be generated dynamically in C# -->
                         </VerticalStackLayout>
 
                     </Grid>

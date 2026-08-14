@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using Microsoft.Maui.Controls.Shapes;
 
 namespace FinanceApp;
 
@@ -8,6 +9,9 @@ public partial class Report : ContentPage
     private string currentMode = "Mingguan";
     private StatistikResponse? currentData;
     private bool isInitializing = true;
+
+    // Define Colors Palette for Category Donut
+    private readonly string[] PaletteColors = { "#006948", "#505f76", "#ba1a1a", "#f6a500", "#673ab7", "#009688", "#e91e63" };
 
     public class MingguanData
     {
@@ -33,6 +37,14 @@ public partial class Report : ContentPage
         public List<MingguanData>? mingguan { get; set; }
         public List<BulananData>? bulanan { get; set; }
         public List<TahunanData>? tahunan { get; set; }
+    }
+
+    public class KategoriData
+    {
+        public int id_kategori { get; set; }
+        public string nama_kategori { get; set; } = "";
+        public string bulan { get; set; } = "";
+        public decimal total_subtotal { get; set; }
     }
 
     public Report()
@@ -87,8 +99,6 @@ public partial class Report : ContentPage
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenKey);
                 client.DefaultRequestHeaders.Add("apikey", tokenKey);
 
-                string url = $"{App.API_HOST}/rpc/get_statistik_transaksi";
-
                 int year = int.Parse(PickerTahun.SelectedItem?.ToString() ?? DateTime.Now.Year.ToString());
                 int month = PickerBulan.SelectedIndex >= 0 ? PickerBulan.SelectedIndex + 1 : DateTime.Now.Month;
 
@@ -97,34 +107,35 @@ public partial class Report : ContentPage
                     p_tahun = year,
                     p_bulan = month
                 };
+                var content = new StringContent(JsonConvert.SerializeObject(bodyObj), System.Text.Encoding.UTF8, "application/json");
 
-                string jsonBody = JsonConvert.SerializeObject(bodyObj);
-                var content = new StringContent(jsonBody, System.Text.Encoding.UTF8, "application/json");
-
-                var response = await client.PostAsync(url, content);
-
-                if (response.IsSuccessStatusCode)
+                // === 1. Fetch Statistik Transaksi ===
+                string urlStat = $"{App.API_HOST}/rpc/get_statistik_transaksi";
+                var responseStat = await client.PostAsync(urlStat, content);
+                if (responseStat.IsSuccessStatusCode)
                 {
-                    string responseJson = await response.Content.ReadAsStringAsync();
-                    
-                    // RPC sering mengembalikan array of object jika outputnya JSON, coba parse sebagai array dulu
-                    if (responseJson.TrimStart().StartsWith("["))
+                    string resStatJson = await responseStat.Content.ReadAsStringAsync();
+                    if (resStatJson.TrimStart().StartsWith("["))
                     {
-                        var list = JsonConvert.DeserializeObject<List<StatistikResponse>>(responseJson);
-                        if (list != null && list.Count > 0)
-                            currentData = list[0];
+                        var list = JsonConvert.DeserializeObject<List<StatistikResponse>>(resStatJson);
+                        if (list != null && list.Count > 0) currentData = list[0];
                     }
                     else
                     {
-                        currentData = JsonConvert.DeserializeObject<StatistikResponse>(responseJson);
+                        currentData = JsonConvert.DeserializeObject<StatistikResponse>(resStatJson);
                     }
-
                     UpdateChartUI();
                 }
-                else
+
+                // === 2. Fetch Kategori Bulanan ===
+                string urlKat = $"{App.API_HOST}/rpc/get_transaksi_kategori_bulanan";
+                var contentKat = new StringContent(JsonConvert.SerializeObject(bodyObj), System.Text.Encoding.UTF8, "application/json"); // Renew content
+                var responseKat = await client.PostAsync(urlKat, contentKat);
+                if (responseKat.IsSuccessStatusCode)
                 {
-                    string err = await response.Content.ReadAsStringAsync();
-                    await DisplayAlert("Gagal Memuat Laporan", $"Status: {response.StatusCode}\n{err}", "OK");
+                    string resKatJson = await responseKat.Content.ReadAsStringAsync();
+                    var catList = JsonConvert.DeserializeObject<List<KategoriData>>(resKatJson);
+                    UpdateCategoryUI(catList ?? new List<KategoriData>());
                 }
             }
         }
@@ -138,16 +149,136 @@ public partial class Report : ContentPage
         }
     }
 
+    private void UpdateCategoryUI(List<KategoriData> categories)
+    {
+        DonutContainer.Children.Clear();
+        LegendContainer.Children.Clear();
+
+        // Base background ring
+        var baseRing = new Ellipse
+        {
+            Stroke = Color.FromArgb("#e9efe9"),
+            StrokeThickness = 12,
+            Fill = Colors.Transparent
+        };
+        DonutContainer.Children.Add(baseRing);
+
+        decimal totalAmount = 0;
+        foreach (var c in categories) totalAmount += c.total_subtotal;
+
+        if (totalAmount <= 0 || categories.Count == 0)
+        {
+            DonutContainer.Children.Add(new Label
+            {
+                Text = "0%",
+                FontAttributes = FontAttributes.Bold,
+                FontSize = 12,
+                TextColor = Color.FromArgb("#171d19"),
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center
+            });
+            return;
+        }
+
+        double totalCircumference = 23.04; // Derived from (100-12) * pi / 12
+        double currentOffset = 0;
+        int colorIndex = 0;
+
+        foreach (var cat in categories)
+        {
+            if (cat.total_subtotal <= 0) continue;
+
+            double percentage = (double)(cat.total_subtotal / totalAmount);
+            double length = percentage * totalCircumference;
+            string colorHex = PaletteColors[colorIndex % PaletteColors.Length];
+
+            // 1. Tambahkan irisan Donut
+            var slice = new Ellipse
+            {
+                Stroke = Color.FromArgb(colorHex),
+                StrokeThickness = 12,
+                Fill = Colors.Transparent
+            };
+
+            if (currentOffset == 0)
+            {
+                slice.StrokeDashArray = new DoubleCollection { length, 1000 };
+            }
+            else
+            {
+                slice.StrokeDashArray = new DoubleCollection { 0, currentOffset, length, 1000 };
+            }
+            DonutContainer.Children.Add(slice);
+            currentOffset += length;
+
+            // 2. Tambahkan Item Legenda
+            var gridLegend = new Grid
+            {
+                ColumnDefinitions = new ColumnDefinitionCollection
+                {
+                    new ColumnDefinition { Width = GridLength.Auto },
+                    new ColumnDefinition { Width = GridLength.Star },
+                    new ColumnDefinition { Width = GridLength.Auto }
+                }
+            };
+
+            gridLegend.Children.Add(new BoxView
+            {
+                Color = Color.FromArgb(colorHex),
+                WidthRequest = 10,
+                HeightRequest = 10,
+                CornerRadius = 5,
+                VerticalOptions = LayoutOptions.Center
+            });
+
+            var lblName = new Label
+            {
+                Text = cat.nama_kategori,
+                FontSize = 14,
+                TextColor = Color.FromArgb("#3d4a42"),
+                Margin = new Thickness(8, 0, 0, 0),
+                VerticalOptions = LayoutOptions.Center
+            };
+            Grid.SetColumn(lblName, 1);
+            gridLegend.Children.Add(lblName);
+
+            var lblPct = new Label
+            {
+                Text = $"{(percentage * 100):0.#}%",
+                FontAttributes = FontAttributes.Bold,
+                FontSize = 14,
+                TextColor = Color.FromArgb("#171d19"),
+                VerticalOptions = LayoutOptions.Center
+            };
+            Grid.SetColumn(lblPct, 2);
+            gridLegend.Children.Add(lblPct);
+
+            LegendContainer.Children.Add(gridLegend);
+
+            colorIndex++;
+        }
+
+        // Label persentase total di tengah donat
+        DonutContainer.Children.Add(new Label
+        {
+            Text = "100%",
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 12,
+            TextColor = Color.FromArgb("#171d19"),
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Center
+        });
+    }
+
     private void UpdateChartUI()
     {
         if (currentData == null) return;
 
-        // Reset semua bar ke 0
         ResetBars();
 
         List<int> values = new List<int> { 0, 0, 0, 0, 0 };
         List<string> labels = new List<string> { "", "", "", "", "" };
-        int activeIndex = -1; // Index batang yang di-highlight (opsional)
+        int activeIndex = -1;
 
         if (currentMode == "Mingguan" && currentData.mingguan != null)
         {
@@ -162,8 +293,6 @@ public partial class Report : ContentPage
             for (int i = 0; i < Math.Min(5, currentData.bulanan.Count); i++)
             {
                 values[i] = currentData.bulanan[i].jumlah_transaksi;
-                
-                // Ambil singkatan 3 huruf bulan (e.g. "August" -> "Aug")
                 string monthName = currentData.bulanan[i].nama_bulan;
                 labels[i] = monthName.Length > 3 ? monthName.Substring(0, 3) : monthName;
             }
@@ -177,14 +306,12 @@ public partial class Report : ContentPage
             }
         }
 
-        // Cari nilai maksimum untuk penskalaan tinggi batang grafik (Max Height = 130px)
         int maxValue = 0;
         foreach (int v in values)
         {
             if (v > maxValue) maxValue = v;
         }
 
-        // Terapkan ke UI
         ApplyBar(0, LblVal1, Bar1, LblBar1, values[0], labels[0], maxValue, 0 == activeIndex);
         ApplyBar(1, LblVal2, Bar2, LblBar2, values[1], labels[1], maxValue, 1 == activeIndex);
         ApplyBar(2, LblVal3, Bar3, LblBar3, values[2], labels[2], maxValue, 2 == activeIndex);
@@ -197,7 +324,6 @@ public partial class Report : ContentPage
         lblVal.Text = value.ToString();
         lblBar.Text = string.IsNullOrEmpty(label) ? "-" : label;
 
-        // Penskalaan tinggi bar (Minimal 5px supaya tetap terlihat meskipun 0)
         double maxHeight = 130.0;
         double calculatedHeight = 5.0;
         if (maxValue > 0)
@@ -207,7 +333,6 @@ public partial class Report : ContentPage
         }
         bar.HeightRequest = calculatedHeight;
 
-        // Pewarnaan (Highlight bar dengan nilai tertinggi jika mau, atau set dinamis)
         Color barColor = isActive ? Color.FromArgb("#006948") : Color.FromArgb("#d0e1fb");
         Color valColor = isActive ? Color.FromArgb("#006948") : Color.FromArgb("#171d19");
 
@@ -258,7 +383,6 @@ public partial class Report : ContentPage
             LabelTahunIni.IsVisible = true;
         }
 
-        // Langsung refresh chart tanpa tembak API lagi
         UpdateChartUI();
     }
 

@@ -309,6 +309,48 @@ public partial class Beranda : ContentPage
         }
     }
 
+#pragma warning disable CS0618
+    private async void MenuRekening_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is View view)
+        {
+            await view.ScaleTo(0.9, 50);
+            await view.ScaleTo(1, 50);
+            await Navigation.PushAsync(new FinanceApp.Rekening.List_Akun());
+        }
+    }
+
+    private async void MenuKategori_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is View view)
+        {
+            await view.ScaleTo(0.9, 50);
+            await view.ScaleTo(1, 50);
+            await Navigation.PushAsync(new FinanceApp.Kategori.List_Kategori());
+        }
+    }
+
+    private async void MenuAnggaran_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is View view)
+        {
+            await view.ScaleTo(0.9, 50);
+            await view.ScaleTo(1, 50);
+            await Navigation.PushAsync(new FinanceApp.Budget.List_Budget());
+        }
+    }
+
+    private async void MenuPengguna_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is View view)
+        {
+            await view.ScaleTo(0.9, 50);
+            await view.ScaleTo(1, 50);
+            await Navigation.PushAsync(new FinanceApp.Users.List_Users());
+        }
+    }
+#pragma warning restore CS0618
+
     private void LoadDummyData()
     {
         // Data dummy Pengeluaran Anggota

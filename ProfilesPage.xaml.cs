@@ -181,7 +181,10 @@ public partial class ProfilesPage : ContentPage
                         {
                             await Task.Delay(1000); // Beri waktu sejenak agar toast terlihat
                             Preferences.Remove("user_data");
-                            Application.Current.MainPage = new NavigationPage(new Login());
+                            MainThread.BeginInvokeOnMainThread(() => 
+                            {
+                                Application.Current.MainPage = new NavigationPage(new Login());
+                            });
                         }
                     }
                     else
@@ -321,7 +324,10 @@ public partial class ProfilesPage : ContentPage
             Preferences.Remove("user_data");
             
             // Arahkan kembali ke halaman Login (menggantikan struktur Shell saat ini)
-            Application.Current.MainPage = new NavigationPage(new Login());
+            MainThread.BeginInvokeOnMainThread(() => 
+            {
+                Application.Current.MainPage = new NavigationPage(new Login());
+            });
         }
     }
 }

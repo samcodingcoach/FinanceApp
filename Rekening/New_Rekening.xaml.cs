@@ -97,7 +97,7 @@ public partial class New_Rekening : ContentPage
 
                 var response = await client.PostAsync(baseUrl, content);
 
-                if (response.IsSuccessStatusCode)
+                if (response.StatusCode == System.Net.HttpStatusCode.Created)
                 {
                     isSuccess = true;
                 }

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FinanceApp.Beranda"
              BackgroundColor="#f5fbf5" NavigationPage.HasNavigationBar="False"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="True">
 
     <ScrollView Margin="0,30,0,0">
         <StackLayout Padding="20" Spacing="20">
@@ -100,28 +100,45 @@
                 </VerticalStackLayout>
             </Border>
 
-            <!-- Budgeting Progress -->
+            <!-- Menu -->
             <Border BackgroundColor="#ffffff" Stroke="#f1f5f9" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
                 <Border.Shadow>
                     <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
                 </Border.Shadow>
                 <Grid ColumnDefinitions="*,*,*,*,*" ColumnSpacing="10" RowDefinitions="Auto,Auto">
-                    <StackLayout Grid.Column="0" Grid.Row="0">
+                    <!--Rekening\List-Akun.xaml-->
+                    <StackLayout x:Name="MenuRekening" Grid.Column="0" Grid.Row="0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="MenuRekening_Tapped" />
+                        </StackLayout.GestureRecognizers>
                         <Image Source="menu_akun.png" HeightRequest="42"></Image>
                         <Label Text="Rekening" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444"></Label>
                     </StackLayout>
-                    <StackLayout Grid.Column="1" Grid.Row="0">
+                    <!--Kategori\List_Kategori.xaml-->
+                    <StackLayout x:Name="MenuKategori" Grid.Column="1" Grid.Row="0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="MenuKategori_Tapped" />
+                        </StackLayout.GestureRecognizers>
                         <Image Source="menu_kategori.png" HeightRequest="42"></Image>
                         <Label Text="Kategori" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444"></Label>
                     </StackLayout>
-                    <StackLayout Grid.Column="2" Grid.Row="0">
+                    <!--Budget\List_Budget.xaml-->
+                    <StackLayout x:Name="MenuAnggaran" Grid.Column="2" Grid.Row="0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="MenuAnggaran_Tapped" />
+                        </StackLayout.GestureRecognizers>
                         <Image Source="menu_budget.png" HeightRequest="42"></Image>
                         <Label Text="Anggaran" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444"></Label>
                     </StackLayout>
-                    <StackLayout Grid.Column="3" Grid.Row="0">
+                    <!--Users\List_Users.xaml-->
+                    <StackLayout x:Name="MenuPengguna" Grid.Column="3" Grid.Row="0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="MenuPengguna_Tapped" />
+                        </StackLayout.GestureRecognizers>
                         <Image Source="menu_user.png" HeightRequest="42"></Image>
                         <Label Text="Pengguna" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444"></Label>
                     </StackLayout>
+                    <!--nanti next time-->
                     <StackLayout Grid.Column="4" Grid.Row="0">
                         <Image Source="menu_config.png" HeightRequest="42"></Image>
                         <Label Text="Pengaturan" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444"></Label>

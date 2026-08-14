@@ -94,6 +94,15 @@ public partial class Edit_Rekening : ContentPage
 
         bool isActive = c_isactive.IsChecked;
 
+        // Cek jika tidak ada perubahan sama sekali
+        if (namaRekening == _rekening.nama_rekening && 
+            saldoAwal == _rekening.saldo_awal && 
+            isActive == _rekening.is_active)
+        {
+            await Navigation.PopAsync();
+            return;
+        }
+
         OverlayLoading.IsVisible = true;
         var delayTask = Task.Delay(3000);
         bool isSuccess = false;
@@ -144,7 +153,7 @@ public partial class Edit_Rekening : ContentPage
 
                 var response = await client.SendAsync(request);
 
-                if (response.IsSuccessStatusCode)
+                if (response.StatusCode == System.Net.HttpStatusCode.OK || response.StatusCode == System.Net.HttpStatusCode.NoContent)
                 {
                     isSuccess = true;
                 }
