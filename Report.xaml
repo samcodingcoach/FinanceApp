@@ -6,7 +6,8 @@
              NavigationPage.HasNavigationBar="False"
              Shell.NavBarIsVisible="False">
              
-    <ScrollView>
+    <Grid>
+        <ScrollView>
         <StackLayout Padding="16,40,16,32" Spacing="24">
             
             <!-- Time Period Selector -->
@@ -67,36 +68,36 @@
                         
                         <!-- Bar W1 -->
                         <VerticalStackLayout Grid.Column="0" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
-                            <Label Text="10" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-                            <BoxView BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="60" CornerRadius="0" HorizontalOptions="Center" />
+                            <Label x:Name="LblVal1" Text="0" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            <BoxView x:Name="Bar1" BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
                             <Label x:Name="LblBar1" Text="W1" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
                         
                         <!-- Bar W2 -->
                         <VerticalStackLayout Grid.Column="1" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
-                            <Label Text="20" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-                            <BoxView BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="100" CornerRadius="0" HorizontalOptions="Center" />
+                            <Label x:Name="LblVal2" Text="0" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            <BoxView x:Name="Bar2" BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
                             <Label x:Name="LblBar2" Text="W2" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
 
                         <!-- Bar W3 (Active) -->
                         <VerticalStackLayout Grid.Column="2" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
-                            <Label Text="25" FontSize="10" TextColor="#006948" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-                            <BoxView BackgroundColor="#006948" WidthRequest="30" HeightRequest="130" CornerRadius="0" HorizontalOptions="Center" />
+                            <Label x:Name="LblVal3" Text="0" FontSize="10" TextColor="#006948" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            <BoxView x:Name="Bar3" BackgroundColor="#006948" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
                             <Label x:Name="LblBar3" Text="W3" FontSize="10" TextColor="#006948" FontAttributes="Bold" HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
 
                         <!-- Bar W4 -->
                         <VerticalStackLayout Grid.Column="3" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
-                            <Label Text="18" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-                            <BoxView BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="85" CornerRadius="0" HorizontalOptions="Center" />
+                            <Label x:Name="LblVal4" Text="0" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            <BoxView x:Name="Bar4" BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
                             <Label x:Name="LblBar4" Text="W4" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
 
                         <!-- Bar W5 -->
                         <VerticalStackLayout Grid.Column="4" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
-                            <Label Text="8" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-                            <BoxView BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="45" CornerRadius="0" HorizontalOptions="Center" />
+                            <Label x:Name="LblVal5" Text="0" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            <BoxView x:Name="Bar5" BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
                             <Label x:Name="LblBar5" Text="W5" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
                         
@@ -121,9 +122,9 @@
                         <!-- Fake Donut Chart (Menggunakan Shapes MAUI) -->
                         <Grid WidthRequest="100" HeightRequest="100" VerticalOptions="Center" HorizontalOptions="Center">
                             <Ellipse Stroke="#e9efe9" StrokeThickness="12" Fill="Transparent" />
-                            <Ellipse Stroke="#006948" StrokeThickness="12" StrokeDashArray="2,4" Fill="Transparent" />
-                            <Ellipse Stroke="#505f76" StrokeThickness="12" StrokeDashArray="1,5" StrokeDashOffset="3" Fill="Transparent" />
-                            <Ellipse Stroke="#ba1a1a" StrokeThickness="12" StrokeDashArray="0.5,5.5" StrokeDashOffset="5" Fill="Transparent" />
+                            <Ellipse Stroke="#006948" StrokeThickness="12" StrokeDashArray="11.52, 100" Fill="Transparent" />
+                            <Ellipse Stroke="#505f76" StrokeThickness="12" StrokeDashArray="0, 11.52, 6.91, 100" Fill="Transparent" />
+                            <Ellipse Stroke="#ba1a1a" StrokeThickness="12" StrokeDashArray="0, 18.43, 4.61, 100" Fill="Transparent" />
                             <Label Text="100%" FontAttributes="Bold" FontSize="12" TextColor="#171d19" HorizontalOptions="Center" VerticalOptions="Center" />
                         </Grid>
                         
@@ -133,7 +134,7 @@
                             <Grid ColumnDefinitions="Auto, *, Auto">
                                 <BoxView Color="#006948" WidthRequest="10" HeightRequest="10" CornerRadius="5" VerticalOptions="Center" />
                                 <Label Grid.Column="1" Text="Food" FontSize="14" TextColor="#3d4a42" Margin="8,0,0,0" VerticalOptions="Center" />
-                                <Label Grid.Column="2" Text="40%" FontAttributes="Bold" FontSize="14" TextColor="#171d19" VerticalOptions="Center" />
+                                <Label Grid.Column="2" Text="50%" FontAttributes="Bold" FontSize="14" TextColor="#171d19" VerticalOptions="Center" />
                             </Grid>
                             
                             <!-- Legend Item 2 -->
@@ -157,4 +158,10 @@
             
         </StackLayout>
     </ScrollView>
+
+    <!-- Loading Overlay -->
+    <Grid x:Name="LoadingOverlay" BackgroundColor="#80000000" IsVisible="False">
+        <ActivityIndicator IsRunning="True" Color="White" HorizontalOptions="Center" VerticalOptions="Center" />
+    </Grid>
+    </Grid>
 </ContentPage>
