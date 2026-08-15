@@ -6,6 +6,9 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Title="Buat User Baru"
              >
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" />
+    </Shell.BackButtonBehavior>
     <Grid RowDefinitions="*,Auto">
 
         <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never">

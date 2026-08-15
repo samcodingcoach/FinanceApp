@@ -7,6 +7,9 @@
              Shell.TabBarIsVisible="True"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              >
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" />
+    </Shell.BackButtonBehavior>
     <Grid>
         <StackLayout Padding="20,70,20,0">
         <toolkit:AvatarView x:Name="ImgPhoto" BackgroundColor="WhiteSmoke" 

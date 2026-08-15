@@ -19,7 +19,7 @@ public partial class New_Rekening : ContentPage
         return true;
     }
 
-    private void Cancel_Clicked(object sender, EventArgs e)
+    private void Cancel_Clicked(object sender, TappedEventArgs e)
     {
         HandleCancel();
     }

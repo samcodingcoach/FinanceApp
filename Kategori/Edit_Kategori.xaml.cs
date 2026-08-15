@@ -97,4 +97,9 @@ public partial class Edit_Kategori : ContentPage
         // Akan ditambahkan fungsi update API sesuai dengan petunjuk selanjutnya
         await Toast.Make("Fungsi perbarui akan diimplementasikan nanti!").Show();
     }
+
+    private async void Cancel_Clicked(object sender, TappedEventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
 }
