@@ -9,7 +9,7 @@
              
     <Grid RowDefinitions="Auto,*,Auto">
         <!-- Custom Header -->
-        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20,40,20,15" BackgroundColor="White">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20,20,20,15" BackgroundColor="White">
             <Grid.Shadow>
                 <Shadow Brush="#000000" Opacity="0.05" Radius="5" Offset="0,2" />
             </Grid.Shadow>

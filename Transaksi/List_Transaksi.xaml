@@ -4,110 +4,111 @@
              x:Class="FinanceApp.Transaksi.List_Transaksi"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              BackgroundColor="#f8fafa"
-             NavigationPage.HasNavigationBar="False" Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="True">
+             NavigationPage.HasNavigationBar="False" Shell.NavBarIsVisible="False" 
+             Shell.TabBarIsVisible="True">
 
     <Grid>
         <RefreshView x:Name="RefreshViewContainer" Refreshing="RefreshViewContainer_Refreshing">
-            <ScrollView Margin="0,30,0,30">
-            <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="10" RowSpacing="7">
-                <Border Grid.Row="0" Padding="10" StrokeShape="RoundRectangle 10"  Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="White">
-                    <Border.Shadow>
-                        <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
-                    </Border.Shadow>
+            <ScrollView>
+                <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="10" RowSpacing="7">
+                    <Border Grid.Row="0" Padding="10" StrokeShape="RoundRectangle 10"  Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="White">
+                        <Border.Shadow>
+                            <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
+                        </Border.Shadow>
 
-                    <Grid ColumnDefinitions="*" ColumnSpacing="10">
-                        <Border Grid.Column="0" Padding="0" StrokeShape="RoundRectangle 10"  Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
-                            <SearchBar Placeholder="Cari Transaksi" x:Name="T_Search" TextChanged="T_Search_TextChanged"></SearchBar>
+                        <Grid ColumnDefinitions="*" ColumnSpacing="10">
+                            <Border Grid.Column="0" Padding="0" StrokeShape="RoundRectangle 10"  Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="White">
+                                <SearchBar Placeholder="Cari Transaksi" x:Name="T_Search" TextChanged="T_Search_TextChanged"></SearchBar>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="1" Padding="10,-7"  HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="#ccc" StrokeThickness="1" BackgroundColor="WhiteSmoke">
+                        <StackLayout Orientation="Horizontal" Spacing="4">
+                            <Image Source="date100.png" HeightRequest="16"></Image>
+                            <DatePicker x:Name="MonthPicker" Format="MMMM yyyy" FontAttributes="Bold" VerticalOptions="Center" TextColor="#444" FontSize="14" DateSelected="MonthPicker_DateSelected"></DatePicker>
+                            <Image Source="chevron100.png" HeightRequest="16" Margin="10,0,0,0"></Image>
+                        </StackLayout>
+                    </Border>
+
+                    <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="5">
+                        <Border x:Name="TabSemua" Grid.Column="0" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TabFilter_Tapped" CommandParameter="Semua" />
+                            </Border.GestureRecognizers>
+                            <Label Text="Semua" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
+                        </Border>
+                        <Border x:Name="TabPemasukan" Grid.Column="1" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="#bccbe6">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TabFilter_Tapped" CommandParameter="Pemasukan" />
+                            </Border.GestureRecognizers>
+                            <Label Text="Pemasukan" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
+                        </Border>
+                        <Border x:Name="TabPengeluaran" Grid.Column="2" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="#bccbe6">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TabFilter_Tapped" CommandParameter="Pengeluaran" />
+                            </Border.GestureRecognizers>
+                            <Label Text="Pengeluaran" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
                         </Border>
                     </Grid>
-                </Border>
 
-                <Border Grid.Row="1" Padding="10,-7"  HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="#ccc" StrokeThickness="1" BackgroundColor="WhiteSmoke">
-                    <StackLayout Orientation="Horizontal" Spacing="4">
-                        <Image Source="date100.png" HeightRequest="16"></Image>
-                        <DatePicker x:Name="MonthPicker" Format="MMMM yyyy" FontAttributes="Bold" VerticalOptions="Center" TextColor="#444" FontSize="14" DateSelected="MonthPicker_DateSelected"></DatePicker>
-                        <Image Source="chevron100.png" HeightRequest="16" Margin="10,0,0,0"></Image>
-                    </StackLayout>
-                </Border>
 
-                <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="5">
-                    <Border x:Name="TabSemua" Grid.Column="0" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="TabFilter_Tapped" CommandParameter="Semua" />
-                        </Border.GestureRecognizers>
-                        <Label Text="Semua" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
-                    </Border>
-                    <Border x:Name="TabPemasukan" Grid.Column="1" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="#bccbe6">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="TabFilter_Tapped" CommandParameter="Pemasukan" />
-                        </Border.GestureRecognizers>
-                        <Label Text="Pemasukan" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
-                    </Border>
-                    <Border x:Name="TabPengeluaran" Grid.Column="2" Padding="12,5" HorizontalOptions="Start" StrokeShape="RoundRectangle 10"  Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="#bccbe6">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="TabFilter_Tapped" CommandParameter="Pengeluaran" />
-                        </Border.GestureRecognizers>
-                        <Label Text="Pengeluaran" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
-                    </Border>
-                </Grid>
-                
-                
-                <!--data list-->
-                <StackLayout Grid.Row="3" Spacing="10" x:Name="ListContainer">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout Spacing="10">
-                                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="5">
-                                    <Label Text="{Binding DateRelative}" FontAttributes="Bold" Grid.Column="0" Grid.Row="0" TextColor="Grey" FontSize="16"></Label>
-                                    <Label Text="{Binding DateDisplay}" FontAttributes="Bold" Grid.Column="1" HorizontalOptions="End" HorizontalTextAlignment="End" Grid.Row="0" TextColor="Grey" FontSize="16"></Label>
-                                    <BoxView Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
-                                             BackgroundColor="Grey" HeightRequest="0.5" Opacity="0.3"></BoxView>
-                                </Grid>
-                                
-                                <StackLayout BindableLayout.ItemsSource="{Binding Items}">
-                                    <BindableLayout.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border StrokeShape="RoundRectangle 10" Padding="10,10,10,10" Margin="0,0,0,10" Stroke="#ccc" StrokeThickness="0.5" BackgroundColor="White">
-                                                <Border.GestureRecognizers>
-                                                    <TapGestureRecognizer Tapped="TransaksiItem_Tapped" CommandParameter="{Binding id_transaksi}" />
-                                                </Border.GestureRecognizers>
-                                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" Padding="0"  RowDefinitions="Auto,Auto" RowSpacing="5">
-                                                    <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="Transparent" HeightRequest="80" WidthRequest="80" VerticalOptions="Start" Padding="0">
-                                                        <Image Source="{Binding ImageSource}" Aspect="AspectFill"></Image>
-                                                    </Border>
-                                                    
-                                                    <StackLayout Grid.Column="1" Grid.Row="0" Spacing="5">
-                                                        <Label Text="{Binding TitleDisplay}" FontAttributes="Bold" FontSize="16" TextColor="#444" LineBreakMode="TailTruncation" MaxLines="2"></Label>
-                                                        <Label Text="{Binding SubtitleDisplay}" FontSize="Small" TextColor="Grey" FontAttributes="Bold"></Label>
-                                                    </StackLayout>
+                    <!--data list-->
+                    <StackLayout Grid.Row="3" Spacing="10" x:Name="ListContainer">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Spacing="10">
+                                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="5">
+                                        <Label Text="{Binding DateRelative}" FontAttributes="Bold" Grid.Column="0" Grid.Row="0" TextColor="Grey" FontSize="16"></Label>
+                                        <Label Text="{Binding DateDisplay}" FontAttributes="Bold" Grid.Column="1" HorizontalOptions="End" HorizontalTextAlignment="End" Grid.Row="0" TextColor="Grey" FontSize="16"></Label>
+                                        <BoxView Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
+                                                 BackgroundColor="Grey" HeightRequest="0.5" Opacity="0.3"></BoxView>
+                                    </Grid>
 
-                                                    <Label Text="{Binding NominalDisplay}" Grid.Column="2" Grid.Row="0" 
-                                                           HorizontalOptions="End" HorizontalTextAlignment="End" 
-                                                           FontSize="18"
-                                                           FontAttributes="Bold" 
-                                                           TextColor="{Binding NominalColor}"></Label>
-
-                                                    <Label Text="{Binding nama_kategori}" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalOptions="Center"
-                                                           Grid.Column="1" Grid.Row="1"></Label>
-
-                                                    <StackLayout Orientation="Horizontal" Spacing="10" Grid.Column="2" Grid.Row="1" HorizontalOptions="End">
-                                                        <Border Padding="12,0" StrokeShape="RoundRectangle 10" Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
-                                                            <Label Text="{Binding role}" VerticalTextAlignment="Center" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
+                                    <StackLayout BindableLayout.ItemsSource="{Binding Items}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border StrokeShape="RoundRectangle 10" Padding="10,10,10,10" Margin="0,0,0,10" Stroke="#ccc" StrokeThickness="0.5" BackgroundColor="White">
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="TransaksiItem_Tapped" CommandParameter="{Binding id_transaksi}" />
+                                                    </Border.GestureRecognizers>
+                                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" Padding="0"  RowDefinitions="Auto,Auto" RowSpacing="5">
+                                                        <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="Transparent" HeightRequest="80" WidthRequest="80" VerticalOptions="Start" Padding="0">
+                                                            <Image Source="{Binding ImageSource}" Aspect="AspectFill"></Image>
                                                         </Border>
-                                                        <Border Padding="12,0" StrokeShape="RoundRectangle 10" Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="MediumVioletRed">
-                                                            <Label Text="{Binding nama_rekening}" FontAttributes="Bold" VerticalTextAlignment="Center"  FontSize="Small" TextColor="White"></Label>
-                                                        </Border>
-                                                    </StackLayout>
-                                                </Grid>
-                                            </Border>
-                                        </DataTemplate>
-                                    </BindableLayout.ItemTemplate>
+
+                                                        <StackLayout Grid.Column="1" Grid.Row="0" Spacing="5">
+                                                            <Label Text="{Binding TitleDisplay}" FontAttributes="Bold" FontSize="16" TextColor="#444" LineBreakMode="TailTruncation" MaxLines="2"></Label>
+                                                            <Label Text="{Binding SubtitleDisplay}" FontSize="Small" TextColor="Grey" FontAttributes="Bold"></Label>
+                                                        </StackLayout>
+
+                                                        <Label Text="{Binding NominalDisplay}" Grid.Column="2" Grid.Row="0" 
+                                                               HorizontalOptions="End" HorizontalTextAlignment="End" 
+                                                               FontSize="18"
+                                                               FontAttributes="Bold" 
+                                                               TextColor="{Binding NominalColor}"></Label>
+
+                                                        <Label Text="{Binding nama_kategori}" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalOptions="Center"
+                                                               Grid.Column="1" Grid.Row="1"></Label>
+
+                                                        <StackLayout Orientation="Horizontal" Spacing="10" Grid.Column="2" Grid.Row="1" HorizontalOptions="End">
+                                                            <Border Padding="12,0" StrokeShape="RoundRectangle 10" Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="CornflowerBlue">
+                                                                <Label Text="{Binding role}" VerticalTextAlignment="Center" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
+                                                            </Border>
+                                                            <Border Padding="12,0" StrokeShape="RoundRectangle 10" Stroke="WhiteSmoke" StrokeThickness="0.5" BackgroundColor="MediumVioletRed">
+                                                                <Label Text="{Binding nama_rekening}" FontAttributes="Bold" VerticalTextAlignment="Center"  FontSize="Small" TextColor="White"></Label>
+                                                            </Border>
+                                                        </StackLayout>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </StackLayout>
                                 </StackLayout>
-                            </StackLayout>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </StackLayout>
-            </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </Grid>
             </ScrollView>
         </RefreshView>
         

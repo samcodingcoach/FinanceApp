@@ -217,4 +217,9 @@ public partial class New_Users : ContentPage
             });
         }
     }
+
+    private async void Cancel_Clicked(object sender, TappedEventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
 }

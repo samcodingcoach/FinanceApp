@@ -4,9 +4,25 @@
              x:Class="FinanceApp.Budget.New_Budget"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              BackgroundColor="#f8fafa"
-             Title="Budget Baru">
-    <ScrollView>
-        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False">
+    <Grid RowDefinitions="Auto,*">
+        <!-- Custom Header untuk menghindari bug transisi Navbar di MAUI Android -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20,20,20,15" BackgroundColor="White">
+            <Grid.Shadow>
+                <Shadow Brush="#000000" Opacity="0.05" Radius="5" Offset="0,2" />
+            </Grid.Shadow>
+            <Label Text="Budget Baru" FontSize="18" TextColor="#222" FontAttributes="Bold" VerticalOptions="Center"></Label>
+            <Label Text="KEMBALI" Grid.Column="1" FontSize="14" TextColor="CornflowerBlue" FontAttributes="Bold" VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Cancel_Clicked" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
 
             <StackLayout Grid.Row="0" Spacing="5" Padding="20">
                 <Label Text="Buat Anggaran Baru" FontAttributes="Bold" 
@@ -117,7 +133,7 @@
 
             </Border>
 
-            <Button Grid.Row="5" Text="SIMPAN ANGGARAN BARU" x:Name="BSimpan" Clicked="BSimpan_Clicked" FontAttributes="Bold" FontSize="18" CharacterSpacing="1" Margin="20,10,20,10" 
+            <Button Grid.Row="5" Text="SIMPAN ANGGARAN BARU" x:Name="BSimpan" Clicked="BSimpan_Clicked" FontAttributes="Bold" FontSize="18" CharacterSpacing="1" Margin="20,20,20,0" 
                     CornerRadius="20" BackgroundColor="CornflowerBlue"></Button>
 
             <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="5" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">
@@ -128,4 +144,5 @@
             </Grid>
         </Grid>
     </ScrollView>
+    </Grid>
 </ContentPage>

@@ -9,7 +9,7 @@
              
     <Grid>
         <ScrollView>
-        <StackLayout Padding="16,40,16,32" Spacing="24">
+        <StackLayout Padding="15" Spacing="24">
             
             <!-- Time Period Selector -->
             <Border BackgroundColor="#e4eae4" Padding="4" StrokeShape="RoundRectangle 12" StrokeThickness="0">

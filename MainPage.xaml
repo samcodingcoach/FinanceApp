@@ -5,7 +5,11 @@
        xmlns:local="clr-namespace:FinanceApp"
        xmlns:transaksi="clr-namespace:FinanceApp.Transaksi"
        FlyoutBehavior="Disabled"
+       Shell.TabBarBackgroundColor="White"
+       Shell.TabBarTitleColor="CornflowerBlue"
+       Shell.TabBarForegroundColor="CornflowerBlue"
        Shell.TabBarUnselectedColor="#80808080"
+       Shell.TabBarIsVisible="True"
        x:Class="FinanceApp.MainPage">
 
     <!--Bottom navigation : Beranda, Transaksi, Pengaturan, Profil-->

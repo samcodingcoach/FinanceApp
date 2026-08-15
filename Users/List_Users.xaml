@@ -5,8 +5,11 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              BackgroundColor="#f8fafa" NavigationPage.HasNavigationBar="False" Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="False">
 
-    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="0">
-        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20,40,20,20" ColumnSpacing="10" BackgroundColor="White">
+    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="10">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20,15" ColumnSpacing="10" BackgroundColor="White">
+            <Grid.Shadow>
+                <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
+            </Grid.Shadow>
             <!-- Title Mode -->
             <StackLayout x:Name="StackLayoutTitle" IsVisible="True">
                 <Label Text="List Users" FontSize="18" TextColor="CornflowerBlue" FontAttributes="Bold"></Label>
@@ -120,7 +123,7 @@
                      BackgroundColor="CornflowerBlue" 
                      HorizontalOptions="End" 
                      VerticalOptions="End" 
-                     Margin="0,0,20,60"
+                     Margin="0,0,20,30"
                      WidthRequest="60" 
                      HeightRequest="60" 
                      CornerRadius="30"

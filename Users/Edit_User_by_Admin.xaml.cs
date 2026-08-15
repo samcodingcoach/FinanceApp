@@ -178,4 +178,9 @@ public partial class Edit_User_by_Admin : ContentPage
             });
         }
     }
+
+    private async void Cancel_Clicked(object sender, TappedEventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
 }

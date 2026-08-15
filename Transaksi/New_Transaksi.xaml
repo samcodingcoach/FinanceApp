@@ -6,7 +6,7 @@
              BackgroundColor="#f8fafa"
              NavigationPage.HasNavigationBar="False" Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="False">
     <Grid>
-        <ScrollView Margin="0,30,0,30">
+        <ScrollView Margin="0,15">
             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" Padding="20,10" RowSpacing="5">
 
                 <StackLayout Orientation="Horizontal" Spacing="10" Grid.Row="0">

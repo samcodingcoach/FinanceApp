@@ -11,7 +11,7 @@
         <BackButtonBehavior IsVisible="False" />
     </Shell.BackButtonBehavior>
     <Grid>
-        <StackLayout Padding="20,70,20,0">
+        <StackLayout Padding="20,50,20,0">
         <toolkit:AvatarView x:Name="ImgPhoto" BackgroundColor="WhiteSmoke" 
             BorderColor="Grey" BorderWidth="0.3" CornerRadius="100"
             HeightRequest="100" WidthRequest="100"

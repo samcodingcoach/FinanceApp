@@ -2,16 +2,27 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FinanceApp.Users.Edit_User_by_Admin"
-             BackgroundColor="#f8fafa" NavigationPage.HasBackButton="False" 
+             BackgroundColor="#f8fafa"
+             NavigationPage.HasNavigationBar="False" 
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             Title="Edit User">
-    
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior IsVisible="False" />
-    </Shell.BackButtonBehavior>
-    <Grid RowDefinitions="*,Auto">
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="False">
+             
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Custom Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20,20,20,15" BackgroundColor="White">
+            <Grid.Shadow>
+                <Shadow Brush="#000000" Opacity="0.05" Radius="5" Offset="0,2" />
+            </Grid.Shadow>
+            <Label Text="Edit User" FontSize="18" TextColor="#222" FontAttributes="Bold" VerticalOptions="Center"></Label>
+            <Label Text="KEMBALI" Grid.Column="1" FontSize="14" TextColor="CornflowerBlue" FontAttributes="Bold" VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Cancel_Clicked" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
 
-        <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never">
+        <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never">
             <StackLayout Padding="20">
 
 
@@ -46,7 +57,7 @@
             </StackLayout>
         </ScrollView>
 
-        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10" Margin="20,10,20,60">
+        <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="10" Margin="20,15">
             <Button Text="HAPUS" Grid.Column="0" x:Name="BDelete" Clicked="BDelete_Clicked"  FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
                     CornerRadius="20" BackgroundColor="IndianRed"></Button>
             <Button Text="UPDATE" Grid.Column="1" x:Name="BSimpan" Clicked="BSimpan_Clicked"  FontAttributes="Bold" FontSize="18" CharacterSpacing="1" 
@@ -54,14 +65,14 @@
 
         </Grid>
 
-        <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">
+        <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="3" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">
             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
                 <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="White" WidthRequest="50" HeightRequest="50" />
                 <Label Text="Menyimpan Data..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
             </VerticalStackLayout>
         </Grid>
 
-        <Grid x:Name="OverlayDelete" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#E6000000" IsVisible="False" ZIndex="1000">
+        <Grid x:Name="OverlayDelete" Grid.Row="0" Grid.RowSpan="3" BackgroundColor="#E6000000" IsVisible="False" ZIndex="1000">
             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="20">
                 <Label x:Name="L_DeleteCountdown" Text="Menghapus dalam 5..." TextColor="White" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
                 <Button Text="BATALKAN" x:Name="BCancelDelete" Clicked="BCancelDelete_Clicked" BackgroundColor="Transparent" BorderColor="White" BorderWidth="2" TextColor="White" CornerRadius="20" WidthRequest="150" FontAttributes="Bold"></Button>

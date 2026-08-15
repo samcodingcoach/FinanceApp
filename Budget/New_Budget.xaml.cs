@@ -193,4 +193,8 @@ public partial class New_Budget : ContentPage
             });
         }
     }
+    private async void Cancel_Clicked(object sender, TappedEventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
 }

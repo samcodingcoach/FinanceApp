@@ -5,7 +5,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              BackgroundColor="#f8fafa" NavigationPage.HasNavigationBar="False" Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="False"
              >
-    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="10,40">
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="15,10">
         <Border Grid.Row="0" Padding="10" StrokeShape="RoundRectangle 10" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="White">
             <Border.Shadow>
                 <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />

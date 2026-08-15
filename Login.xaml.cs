@@ -74,9 +74,9 @@ public partial class Login : ContentPage
                         {
                             _failedAttempts = 0;
                             Preferences.Set("user_data", JsonConvert.SerializeObject(result));
-                            MainThread.BeginInvokeOnMainThread(() => 
+                            MainThread.BeginInvokeOnMainThread(async () => 
                             {
-                                Application.Current.MainPage = new MainPage();
+                                await Navigation.PopModalAsync();
                             });
                         }
                         else
