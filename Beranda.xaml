@@ -96,7 +96,7 @@
                     
                     <ProgressBar x:Name="PB_Anggaran" Progress="0.65" ProgressColor="#006948" BackgroundColor="#e4eae4" HeightRequest="8" />
                     
-                    <Label x:Name="L_AnggaranTersisa" Text="Tersisa Rp 1.500.000 untuk bulan ini." FontSize="14" TextColor="#3d4a42" />
+                    <Label x:Name="L_AnggaranTersisa" Text="Tersisa Rp 0 untuk bulan ini." FontSize="14" TextColor="#3d4a42" />
                 </VerticalStackLayout>
             </Border>
 
@@ -151,7 +151,11 @@
             <VerticalStackLayout Spacing="16">
                 <Grid ColumnDefinitions="*,Auto">
                     <Label Grid.Column="0" Text="Pengeluaran Anggota" FontSize="18" FontAttributes="Bold" TextColor="#171d19" />
-                    <Label Grid.Column="1" Text="Lihat Semua" FontSize="14" FontAttributes="Bold" TextColor="#006948" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="Lihat Semua" FontSize="14" FontAttributes="Bold" TextColor="#006948" VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="LihatSemuaPengeluaran_Tapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
                 </Grid>
 
                 <Border BackgroundColor="#ffffff" Stroke="#dee4de" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">

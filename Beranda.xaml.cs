@@ -351,6 +351,16 @@ public partial class Beranda : ContentPage
     }
 #pragma warning restore CS0618
 
+    private async void LihatSemuaPengeluaran_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is View view)
+        {
+            await view.ScaleTo(0.9, 50);
+            await view.ScaleTo(1, 50);
+            await Navigation.PushAsync(new FinanceApp.Users.Transaksi_Users());
+        }
+    }
+
     private void LoadDummyData()
     {
         // Data dummy Pengeluaran Anggota
