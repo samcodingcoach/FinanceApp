@@ -205,7 +205,7 @@ public partial class Beranda : ContentPage
                 }
 
                 // 6. Dokumen Terakhir
-                string urlDokumen = $"{App.API_HOST}/transaksi?select=no_faktur,keterangan,foto_transaksi&order=id_transaksi.desc&limit=4";
+                string urlDokumen = $"{App.API_HOST}/transaksi?select=no_faktur,keterangan,foto_transaksi&foto_transaksi=neq.&order=id_transaksi.desc&limit=4";
                 var resDokumen = await client.GetAsync(urlDokumen);
                 if (resDokumen.IsSuccessStatusCode)
                 {

@@ -98,7 +98,7 @@
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                             <StackLayout Grid.Column="0">
                                 <Label Text="TANGGAL" FontSize="Caption" FontAttributes="Bold" TextColor="Grey"></Label>
-                                <DatePicker x:Name="DP_Tanggal" Format="dd MMMM yyyy" FontSize="16" TranslationY="-5" FontAttributes="Bold" TextColor="#444"></DatePicker>
+                                <DatePicker x:Name="DP_Tanggal" Format="dd MMMM yyyy" FontSize="14" TranslationY="-5"  TextColor="#444"></DatePicker>
                             </StackLayout>
 
                             <Image Source="date100.png" HeightRequest="24" Grid.Column="1"></Image>
