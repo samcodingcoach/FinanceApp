@@ -18,10 +18,12 @@ public partial class PilihRekening_BottomSheet : BottomSheet
     public event EventHandler<AkunRekening> RekeningSelected;
 
     private bool _isPengeluaran;
+    private decimal _nominalRequired;
 
-    public PilihRekening_BottomSheet(bool isPengeluaran = false)
+    public PilihRekening_BottomSheet(bool isPengeluaran = false, decimal nominalRequired = 0)
     {
         _isPengeluaran = isPengeluaran;
+        _nominalRequired = nominalRequired;
         InitializeComponent();
         _allAkun = new ObservableCollection<AkunRekening>();
         ListAkunCollection.ItemsSource = _allAkun;
@@ -61,7 +63,7 @@ public partial class PilihRekening_BottomSheet : BottomSheet
             // Jika transaksi pengeluaran, jangan tampilkan rekening bersaldo 0 atau minus
             if (_isPengeluaran)
             {
-                apiUrl += "&saldo=gt.0";
+                apiUrl += "&saldo_akhir=gt.0";
             }
 
             using (var client = new HttpClient())
@@ -127,6 +129,15 @@ public partial class PilihRekening_BottomSheet : BottomSheet
         var selectedItem = e.Parameter as AkunRekening;
         if (selectedItem != null && sender is Border currentBorder)
         {
+            if (_isPengeluaran && (decimal)selectedItem.saldo_akhir < _nominalRequired)
+            {
+                if (Application.Current.MainPage != null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Saldo Tidak Cukup", $"Saldo rekening {selectedItem.nama_rekening} (Rp {selectedItem.saldo_akhir:N0}) tidak mencukupi untuk transaksi senilai Rp {_nominalRequired:N0}.", "OK");
+                }
+                return;
+            }
+
             if (_selectedRekening == selectedItem)
             {
                 // Tap ke-2 pada item yang sama: Konfirmasi pilihan dan kembali ke New_Transaksi

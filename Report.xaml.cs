@@ -222,12 +222,11 @@ public partial class Report : ContentPage
                 }
             };
 
-            gridLegend.Children.Add(new BoxView
+            gridLegend.Children.Add(new Microsoft.Maui.Controls.Shapes.Ellipse
             {
-                Color = Color.FromArgb(colorHex),
+                Fill = new SolidColorBrush(Color.FromArgb(colorHex)),
                 WidthRequest = 10,
                 HeightRequest = 10,
-                CornerRadius = 5,
                 VerticalOptions = LayoutOptions.Center
             });
 

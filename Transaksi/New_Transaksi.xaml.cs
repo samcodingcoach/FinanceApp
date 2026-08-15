@@ -35,15 +35,13 @@ public partial class New_Transaksi : ContentPage
             LabelDetailCount.Text = $"{jumlahItem} Item Detail Barang / Jasa";
             LabelDetailCount.TextColor = Colors.CornflowerBlue;
 
-            if (grandTotal > 0)
-            {
-                T_Nominal.Text = grandTotal.ToString("N0");
-            }
+            T_Nominal.Text = grandTotal.ToString("N0");
         }
         else
         {
             LabelDetailCount.Text = "Tambah Detail Barang / Jasa";
             LabelDetailCount.TextColor = Colors.Grey;
+            T_Nominal.Text = string.Empty;
         }
     }
 
@@ -132,7 +130,14 @@ public partial class New_Transaksi : ContentPage
             await stackLayout.FadeToAsync(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
             await stackLayout.FadeToAsync(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
 
-            var page = new Transaksi.PilihRekening_BottomSheet(!_isPemasukan);
+            decimal nominalVal = 0;
+            if (!string.IsNullOrWhiteSpace(T_Nominal.Text))
+            {
+                string cleanNominal = new string(T_Nominal.Text.Where(char.IsDigit).ToArray());
+                decimal.TryParse(cleanNominal, out nominalVal);
+            }
+
+            var page = new Transaksi.PilihRekening_BottomSheet(!_isPemasukan, nominalVal);
             page.HasHandle = true;
             page.HasBackdrop = true;
             
@@ -442,6 +447,27 @@ public partial class New_Transaksi : ContentPage
                             
                             // Bersihkan temporary detail setelah sukses
                             New_Transaksi_Detail.TempDetailItems.Clear();
+                        }
+                        else
+                        {
+                            // Jika user menginput manual tanpa masuk ke halaman detail
+                            // Variabel nominalValue sudah didapatkan di awal fungsi BSimpan_Clicked
+
+                            var listDetail = new List<object>
+                            {
+                                new {
+                                    id_transaksi = id_transaksi,
+                                    nama_barang_jasa = selectedKategori?.nama_kategori ?? "Transaksi Umum",
+                                    harga = nominalValue,
+                                    jumlah = 1,
+                                    subtotal = nominalValue
+                                }
+                            };
+                            
+                            string detailJson = JsonConvert.SerializeObject(listDetail);
+                            var detailContent = new StringContent(detailJson, System.Text.Encoding.UTF8, "application/json");
+                            string urlDetail = $"{App.API_HOST}/transaksi_detail";
+                            await client.PostAsync(urlDetail, detailContent);
                         }
                     }
                     

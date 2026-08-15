@@ -110,7 +110,7 @@
             <StackLayout Spacing="16">
                 <Grid>
                     <Label Text="Rincian Kategori" FontAttributes="Bold" FontSize="20" TextColor="#171d19" HorizontalOptions="Start" />
-                    <Label Text="View All" FontSize="12" FontAttributes="Bold" TextColor="#006948" HorizontalOptions="End" VerticalOptions="Center" />
+                    <Label Text="Lihat Semua" FontSize="14" FontAttributes="Bold" TextColor="#006948" HorizontalOptions="End" VerticalOptions="Center" />
                 </Grid>
 
                 <Border BackgroundColor="#ffffff" Stroke="#bccac0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
