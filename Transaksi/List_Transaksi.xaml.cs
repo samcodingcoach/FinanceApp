@@ -117,8 +117,8 @@ public partial class List_Transaksi : ContentPage
         // 1. Filter by Tab (Semua, Pemasukan, Pengeluaran)
         var filteredData = _allRawData.Where(x => 
             _currentTab == "Semua" || 
-            (_currentTab == "Pemasukan" && !x.tipe) || 
-            (_currentTab == "Pengeluaran" && x.tipe)
+            (_currentTab == "Pemasukan" && x.tipe) || 
+            (_currentTab == "Pengeluaran" && !x.tipe)
         ).ToList();
 
         // 2. Group by Date
@@ -201,7 +201,7 @@ public class TransaksiRowModel
     public string? nama_rekening { get; set; }
     public int id_kategori { get; set; }
     public string? nama_kategori { get; set; }
-    public bool tipe { get; set; } // true = pengeluaran, false = pemasukan
+    public bool tipe { get; set; } // false = pengeluaran, true = pemasukan
     public string? keterangan { get; set; }
     public string? foto_transaksi { get; set; }
     public decimal total_transaksi { get; set; }
@@ -210,10 +210,10 @@ public class TransaksiRowModel
     public string? ImageSource => string.IsNullOrEmpty(foto_transaksi) ? "nopic_nota.jpg" : ((App)Application.Current).BUCKET_URL + "/transaksi/" + foto_transaksi;
     
     [JsonIgnore]
-    public string NominalDisplay => $"{(tipe ? "-" : "+")} Rp {total_transaksi:N0}";
+    public string NominalDisplay => $"{(tipe ? "+" : "-")} Rp {total_transaksi:N0}";
     
     [JsonIgnore]
-    public Color NominalColor => tipe ? Colors.OrangeRed : Colors.Green;
+    public Color NominalColor => tipe ? Colors.Green : Colors.OrangeRed;
 
     [JsonIgnore]
     public string SubtitleDisplay => $"#{no_faktur ?? "TRX"} / {created_at:HH:mm} WIB";

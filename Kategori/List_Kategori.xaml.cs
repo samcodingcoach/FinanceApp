@@ -9,6 +9,7 @@ public partial class List_Kategori : ContentPage
 {
     private ObservableCollection<KategoriModel> _kategoriList;
     private ObservableCollection<KategoriModel> _allKategoriList;
+    private string _currentFilter = "Semua";
     
     public List_Kategori()
     {
@@ -103,12 +104,54 @@ public partial class List_Kategori : ContentPage
         _kategoriList.Clear();
         foreach (var item in _allKategoriList)
         {
-            if (string.IsNullOrEmpty(keyword) || (!string.IsNullOrEmpty(item.nama_kategori) && item.nama_kategori.ToLower().Contains(keyword)))
+            bool matchKeyword = string.IsNullOrEmpty(keyword) || (!string.IsNullOrEmpty(item.nama_kategori) && item.nama_kategori.ToLower().Contains(keyword));
+            bool matchFilter = _currentFilter == "Semua" || 
+                               (_currentFilter == "Pemasukan" && item.tipe) || 
+                               (_currentFilter == "Pengeluaran" && !item.tipe);
+
+            if (matchKeyword && matchFilter)
             {
                 _kategoriList.Add(item);
             }
         }
         L_ItemCount.Text = $"{_kategoriList.Count} Items";
+    }
+
+    private async void FilterTipe_Clicked(object sender, EventArgs e)
+    {
+        var btn = sender as Button;
+        if (btn == null) return;
+        
+        // Animasi tombol saat ditap
+        await btn.ScaleTo(0.9, 50);
+        await btn.ScaleTo(1.0, 50);
+
+        // Reset Styles
+        BSemua.BackgroundColor = Colors.Transparent;
+        BSemua.TextColor = Colors.DarkGrey;
+        BPemasukan.BackgroundColor = Colors.Transparent;
+        BPemasukan.TextColor = Colors.DarkGrey;
+        BPengeluaran.BackgroundColor = Colors.Transparent;
+        BPengeluaran.TextColor = Colors.DarkGrey;
+
+        // Apply Active Style
+        btn.BackgroundColor = Colors.DarkCyan;
+        btn.TextColor = Colors.White;
+
+        if (btn == BSemua) _currentFilter = "Semua";
+        else if (btn == BPemasukan) _currentFilter = "Pemasukan";
+        else if (btn == BPengeluaran) _currentFilter = "Pengeluaran";
+
+        // Refresh Data
+        RefreshLocalFilter();
+
+        // Animasi slide list kategori
+        ListKategoriCollection.TranslationY = 30;
+        ListKategoriCollection.Opacity = 0;
+        await Task.WhenAll(
+            ListKategoriCollection.TranslateTo(0, 0, 300, Easing.CubicOut),
+            ListKategoriCollection.FadeTo(1, 300)
+        );
     }
 
     private async void BtnMore_Tapped(object sender, TappedEventArgs e)

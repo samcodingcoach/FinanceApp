@@ -6,7 +6,7 @@
              BackgroundColor="#f8fafa" NavigationPage.HasNavigationBar="False" 
              Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="False">
     <Grid RowDefinitions="Auto,*,Auto">
-        <Border Grid.Row="0" Padding="10"  StrokeShape="RoundRectangle 10" Margin="10,35,10,10" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="White">
+        <Border Grid.Row="0" Padding="10"  StrokeShape="RoundRectangle 10" Margin="10" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="White">
             <Border.Shadow>
                 <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
             </Border.Shadow>

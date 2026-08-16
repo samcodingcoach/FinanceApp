@@ -48,7 +48,8 @@
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="TabFilter_Tapped" CommandParameter="Pengeluaran" />
                             </Border.GestureRecognizers>
-                            <Label Text="Pengeluaran" FontAttributes="Bold" FontSize="Small" TextColor="White"></Label>
+                            <Label Text="Pengeluaran" FontAttributes="Bold" 
+                                   FontSize="Small" TextColor="White"></Label>
                         </Border>
                     </Grid>
 

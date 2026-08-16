@@ -5,7 +5,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              BackgroundColor="#f8fafa" NavigationPage.HasNavigationBar="False" 
              Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="False">
-    <Grid RowDefinitions="Auto,*" RowSpacing="15">
+    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="15">
         <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20,15"  ColumnSpacing="10" BackgroundColor="White">
 
             <Grid.Shadow>
@@ -33,7 +33,20 @@
                 </Image.GestureRecognizers>
             </Image>
         </Grid>
-        <RefreshView x:Name="KategoriRefresh" Grid.Row="1" Refreshing="KategoriRefresh_Refreshing">
+        <!--filter tipe-->
+        <StackLayout Grid.Row="1" Spacing="10" Margin="15,0">
+            <Label Text="Tipe Transaksi" FontAttributes="Bold" TextColor="#444"></Label>
+            <Border Padding="5" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                    BackgroundColor="WhiteSmoke">
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                    <!--tipe-->
+                    <Button x:Name="BSemua" Clicked="FilterTipe_Clicked" CornerRadius="10" FontAttributes="Bold" Text="SEMUA" TextColor="White" Grid.Column="0" BackgroundColor="DarkCyan"></Button>
+                    <Button x:Name="BPemasukan" Clicked="FilterTipe_Clicked" CornerRadius="10" FontAttributes="Bold" Text="PEMASUKAN" TextColor="DarkGrey" Grid.Column="1" BackgroundColor="Transparent"></Button>
+                    <Button x:Name="BPengeluaran" Clicked="FilterTipe_Clicked" Text="PENGELUARAN" TextColor="DarkGrey" FontAttributes="Bold" CornerRadius="10" Grid.Column="2" BackgroundColor="Transparent"></Button>
+                </Grid>
+            </Border>
+        </StackLayout>
+        <RefreshView x:Name="KategoriRefresh" Grid.Row="2" Refreshing="KategoriRefresh_Refreshing">
             <CollectionView x:Name="ListKategoriCollection" Margin="10,0,10,10" SelectionMode="Single" SelectionChanged="ListKategoriCollection_SelectionChanged">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="0" VerticalItemSpacing="10" />
@@ -78,7 +91,7 @@
         </ImageButton>
 
         <!-- Overlay Loading -->
-        <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">
+        <Grid x:Name="OverlayLoading" Grid.Row="0" Grid.RowSpan="3" BackgroundColor="#80000000" IsVisible="False" ZIndex="999">
             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
                 <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="White" WidthRequest="50" HeightRequest="50" />
                 <Label Text="Mohon Tunggu..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
