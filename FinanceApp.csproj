@@ -100,6 +100,9 @@
 	  <MauiXaml Update="Login.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pengaturan\ListMenuPengaturan.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pengaturan\SettingFinger.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
