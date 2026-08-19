@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using Plugin.Maui.Biometric;
 
 namespace FinanceApp;
 
@@ -74,9 +75,24 @@ public partial class Login : ContentPage
                         {
                             _failedAttempts = 0;
                             Preferences.Set("user_data", JsonConvert.SerializeObject(result));
+                            
+                            // Save credentials for Biometric fast-login
+                            await SecureStorage.Default.SetAsync("last_username", username);
+                            await SecureStorage.Default.SetAsync("last_password", password);
+
+                            // Reset cache Beranda agar memuat data baru secara otomatis
+                            Beranda.ResetCache();
+
                             MainThread.BeginInvokeOnMainThread(async () => 
                             {
-                                await Navigation.PopModalAsync();
+                                if (Navigation.ModalStack.Count > 0)
+                                {
+                                    await Navigation.PopModalAsync();
+                                }
+                                else if (Application.Current != null)
+                                {
+                                    Application.Current.MainPage = new MainPage();
+                                }
                             });
                         }
                         else
@@ -137,6 +153,51 @@ public partial class Login : ContentPage
                 });
             });
             #pragma warning restore CS4014
+        }
+    }
+
+    private async void Biometric_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is View view)
+        {
+            await view.ScaleTo(0.9, 100);
+            await view.ScaleTo(1, 100);
+        }
+
+        bool isBiometricEnabled = Preferences.Get("use_biometric", false);
+        if (!isBiometricEnabled)
+        {
+            await DisplayAlert("Biometrik Nonaktif", "Anda belum mengaktifkan fitur ini. Silakan login manual terlebih dahulu, lalu aktifkan di Pengaturan.", "OK");
+            return;
+        }
+
+        string savedUsername = await SecureStorage.Default.GetAsync("last_username");
+        string savedPassword = await SecureStorage.Default.GetAsync("last_password");
+
+        if (string.IsNullOrEmpty(savedUsername) || string.IsNullOrEmpty(savedPassword))
+        {
+            await DisplayAlert("Data Tidak Ditemukan", "Sesi biometrik kedaluwarsa atau belum tersedia. Silakan login manual satu kali terlebih dahulu.", "OK");
+            return;
+        }
+
+        var authResult = await BiometricAuthenticationService.Default.AuthenticateAsync(new AuthenticationRequest()
+        {
+            Title = "Login Cepat",
+            Subtitle = "Akses akun FinanceApp Anda",
+            Description = "Gunakan sidik jari atau Face ID untuk masuk tanpa mengetik password.",
+            NegativeText = "Batal"
+        }, CancellationToken.None);
+
+        if (authResult.Status == BiometricResponseStatus.Success)
+        {
+            // Auto fill UI and trigger login programmatically
+            UsernameEntry.Text = savedUsername;
+            PasswordEntry.Text = savedPassword;
+            OnLoginClicked(LoginBtn, EventArgs.Empty);
+        }
+        else
+        {
+            await Toast.Make("Otentikasi biometrik dibatalkan atau gagal.").Show();
         }
     }
 }

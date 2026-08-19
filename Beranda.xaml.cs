@@ -13,6 +13,11 @@ public partial class Beranda : ContentPage
 {
     private static DateTime _lastFetchTime = DateTime.MinValue;
 
+    public static void ResetCache()
+    {
+        _lastFetchTime = DateTime.MinValue;
+    }
+
 	public Beranda()
 	{
 		InitializeComponent();
@@ -25,10 +30,10 @@ public partial class Beranda : ContentPage
         await LoadApiDataAsync();
     }
 
-    private async Task LoadApiDataAsync()
+    public async Task LoadApiDataAsync(bool force = false)
     {
-        // Hanya memanggil API jika sudah berlalu 30 menit dari fetch terakhir
-        if ((DateTime.Now - _lastFetchTime).TotalMinutes < 30)
+        // Hanya memanggil API jika sudah berlalu 30 menit dari fetch terakhir atau jika dipaksa (force)
+        if (!force && (DateTime.Now - _lastFetchTime).TotalMinutes < 30)
         {
             return;
         }

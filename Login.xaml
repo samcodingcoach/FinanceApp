@@ -85,6 +85,9 @@
                                 </HorizontalStackLayout>
                             </Border>
                             <Border Grid.Column="1" BackgroundColor="White" Stroke="#bccac0" StrokeThickness="1" StrokeShape="RoundRectangle 12" HeightRequest="45">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="Biometric_Tapped" />
+                                </Border.GestureRecognizers>
                                 <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
                                     <Image Source="fingerprint1.png" HeightRequest="22"></Image>
                                     <Label Text="Biometric" VerticalOptions="Center" FontAttributes="Bold" 
