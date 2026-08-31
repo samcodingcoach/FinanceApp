@@ -17,18 +17,33 @@
             </Grid>
         </Border>
 
-        <Border Grid.Row="1" Padding="10" StrokeShape="RoundRectangle 10"  Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="White">
+        <Border Grid.Row="1" Padding="10" StrokeShape="RoundRectangle 10" Stroke="Transparent" StrokeThickness="0.5" BackgroundColor="White">
             <Border.Shadow>
                 <Shadow Brush="#000000" Opacity="0.10" Radius="12" Offset="0,-3" />
             </Border.Shadow>
-            <Grid ColumnDefinitions="Auto,*,Auto" Padding="10" RowDefinitions="Auto" ColumnSpacing="15">
-                <Grid.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="SettingFinger_Tapped" />
-                </Grid.GestureRecognizers>
-                <Image Source="fingerprint1.png" HeightRequest="24" Grid.Column="0" Grid.Row="0" VerticalOptions="Center"></Image>
-                <Label Text="Biometric Sidik Jari" FontSize="16" TextColor="#444" Grid.Column="1" Grid.Row="0" VerticalOptions="Center" FontAttributes="Bold"></Label>
-                <Image Source="chevron100.png" HeightRequest="18" TranslationY="2" VerticalOptions="Center" Rotation="-90" Grid.Column="2" Grid.Row="0" HorizontalOptions="End"></Image>
-            </Grid>
+            <VerticalStackLayout Spacing="5">
+                <!-- Item 1: Biometric Sidik Jari -->
+                <Grid ColumnDefinitions="Auto,*,Auto" Padding="10,12" ColumnSpacing="15">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="SettingFinger_Tapped" />
+                    </Grid.GestureRecognizers>
+                    <Image Source="fingerprint1.png" HeightRequest="24" Grid.Column="0" VerticalOptions="Center"></Image>
+                    <Label Text="Biometric Sidik Jari" FontSize="15" TextColor="#444" Grid.Column="1" VerticalOptions="Center" FontAttributes="Bold"></Label>
+                    <Image Source="chevron100.png" HeightRequest="18" TranslationY="2" VerticalOptions="Center" Rotation="-90" Grid.Column="2" HorizontalOptions="End"></Image>
+                </Grid>
+
+                <BoxView HeightRequest="0.5" Color="#f1f5f9" Margin="10,0" />
+
+                <!-- Item 2: Atur Refresh Data Dashboard -->
+                <Grid ColumnDefinitions="Auto,*,Auto" Padding="10,12" ColumnSpacing="15">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="SettingRefresh_Tapped" />
+                    </Grid.GestureRecognizers>
+                    <Image Source="refreshberanda1.png" HeightRequest="24" Grid.Column="0" VerticalOptions="Center"></Image>
+                    <Label Text="Atur Refresh Data Dashboard" FontSize="15" TextColor="#444" Grid.Column="1" VerticalOptions="Center" FontAttributes="Bold"></Label>
+                    <Image Source="chevron100.png" HeightRequest="18" TranslationY="2" VerticalOptions="Center" Rotation="-90" Grid.Column="2" HorizontalOptions="End"></Image>
+                </Grid>
+            </VerticalStackLayout>
         </Border>
     </Grid>
 </ContentPage>

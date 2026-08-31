@@ -16,4 +16,14 @@ public partial class ListMenuPengaturan : ContentPage
             await Navigation.PushAsync(new SettingFinger());
         }
     }
+
+    private async void SettingRefresh_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is View view)
+        {
+            await view.ScaleTo(0.95, 50);
+            await view.ScaleTo(1, 50);
+            await Navigation.PushAsync(new SettingRefreshBeranda());
+        }
+    }
 }

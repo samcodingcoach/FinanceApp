@@ -19,7 +19,17 @@
                            WidthRequest="120" HeightRequest="120" Margin="0,-30,-10,-30" Rotation="180" />
 
                     <VerticalStackLayout>
-                        <Label Text="TOTAL SALDO" FontSize="12" FontAttributes="Bold" TextColor="#e6ffffff" CharacterSpacing="1" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0" Text="TOTAL SALDO" FontSize="12" FontAttributes="Bold" TextColor="#e6ffffff" CharacterSpacing="1" VerticalOptions="Center" />
+                            
+                            <!-- Countdown Badge Pill -->
+                            <Border Grid.Column="1" BackgroundColor="#29ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="8,4" VerticalOptions="Center">
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                    <Image x:Name="ImgRefreshIcon" Source="refreshberanda1.png" WidthRequest="12" HeightRequest="12" VerticalOptions="Center" />
+                                    <Label x:Name="L_Countdown" Text="--:--" FontSize="11" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Border>
+                        </Grid>
                         <!--total_saldo_akhir : total-->
                         <Label x:Name="L_TotalSaldo" Text="Rp 0" FontSize="32" FontAttributes="Bold" TextColor="White" Margin="0,5,0,0" />
                         

@@ -2,11 +2,109 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FinanceApp.Pengaturan.SettingRefreshBeranda"
-             Title="SettingRefreshBeranda">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             BackgroundColor="#f8fafc"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Custom Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20,20,20,15" BackgroundColor="White">
+            <Grid.Shadow>
+                <Shadow Brush="#000000" Opacity="0.05" Radius="5" Offset="0,2" />
+            </Grid.Shadow>
+            <Label Text="Pengaturan Refresh" FontSize="18" TextColor="CornflowerBlue" FontAttributes="Bold" VerticalOptions="Center"/>
+            <Label Text="KEMBALI" Grid.Column="1" FontSize="14" TextColor="CornflowerBlue" FontAttributes="Bold" VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Back_Tapped" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+
+        <!-- Main Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="20">
+                
+                <!-- Main Card -->
+                <Border BackgroundColor="White" Padding="20" StrokeShape="RoundRectangle 16" Stroke="#e2e8f0" StrokeThickness="1">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Opacity="0.03" Radius="8" Offset="0,2" />
+                    </Border.Shadow>
+                    
+                    <VerticalStackLayout Spacing="16">
+                        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                            <Image Source="refreshberanda1.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center"/>
+                            <Label Text="Interval Refresh Otomatis" FontSize="16" FontAttributes="Bold" TextColor="#1e293b" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        
+                        <Label Text="Tentukan durasi timer interval untuk otomatis memuat ulang (refresh) data terbaru di halaman Beranda dari server." FontSize="13" TextColor="#64748b" LineBreakMode="WordWrap" />
+
+                        <!-- Selected Value Display -->
+                        <Border BackgroundColor="#f0f7ff" Stroke="#bfdbfe" StrokeShape="RoundRectangle 12" Padding="15" Margin="0,10,0,0">
+                            <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                                <Label Text="WAKTU INTERVAL SAAT INI" FontSize="11" TextColor="#3b82f6" FontAttributes="Bold" HorizontalTextAlignment="Center" CharacterSpacing="1" />
+                                <Label x:Name="L_SelectedMinutes" Text="30 Menit" FontSize="28" FontAttributes="Bold" TextColor="CornflowerBlue" HorizontalTextAlignment="Center" />
+                                <Label Text="(Min: 1 Menit • Maks: 30 Menit)" FontSize="11" TextColor="#64748b" HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Slider -->
+                        <VerticalStackLayout Spacing="6" Margin="0,10,0,0">
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <Label Grid.Column="0" Text="1 Mnt" FontSize="12" TextColor="#94a3b8" FontAttributes="Bold" />
+                                <Label Grid.Column="2" Text="30 Mnt" FontSize="12" TextColor="#94a3b8" FontAttributes="Bold" />
+                            </Grid>
+                            <Slider x:Name="SliderInterval" Minimum="1" Maximum="30" Value="30" MinimumTrackColor="CornflowerBlue" MaximumTrackColor="#cbd5e1" ThumbColor="CornflowerBlue" ValueChanged="SliderInterval_ValueChanged" />
+                        </VerticalStackLayout>
+
+                        <!-- Quick Presets -->
+                        <VerticalStackLayout Spacing="8" Margin="0,10,0,0">
+                            <Label Text="Pilihan Cepat:" FontSize="12" FontAttributes="Bold" TextColor="#64748b" />
+                            <Grid ColumnDefinitions="*,*,*,*,*" ColumnSpacing="6">
+                                <Border Grid.Column="0" BackgroundColor="#f1f5f9" StrokeThickness="0" StrokeShape="RoundRectangle 8" Padding="0,8">
+                                    <Label Text="1 Mnt" FontSize="11" FontAttributes="Bold" TextColor="#334155" HorizontalTextAlignment="Center" />
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="Preset_Tapped" CommandParameter="1" />
+                                    </Border.GestureRecognizers>
+                                </Border>
+                                <Border Grid.Column="1" BackgroundColor="#f1f5f9" StrokeThickness="0" StrokeShape="RoundRectangle 8" Padding="0,8">
+                                    <Label Text="5 Mnt" FontSize="11" FontAttributes="Bold" TextColor="#334155" HorizontalTextAlignment="Center" />
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="Preset_Tapped" CommandParameter="5" />
+                                    </Border.GestureRecognizers>
+                                </Border>
+                                <Border Grid.Column="2" BackgroundColor="#f1f5f9" StrokeThickness="0" StrokeShape="RoundRectangle 8" Padding="0,8">
+                                    <Label Text="10 Mnt" FontSize="11" FontAttributes="Bold" TextColor="#334155" HorizontalTextAlignment="Center" />
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="Preset_Tapped" CommandParameter="10" />
+                                    </Border.GestureRecognizers>
+                                </Border>
+                                <Border Grid.Column="3" BackgroundColor="#f1f5f9" StrokeThickness="0" StrokeShape="RoundRectangle 8" Padding="0,8">
+                                    <Label Text="15 Mnt" FontSize="11" FontAttributes="Bold" TextColor="#334155" HorizontalTextAlignment="Center" />
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="Preset_Tapped" CommandParameter="15" />
+                                    </Border.GestureRecognizers>
+                                </Border>
+                                <Border Grid.Column="4" BackgroundColor="#f1f5f9" StrokeThickness="0" StrokeShape="RoundRectangle 8" Padding="0,8">
+                                    <Label Text="30 Mnt" FontSize="11" FontAttributes="Bold" TextColor="#334155" HorizontalTextAlignment="Center" />
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="Preset_Tapped" CommandParameter="30" />
+                                    </Border.GestureRecognizers>
+                                </Border>
+                            </Grid>
+                        </VerticalStackLayout>
+                        
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Save Button -->
+                <Button x:Name="BtnSimpan" Text="SIMPAN PENGATURAN" CornerRadius="12" BackgroundColor="CornflowerBlue" TextColor="White" FontAttributes="Bold" HeightRequest="52" Clicked="BtnSimpan_Clicked">
+                    <Button.Shadow>
+                        <Shadow Brush="CornflowerBlue" Opacity="0.3" Radius="8" Offset="0,3" />
+                    </Button.Shadow>
+                </Button>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

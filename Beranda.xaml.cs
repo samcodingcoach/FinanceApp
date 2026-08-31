@@ -12,6 +12,8 @@ namespace FinanceApp;
 public partial class Beranda : ContentPage
 {
     private static DateTime _lastFetchTime = DateTime.MinValue;
+    private IDispatcherTimer? _countdownTimer;
+    private int _remainingSeconds;
 
     public static void ResetCache()
     {
@@ -27,13 +29,88 @@ public partial class Beranda : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        StartCountdownTimer();
         await LoadApiDataAsync();
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        StopCountdownTimer();
+    }
+
+    private void StartCountdownTimer()
+    {
+        StopCountdownTimer();
+
+        int intervalMinutes = Preferences.Get("refresh_interval_minutes", 30);
+        if (intervalMinutes < 1) intervalMinutes = 1;
+        if (intervalMinutes > 30) intervalMinutes = 30;
+
+        if (_lastFetchTime == DateTime.MinValue)
+        {
+            _remainingSeconds = intervalMinutes * 60;
+        }
+        else
+        {
+            var elapsed = (DateTime.Now - _lastFetchTime).TotalSeconds;
+            _remainingSeconds = (int)Math.Max(0, (intervalMinutes * 60) - elapsed);
+        }
+
+        UpdateCountdownText();
+
+        _countdownTimer = Dispatcher.CreateTimer();
+        _countdownTimer.Interval = TimeSpan.FromSeconds(1);
+        _countdownTimer.Tick += async (s, e) =>
+        {
+            if (_remainingSeconds > 0)
+            {
+                _remainingSeconds--;
+                UpdateCountdownText();
+            }
+            else
+            {
+                int mins = Preferences.Get("refresh_interval_minutes", 30);
+                if (mins < 1) mins = 1;
+                if (mins > 30) mins = 30;
+                _remainingSeconds = mins * 60;
+
+                L_Countdown.Text = "Refresh...";
+                if (ImgRefreshIcon != null)
+                {
+                    _ = ImgRefreshIcon.RelRotateTo(360, 600);
+                }
+                await LoadApiDataAsync(force: true);
+                UpdateCountdownText();
+            }
+        };
+        _countdownTimer.Start();
+    }
+
+    private void StopCountdownTimer()
+    {
+        if (_countdownTimer != null)
+        {
+            _countdownTimer.Stop();
+            _countdownTimer = null;
+        }
+    }
+
+    private void UpdateCountdownText()
+    {
+        int mins = _remainingSeconds / 60;
+        int secs = _remainingSeconds % 60;
+        L_Countdown.Text = $"{mins:D2}:{secs:D2}";
     }
 
     public async Task LoadApiDataAsync(bool force = false)
     {
-        // Hanya memanggil API jika sudah berlalu 30 menit dari fetch terakhir atau jika dipaksa (force)
-        if (!force && (DateTime.Now - _lastFetchTime).TotalMinutes < 30)
+        int intervalMinutes = Preferences.Get("refresh_interval_minutes", 30);
+        if (intervalMinutes < 1) intervalMinutes = 1;
+        if (intervalMinutes > 30) intervalMinutes = 30;
+
+        // Hanya memanggil API jika sudah berlalu intervalMinutes dari fetch terakhir atau jika dipaksa (force)
+        if (!force && (DateTime.Now - _lastFetchTime).TotalMinutes < intervalMinutes)
         {
             return;
         }
@@ -246,6 +323,11 @@ public partial class Beranda : ContentPage
                 
                 // Jika semua API dieksekusi tanpa error, catat waktu terakhirnya
                 _lastFetchTime = DateTime.Now;
+                int mins = Preferences.Get("refresh_interval_minutes", 30);
+                if (mins < 1) mins = 1;
+                if (mins > 30) mins = 30;
+                _remainingSeconds = mins * 60;
+                UpdateCountdownText();
             }
         }
         catch (Exception ex)
