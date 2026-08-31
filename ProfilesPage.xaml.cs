@@ -181,6 +181,7 @@ public partial class ProfilesPage : ContentPage
                         {
                             await Task.Delay(1000); // Beri waktu sejenak agar toast terlihat
                             Preferences.Remove("user_data");
+                            Preferences.Remove("id_user");
                             Beranda.ResetCache();
                             MainThread.BeginInvokeOnMainThread(() => 
                             {
@@ -326,6 +327,7 @@ public partial class ProfilesPage : ContentPage
         {
             // Hapus data sesi / login dari penyimpanan lokal
             Preferences.Remove("user_data");
+            Preferences.Remove("id_user");
             Beranda.ResetCache();
             
             // Arahkan kembali ke MainPage (yang akan otomatis memunculkan Modal Login)

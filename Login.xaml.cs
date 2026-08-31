@@ -67,14 +67,43 @@ public partial class Login : ContentPage
 
                 if (response.IsSuccessStatusCode)
                 {
+                    System.Diagnostics.Debug.WriteLine("================ [LOGIN DEBUG] ================");
+                    System.Diagnostics.Debug.WriteLine($"[LOGIN RAW RESPONSE]: {responseContent}");
+
                     var resultList = JsonConvert.DeserializeObject<List<LoginResponse>>(responseContent);
                     if (resultList != null && resultList.Count > 0)
                     {
                         var result = resultList[0];
                         if (result.success)
                         {
+                            int extractedId = result.user_id > 0 ? result.user_id : result.id_users;
+                            if (extractedId <= 0)
+                            {
+                                try
+                                {
+                                    var jArr = Newtonsoft.Json.Linq.JArray.Parse(responseContent);
+                                    if (jArr.Count > 0)
+                                    {
+                                        var jObj = jArr[0];
+                                        extractedId = (int?)jObj["id_users"] ?? (int?)jObj["user_id"] ?? (int?)jObj["id_user"] ?? (int?)jObj["id"] ?? 0;
+                                    }
+                                }
+                                catch { }
+                            }
+
+                            if (extractedId > 0)
+                            {
+                                result.user_id = extractedId;
+                                result.id_users = extractedId;
+                            }
+
+                            System.Diagnostics.Debug.WriteLine($"[LOGIN SUCCESS] ID USERS KELUAR: {extractedId}");
+                            System.Diagnostics.Debug.WriteLine($"[LOGIN SUCCESS] USERNAME: {result.username}, NAMA: {result.nama_lengkap}, ROLE: {result.role}");
+                            System.Diagnostics.Debug.WriteLine("===============================================");
+
                             _failedAttempts = 0;
                             Preferences.Set("user_data", JsonConvert.SerializeObject(result));
+                            Preferences.Set("id_user", extractedId);
                             
                             // Save credentials for Biometric fast-login
                             await SecureStorage.Default.SetAsync("last_username", username);
@@ -207,6 +236,7 @@ public class LoginResponse
     public bool success { get; set; }
     public string message { get; set; }
     public int user_id { get; set; }
+    public int id_users { get; set; }
     public string username { get; set; }
     public string email { get; set; }
     public string role { get; set; }

@@ -91,10 +91,10 @@
                 <VerticalStackLayout Spacing="16">
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Grid.Column="0" Text="Anggaran Bulanan" FontSize="18" FontAttributes="Bold" TextColor="#171d19" />
-                        <Label x:Name="L_AnggaranTerpakaiPersen" Grid.Column="1" Text="Terpakai 65%" FontSize="14" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalOptions="Center" />
+                        <Label x:Name="L_AnggaranTerpakaiPersen" Grid.Column="1" Text="Terpakai 0%" FontSize="14" FontAttributes="Bold" TextColor="CornflowerBlue" VerticalOptions="Center" />
                     </Grid>
                     
-                    <ProgressBar x:Name="PB_Anggaran" Progress="0.65" ProgressColor="#006948" BackgroundColor="#e4eae4" HeightRequest="8" />
+                    <ProgressBar x:Name="PB_Anggaran" Progress="0" ProgressColor="#006948" BackgroundColor="#e4eae4" HeightRequest="8" />
                     
                     <Label x:Name="L_AnggaranTersisa" Text="Tersisa Rp 0 untuk bulan ini." FontSize="14" TextColor="#3d4a42" />
                 </VerticalStackLayout>

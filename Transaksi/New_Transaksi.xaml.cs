@@ -384,10 +384,25 @@ public partial class New_Transaksi : ContentPage
             var app = Application.Current as App;
             string tokenKey = app?.TOKEN_KEY ?? string.Empty;
 
+            int currentUserId = Preferences.Get("id_user", 0);
+            if (currentUserId <= 0)
+            {
+                string jsonUser = Preferences.Get("user_data", string.Empty);
+                if (!string.IsNullOrEmpty(jsonUser))
+                {
+                    try
+                    {
+                        var jObj = Newtonsoft.Json.Linq.JObject.Parse(jsonUser);
+                        currentUserId = (int?)jObj["id_users"] ?? (int?)jObj["user_id"] ?? (int?)jObj["id_user"] ?? (int?)jObj["id"] ?? 0;
+                    }
+                    catch { }
+                }
+            }
+
             var trxData = new
             {
                 no_faktur = NoFaktur.Text ?? "",
-                id_users = Preferences.Get("id_user", 3), // Default 3 sesuai agy.txt
+                id_users = currentUserId > 0 ? currentUserId : 1,
                 id_rekening = _id_rekening,
                 id_kategori = selectedKategori.id_kategori,
                 foto_transaksi = _uploadedKey ?? "",
@@ -396,6 +411,11 @@ public partial class New_Transaksi : ContentPage
             };
 
             string trxJson = JsonConvert.SerializeObject(trxData);
+            
+            System.Diagnostics.Debug.WriteLine("================ [TRANSAKSI DEBUG] ================");
+            System.Diagnostics.Debug.WriteLine($"[TRANSAKSI PAYLOAD]: {trxJson}");
+            System.Diagnostics.Debug.WriteLine($"[TRANSAKSI ID_USERS DIGUNAKAN]: {trxData.id_users}");
+            System.Diagnostics.Debug.WriteLine("====================================================");
             
             using (var client = new HttpClient())
             {

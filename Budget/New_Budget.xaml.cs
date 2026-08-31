@@ -149,11 +149,26 @@ public partial class New_Budget : ContentPage
                 string postUrl = $"{App.API_HOST}/budget";
                 client.DefaultRequestHeaders.Add("Prefer", "return=representation");
 
+                int currentUserId = Preferences.Get("id_user", 0);
+                if (currentUserId <= 0)
+                {
+                    string jsonUser = Preferences.Get("user_data", string.Empty);
+                    if (!string.IsNullOrEmpty(jsonUser))
+                    {
+                        try
+                        {
+                            var jObj = Newtonsoft.Json.Linq.JObject.Parse(jsonUser);
+                            currentUserId = (int?)jObj["id_users"] ?? (int?)jObj["user_id"] ?? (int?)jObj["id_user"] ?? (int?)jObj["id"] ?? 0;
+                        }
+                        catch { }
+                    }
+                }
+
                 var payload = new
                 {
                     periode_awal = dStart.ToString("MM/dd/yyyy"),
                     periode_akhir = dEnd.ToString("MM/dd/yyyy"),
-                    id_users = id_users,
+                    id_users = currentUserId > 0 ? currentUserId : 1,
                     deskripsi = e_deskripsi.Text ?? "",
                     total_rencana = totalRencana
                 };

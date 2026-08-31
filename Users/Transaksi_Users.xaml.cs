@@ -36,7 +36,21 @@ public partial class Transaksi_Users : ContentPage
         {
             var app = Application.Current as App;
             string tokenKey = app?.TOKEN_KEY ?? string.Empty;
-            int id_users = Preferences.Get("id_user", 3);
+            int id_users = Preferences.Get("id_user", 0);
+            if (id_users <= 0)
+            {
+                string jsonUser = Preferences.Get("user_data", string.Empty);
+                if (!string.IsNullOrEmpty(jsonUser))
+                {
+                    try
+                    {
+                        var jObj = Newtonsoft.Json.Linq.JObject.Parse(jsonUser);
+                        id_users = (int?)jObj["id_users"] ?? (int?)jObj["user_id"] ?? (int?)jObj["id_user"] ?? (int?)jObj["id"] ?? 0;
+                    }
+                    catch { }
+                }
+            }
+            if (id_users <= 0) id_users = 1;
 
             string url = $"{App.API_HOST}/rpc/get_transaksi_detail_harian";
 
