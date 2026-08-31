@@ -12,19 +12,25 @@ public partial class New_Transaksi : ContentPage
 {
     private bool _isPemasukan = false;
     private ObservableCollection<KategoriData> _kategoris;
+    private int? _selectedIdKategori = null;
 
     public New_Transaksi()
 	{
 		InitializeComponent();
         _kategoris = new ObservableCollection<KategoriData>();
         KategoriCollectionView.ItemsSource = _kategoris;
+        TP_Waktu.Time = DateTime.Now.TimeOfDay;
 	}
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        // Load data pengeluaran (karena _isPemasukan = false secara default)
-        LoadKategori();
+        
+        // Hanya load kategori jika belum pernah dimuat sebelumnya agar seleksi tidak hilang
+        if (_kategoris.Count == 0)
+        {
+            LoadKategori();
+        }
 
         // Update ringkasan detail item jika ada (jumlah item & total nominal)
         if (New_Transaksi_Detail.TempDetailItems != null && New_Transaksi_Detail.TempDetailItems.Count > 0)
@@ -70,6 +76,10 @@ public partial class New_Transaksi : ContentPage
                     {
                         foreach (var item in data)
                         {
+                            if (_selectedIdKategori != null && item.id_kategori == _selectedIdKategori.Value)
+                            {
+                                item.IsSelected = true;
+                            }
                             _kategoris.Add(item);
                         }
                     }
@@ -90,6 +100,7 @@ public partial class New_Transaksi : ContentPage
     {
         if (_isPemasukan) return;
         _isPemasukan = true;
+        _selectedIdKategori = null;
         BPemasukan.BackgroundColor = Colors.DarkCyan;
         BPemasukan.TextColor = Colors.White;
         BPengeluaran.BackgroundColor = Colors.Transparent;
@@ -101,6 +112,7 @@ public partial class New_Transaksi : ContentPage
     {
         if (!_isPemasukan) return;
         _isPemasukan = false;
+        _selectedIdKategori = null;
         BPengeluaran.BackgroundColor = Colors.DarkCyan;
         BPengeluaran.TextColor = Colors.White;
         BPemasukan.BackgroundColor = Colors.Transparent;
@@ -113,9 +125,10 @@ public partial class New_Transaksi : ContentPage
         var selectedItem = e.Parameter as KategoriData;
         if (selectedItem == null) return;
         
+        _selectedIdKategori = selectedItem.id_kategori;
         foreach (var item in _kategoris)
         {
-            item.IsSelected = (item == selectedItem);
+            item.IsSelected = (item.id_kategori == selectedItem.id_kategori);
         }
 
         await Toast.Make($"Memilih {selectedItem.nama_kategori} (ID: {selectedItem.id_kategori})").Show();
@@ -162,8 +175,8 @@ public partial class New_Transaksi : ContentPage
     {
         if (sender is View view)
         {
-            _ = view.ScaleTo(0.95, 100).ContinueWith(t => view.ScaleTo(1, 100));
-            _ = view.FadeTo(0.5, 100).ContinueWith(t => view.FadeTo(1, 100));
+            _ = view.ScaleToAsync(0.95, 100).ContinueWith(t => view.ScaleToAsync(1, 100));
+            _ = view.FadeToAsync(0.5, 100).ContinueWith(t => view.FadeToAsync(1, 100));
         }
 
         await Task.Delay(150); // Menunggu sejenak agar animasi klik terlihat sebelum berpindah halaman
@@ -178,8 +191,8 @@ public partial class New_Transaksi : ContentPage
     {
         if (sender is View view)
         {
-            _ = view.ScaleTo(0.8, 100).ContinueWith(t => view.ScaleTo(1, 100));
-            _ = view.FadeTo(0.5, 100).ContinueWith(t => view.FadeTo(1, 100));
+            _ = view.ScaleToAsync(0.8, 100).ContinueWith(t => view.ScaleToAsync(1, 100));
+            _ = view.FadeToAsync(0.5, 100).ContinueWith(t => view.FadeToAsync(1, 100));
         }
 
         try
@@ -195,7 +208,7 @@ public partial class New_Transaksi : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Gagal membuka kamera: {ex.Message}", "OK");
+            await DisplayAlertAsync("Error", $"Gagal membuka kamera: {ex.Message}", "OK");
         }
     }
 
@@ -203,8 +216,8 @@ public partial class New_Transaksi : ContentPage
     {
         if (sender is View view)
         {
-            _ = view.ScaleTo(0.8, 100).ContinueWith(t => view.ScaleTo(1, 100));
-            _ = view.FadeTo(0.5, 100).ContinueWith(t => view.FadeTo(1, 100));
+            _ = view.ScaleToAsync(0.8, 100).ContinueWith(t => view.ScaleToAsync(1, 100));
+            _ = view.FadeToAsync(0.5, 100).ContinueWith(t => view.FadeToAsync(1, 100));
         }
 
         try
@@ -217,7 +230,7 @@ public partial class New_Transaksi : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Gagal membuka galeri: {ex.Message}", "OK");
+            await DisplayAlertAsync("Error", $"Gagal membuka galeri: {ex.Message}", "OK");
         }
     }
 
@@ -267,7 +280,7 @@ public partial class New_Transaksi : ContentPage
         catch (Exception ex)
         {
             LabelUploadStatus.Text = "Upload Min 500kb";
-            await DisplayAlert("Error", $"Gagal mengolah gambar: {ex.Message}", "OK");
+            await DisplayAlertAsync("Error", $"Gagal mengolah gambar: {ex.Message}", "OK");
         }
     }
 
@@ -315,14 +328,14 @@ public partial class New_Transaksi : ContentPage
                 else
                 {
                     string err = await response.Content.ReadAsStringAsync();
-                    await DisplayAlert("Error Upload", err, "OK");
+                    await DisplayAlertAsync("Error Upload", err, "OK");
                     return false;
                 }
             }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Gagal mengunggah gambar: {ex.Message}", "OK");
+            await DisplayAlertAsync("Error", $"Gagal mengunggah gambar: {ex.Message}", "OK");
             return false;
         }
     }
@@ -399,6 +412,13 @@ public partial class New_Transaksi : ContentPage
                 }
             }
 
+            TimeSpan chosenTime = (TP_Waktu?.Time != null && TP_Waktu.Time.Value != TimeSpan.Zero)
+                ? TP_Waktu.Time.Value 
+                : DateTime.Now.TimeOfDay;
+
+            DateTime selectedDate = DP_Tanggal?.Date ?? DateTime.Today;
+            DateTime fullDateTime = selectedDate.Date + chosenTime;
+
             var trxData = new
             {
                 no_faktur = NoFaktur.Text ?? "",
@@ -407,15 +427,15 @@ public partial class New_Transaksi : ContentPage
                 id_kategori = selectedKategori.id_kategori,
                 foto_transaksi = _uploadedKey ?? "",
                 keterangan = T_Catatan.Text ?? "",
-                created_at = string.Format("{0:yyyy-MM-dd}", DP_Tanggal.Date)
+                created_at = fullDateTime.ToString("yyyy-MM-dd HH:mm:ss")
             };
 
             string trxJson = JsonConvert.SerializeObject(trxData);
             
-            System.Diagnostics.Debug.WriteLine("================ [TRANSAKSI DEBUG] ================");
-            System.Diagnostics.Debug.WriteLine($"[TRANSAKSI PAYLOAD]: {trxJson}");
-            System.Diagnostics.Debug.WriteLine($"[TRANSAKSI ID_USERS DIGUNAKAN]: {trxData.id_users}");
-            System.Diagnostics.Debug.WriteLine("====================================================");
+            //System.Diagnostics.Debug.WriteLine("================ [TRANSAKSI DEBUG] ================");
+            //System.Diagnostics.Debug.WriteLine($"[TRANSAKSI PAYLOAD]: {trxJson}");
+            //System.Diagnostics.Debug.WriteLine($"[TRANSAKSI ID_USERS DIGUNAKAN]: {trxData.id_users}");
+            //System.Diagnostics.Debug.WriteLine("====================================================");
             
             using (var client = new HttpClient())
             {
@@ -497,7 +517,7 @@ public partial class New_Transaksi : ContentPage
                 else
                 {
                     string err = await response.Content.ReadAsStringAsync();
-                    await DisplayAlert("Error", $"Gagal menyimpan transaksi: {err}", "OK");
+                    await DisplayAlertAsync("Error", $"Gagal menyimpan transaksi: {err}", "OK");
                     OverlayLoading.IsVisible = false;
                     return;
                 }
@@ -505,7 +525,7 @@ public partial class New_Transaksi : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Terjadi kesalahan: {ex.Message}", "OK");
+            await DisplayAlertAsync("Error", $"Terjadi kesalahan: {ex.Message}", "OK");
             OverlayLoading.IsVisible = false;
             return;
         }
@@ -524,7 +544,7 @@ public class KategoriData : INotifyPropertyChanged
     public string? nama_kategori { get; set; }
     public bool tipe { get; set; }
     public bool is_active { get; set; }
-    public string icon { get; set; }
+    public string? icon { get; set; }
 
     private bool _isSelected;
     public bool IsSelected
