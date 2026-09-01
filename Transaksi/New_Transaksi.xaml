@@ -146,12 +146,12 @@
                             <Label x:Name="LabelUploadStatus" Text="Upload Min 500kb"></Label>
                         </StackLayout>
 
-                        <Image Source="camera1.png" HeightRequest="24" Grid.Column="1" Margin="15,0">
+                        <Image Source="camera1.png" HeightRequest="24" Grid.Column="1" Margin="15,0" TranslationX="-50">
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="Camera_Tapped" />
                             </Image.GestureRecognizers>
                         </Image>
-                        <Image Source="gallery1.png" HeightRequest="24" Grid.Column="2">
+                        <Image Source="gallery1.png" HeightRequest="24" Grid.Column="2" TranslationX="-50">
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="Gallery_Tapped" />
                             </Image.GestureRecognizers>

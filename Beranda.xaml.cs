@@ -446,6 +446,16 @@ public partial class Beranda : ContentPage
             await Navigation.PushAsync(new FinanceApp.Pengaturan.ListMenuPengaturan());
         }
     }
+
+    private async void MenuFav_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is View view)
+        {
+            await view.ScaleToAsync(0.9, 50);
+            await view.ScaleToAsync(1, 50);
+            await Navigation.PushAsync(new Favorit.ListFav());
+        }
+    }
 #pragma warning restore CS0618
 
     private async void LihatSemuaPengeluaran_Tapped(object sender, TappedEventArgs e)

@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Content.Res;
 using Android.Runtime;
 
@@ -75,15 +75,24 @@ namespace FinanceApp
             {
                 if (view is SearchBar)
                 {
-                    // Remove underline
-                    handler.PlatformView.BackgroundTintList = ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
+                    try
+                    {
+                        if (handler.PlatformView != null)
+                        {
+                            // Remove underline
+                            handler.PlatformView.BackgroundTintList = ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
 
-                    // Change placeholder text color
-                    Android.Widget.LinearLayout linearLayout = handler.PlatformView.GetChildAt(0) as Android.Widget.LinearLayout;
-                    linearLayout = linearLayout.GetChildAt(2) as Android.Widget.LinearLayout;
-                    linearLayout = linearLayout.GetChildAt(1) as Android.Widget.LinearLayout;
-                    linearLayout.Background = null;
-
+                            // Change placeholder text color
+                            var l0 = handler.PlatformView.GetChildAt(0) as Android.Widget.LinearLayout;
+                            var l1 = l0?.GetChildAt(2) as Android.Widget.LinearLayout;
+                            var l2 = l1?.GetChildAt(1) as Android.Widget.LinearLayout;
+                            if (l2 != null)
+                            {
+                                l2.Background = null;
+                            }
+                        }
+                    }
+                    catch { }
                 }
             });
         }

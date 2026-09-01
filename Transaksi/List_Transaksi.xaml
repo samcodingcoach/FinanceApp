@@ -56,6 +56,12 @@
 
                     <!--data list-->
                     <StackLayout Grid.Row="3" Spacing="10" x:Name="ListContainer">
+                        <BindableLayout.EmptyView>
+                            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="12" Margin="0,150,0,0">
+                                <Image Source="emptylist01.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                <Label Text="Data tidak ditemukan" TextColor="#888888" FontSize="15" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                        </BindableLayout.EmptyView>
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout Spacing="10">

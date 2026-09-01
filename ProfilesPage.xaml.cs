@@ -335,7 +335,7 @@ public partial class ProfilesPage : ContentPage
             {
                 if (Application.Current != null)
                 {
-                    Application.Current.MainPage = new MainPage();
+                    Application.Current.MainPage = new NavigationPage(new Login());
                 }
             });
         }

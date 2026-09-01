@@ -115,7 +115,7 @@
                 <Border.Shadow>
                     <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
                 </Border.Shadow>
-                <Grid ColumnDefinitions="*,*,*,*,*" ColumnSpacing="5" RowDefinitions="Auto,Auto">
+                <Grid ColumnDefinitions="*,*,*,*,*" ColumnSpacing="5" RowDefinitions="Auto,Auto" RowSpacing="10">
                     <!--Rekening\List-Akun.xaml-->
                     <StackLayout x:Name="MenuRekening" Grid.Column="0" Grid.Row="0">
                         <StackLayout.GestureRecognizers>
@@ -148,14 +148,23 @@
                         <Image Source="menu_user.png" HeightRequest="42"></Image>
                         <Label Text="Pengguna" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444"></Label>
                     </StackLayout>
+                    <!--pengaturan-->
                     <StackLayout x:Name="MenuPengaturan" Grid.Column="4" Grid.Row="0">
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer Tapped="MenuPengaturan_Tapped" />
                         </StackLayout.GestureRecognizers>
-                        <Image Source="menu_config.png" HeightRequest="42"></Image>
-                        <Label Text="Pengaturan" LineBreakMode="TailTruncation" MaxLines="1" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444"></Label>
+                        <Image Source="menu_config.png" HeightRequest="42" />
+                        <Label Text="Pengaturan" LineBreakMode="TailTruncation" MaxLines="1" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444" />
                     </StackLayout>
-                    
+
+                    <StackLayout x:Name="MenuFav" Grid.Column="0" Grid.Row="1">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="MenuFav_Tapped" />
+                        </StackLayout.GestureRecognizers>
+                        <Image Source="iconfavtx1.png" HeightRequest="42"></Image>
+                        <Label Text="Berulang" LineBreakMode="TailTruncation" MaxLines="1" HorizontalTextAlignment="Center" FontSize="14" FontAttributes="Bold" TextColor="#444"></Label>
+                    </StackLayout>
+
                 </Grid>
             </Border>
 
