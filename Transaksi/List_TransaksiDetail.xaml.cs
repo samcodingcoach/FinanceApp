@@ -144,7 +144,11 @@ public partial class List_TransaksiDetail : BottomSheet
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
-                    var headerList = JsonConvert.DeserializeObject<List<TransaksiRowModel>>(json);
+                    var settings = new JsonSerializerSettings
+                    {
+                        DateParseHandling = DateParseHandling.DateTimeOffset
+                    };
+                    var headerList = JsonConvert.DeserializeObject<List<TransaksiRowModel>>(json, settings);
                     var header = headerList?.FirstOrDefault();
 
                     if (header != null)

@@ -79,7 +79,11 @@ public partial class List_Transaksi : ContentPage
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
-                    var data = JsonConvert.DeserializeObject<List<TransaksiRowModel>>(json);
+                    var settings = new JsonSerializerSettings
+                    {
+                        DateParseHandling = DateParseHandling.DateTimeOffset
+                    };
+                    var data = JsonConvert.DeserializeObject<List<TransaksiRowModel>>(json, settings);
                     
                     _allRawData.Clear();
                     if (data != null)
@@ -192,7 +196,7 @@ public partial class List_Transaksi : ContentPage
 public class TransaksiRowModel
 {
     public int id_transaksi { get; set; }
-    public DateTime created_at { get; set; }
+    public DateTimeOffset created_at { get; set; }
     public string? no_faktur { get; set; }
     public int id_users { get; set; }
     public string? nama_lengkap { get; set; }
@@ -216,7 +220,7 @@ public class TransaksiRowModel
     public Color NominalColor => tipe ? Colors.Green : Colors.OrangeRed;
 
     [JsonIgnore]
-    public string SubtitleDisplay => $"#{no_faktur ?? "TRX"} / {created_at:HH:mm} WIB";
+    public string SubtitleDisplay => $"#{no_faktur ?? "TRX"} / {created_at:HH:mm}";
     
     [JsonIgnore]
     public string? TitleDisplay => string.IsNullOrEmpty(keterangan) ? nama_kategori : keterangan;
