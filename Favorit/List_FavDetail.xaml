@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<the49:BottomSheet xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                   xmlns:the49="https://schemas.the49.com/dotnet/2023/maui"
+                   BackgroundColor="White" Padding="0"
+                   x:Class="FinanceApp.Favorit.List_FavDetail">
+
+    <the49:BottomSheet.Detents>
+        <the49:RatioDetent Ratio="0.75" />
+    </the49:BottomSheet.Detents>
+
+    <Grid>
+        <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" RowSpacing="12" Padding="20,24,20,20">
+
+            <!-- Header Title & Close Button -->
+            <StackLayout Orientation="Horizontal" Grid.Row="0">
+                <Label Text="Rincian Transaksi Rutin" FontAttributes="Bold" FontSize="17" TextColor="#222" VerticalOptions="Center" />
+                <Image Source="close100.png" HeightRequest="22" WidthRequest="22" HorizontalOptions="EndAndExpand" VerticalOptions="Center">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Close_Tapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+            
+            <!-- Search Bar -->
+            <Border Grid.Row="1" Padding="0" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
+                <SearchBar Placeholder="Cari nama barang / jasa..." x:Name="T_Search" TextChanged="T_Search_TextChanged" />
+            </Border>
+
+            <!-- Collection of Detail Items (Editable Inline) -->
+            <CollectionView Grid.Row="2" x:Name="DetailCollection">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeShape="RoundRectangle 10" Stroke="#E2E8F0" StrokeThickness="1" BackgroundColor="#FAFAFA" Padding="12,8" Margin="0,0,0,10">
+                            <Grid ColumnDefinitions="*,130" ColumnSpacing="10" VerticalOptions="Center">
+                                <!-- Edit Nama Barang / Jasa -->
+                                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                    <Label Text="Nama Barang / Jasa" FontSize="11" TextColor="Grey" FontAttributes="Bold" />
+                                    <Border StrokeShape="RoundRectangle 6" Stroke="#D1D5DB" StrokeThickness="0.5" BackgroundColor="White" Padding="8,2">
+                                        <Entry Text="{Binding nama_barang_jasa, Mode=TwoWay}" 
+                                               FontSize="14" FontAttributes="Bold" TextColor="#333" 
+                                               Placeholder="Nama item" />
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <!-- Edit Harga -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                    <Label Text="Harga (Rp)" FontSize="11" TextColor="Grey" FontAttributes="Bold" />
+                                    <Border StrokeShape="RoundRectangle 6" Stroke="#D1D5DB" StrokeThickness="0.5" BackgroundColor="White" Padding="8,2">
+                                        <Entry Text="{Binding HargaInput, Mode=TwoWay}" 
+                                               Keyboard="Numeric" 
+                                               FontSize="14" FontAttributes="Bold" TextColor="DarkCyan" 
+                                               HorizontalTextAlignment="End" 
+                                               Placeholder="0" />
+                                    </Border>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Margin="0,40,0,0" Spacing="8">
+                        <Label Text="Tidak ada rincian item." TextColor="Grey" FontSize="15" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+
+            <!-- Subtotal Section -->
+            <Border Grid.Row="3" BackgroundColor="#F8FAFC" Stroke="#E2E8F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16,10">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Label Grid.Column="0" Text="Subtotal" FontAttributes="Bold" FontSize="16" VerticalOptions="Center" TextColor="#333" />
+                    <Label Grid.Column="1" x:Name="L_TotalSubtotal" Text="Rp 0" FontAttributes="Bold" FontSize="18" TextColor="DarkCyan" VerticalOptions="Center" HorizontalOptions="Fill" HorizontalTextAlignment="End" />
+                </Grid>
+            </Border>
+
+            <!-- Button Update Data -->
+            <Button Grid.Row="4" Text="UPDATE RINCIAN" x:Name="BtnUpdate" Clicked="BtnUpdate_Clicked"
+                    FontAttributes="Bold" FontSize="16" CharacterSpacing="1" 
+                    CornerRadius="12" BackgroundColor="CornflowerBlue" TextColor="White" HeightRequest="50">
+                <Button.Shadow>
+                    <Shadow Brush="#000000" Opacity="0.15" Radius="6" Offset="0,2" />
+                </Button.Shadow>
+            </Button>
+        </Grid>
+
+        <!-- Loading Overlay (3 Detik Delay) -->
+        <Grid x:Name="LoadingOverlay" BackgroundColor="#80000000" IsVisible="True">
+            <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="12">
+                <ActivityIndicator IsRunning="{Binding Source={x:Reference LoadingOverlay}, Path=IsVisible}" Color="White" WidthRequest="40" HeightRequest="40" />
+                <Label x:Name="L_LoadingText" Text="Memuat Detail..." TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center" FontSize="14" />
+            </StackLayout>
+        </Grid>
+    </Grid>
+</the49:BottomSheet>

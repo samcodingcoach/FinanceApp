@@ -42,7 +42,7 @@ public partial class ListFav : ContentPage
         LoadData();
     }
 
-    private async void LoadData(bool isRefresh = false)
+    public async void LoadData(bool isRefresh = false)
     {
         if (!isRefresh)
         {
@@ -144,7 +144,14 @@ public partial class ListFav : ContentPage
 
             if (e.Parameter is int id_fav)
             {
-                // Action saat item favorit ditekan
+                var page = new List_FavDetail(id_fav, () =>
+                {
+                    ResetCache();
+                    LoadData(true);
+                });
+                page.HasHandle = true;
+                page.HasBackdrop = true;
+                _ = page.ShowAsync(Window);
             }
         }
     }
