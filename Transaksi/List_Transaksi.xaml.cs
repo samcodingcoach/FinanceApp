@@ -150,18 +150,30 @@ public partial class List_Transaksi : ContentPage
         LoadData();
     }
 
-    private void TabFilter_Tapped(object sender, TappedEventArgs e)
+    private async void TabFilter_Tapped(object sender, TappedEventArgs e)
     {
+        if (sender is View view)
+        {
+            await view.ScaleTo(0.92, 80);
+            await view.ScaleTo(1.0, 80);
+        }
+
         if (e.Parameter is string tabName)
         {
             _currentTab = tabName;
             
-            // Update UI for tabs
+            // Update UI warna tabs
             TabSemua.BackgroundColor = _currentTab == "Semua" ? Colors.CornflowerBlue : Color.FromArgb("#bccbe6");
             TabPemasukan.BackgroundColor = _currentTab == "Pemasukan" ? Colors.CornflowerBlue : Color.FromArgb("#bccbe6");
             TabPengeluaran.BackgroundColor = _currentTab == "Pengeluaran" ? Colors.CornflowerBlue : Color.FromArgb("#bccbe6");
 
-            RefreshDisplay(); // Local filter
+            // Tampilkan Overlay Loading 3 detik sesuai instruksi
+            LoadingOverlay.IsVisible = true;
+            await Task.Delay(3000);
+
+            RefreshDisplay(); // Render data setelah overlay
+
+            LoadingOverlay.IsVisible = false;
         }
     }
 

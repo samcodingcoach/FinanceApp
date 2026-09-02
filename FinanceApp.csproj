@@ -97,6 +97,9 @@
 	  <MauiXaml Update="Favorit\NewFav.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Favorit\NewFav_Detail.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Kategori\Edit_Kategori.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
