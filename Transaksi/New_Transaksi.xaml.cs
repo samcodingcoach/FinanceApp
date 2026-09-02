@@ -13,6 +13,7 @@ public partial class New_Transaksi : ContentPage
     private bool _isPemasukan = false;
     private ObservableCollection<KategoriData> _kategoris;
     private int? _selectedIdKategori = null;
+    private FavoritImportItemModel? _nearestReminderFav = null;
 
     public New_Transaksi()
 	{
@@ -32,6 +33,9 @@ public partial class New_Transaksi : ContentPage
             LoadKategori();
         }
 
+        // Cek pengingat favorit terdekat (Model 1)
+        _ = LoadNearestReminderFavoritAsync();
+
         // Update ringkasan detail item jika ada (jumlah item & total nominal)
         if (New_Transaksi_Detail.TempDetailItems != null && New_Transaksi_Detail.TempDetailItems.Count > 0)
         {
@@ -49,6 +53,195 @@ public partial class New_Transaksi : ContentPage
             LabelDetailCount.TextColor = Colors.Grey;
             T_Nominal.Text = string.Empty;
         }
+    }
+
+    private async Task LoadNearestReminderFavoritAsync()
+    {
+        try
+        {
+            var app = Application.Current as App;
+            string tokenKey = app?.TOKEN_KEY ?? string.Empty;
+
+            using (var client = new HttpClient())
+            {
+                string url = $"{App.API_HOST}/rpc/get_favorit_transaksi";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenKey);
+                client.DefaultRequestHeaders.Add("apikey", tokenKey);
+
+                var response = await client.PostAsync(url, new StringContent("{}", System.Text.Encoding.UTF8, "application/json"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings { DateParseHandling = DateParseHandling.DateTimeOffset };
+                    var data = JsonConvert.DeserializeObject<List<FavoritImportItemModel>>(json, settings);
+
+                    if (data != null && data.Count > 0)
+                    {
+                        int currentDay = DateTime.Now.Day;
+                        // Ambil yang belum lewat bulan ini (setiap_tanggal >= currentDay), urutkan yang paling dekat
+                        var upcoming = data.Where(x => x.setiap_tanggal >= currentDay).OrderBy(x => x.setiap_tanggal).FirstOrDefault();
+
+                        if (upcoming != null)
+                        {
+                            _nearestReminderFav = upcoming;
+                            int diffDays = upcoming.setiap_tanggal - currentDay;
+                            string infoJadwal = diffDays == 0 ? "Jadwal hari ini" : $"{diffDays} hari lagi";
+
+                            L_BannerReminderTitle.Text = $"{upcoming.TitleDisplay}";
+                            L_BannerReminderSubtitle.Text = $"Setiap Tanggal {upcoming.setiap_tanggal} ({infoJadwal}) • Rp {upcoming.total_harga:N0}";
+                            BannerReminderInfo.IsVisible = true;
+                            return;
+                        }
+                    }
+                }
+            }
+            BannerReminderInfo.IsVisible = false;
+        }
+        catch
+        {
+            BannerReminderInfo.IsVisible = false;
+        }
+    }
+
+    private async void ApplyBannerReminder_Tapped(object sender, TappedEventArgs e)
+    {
+        if (_nearestReminderFav != null)
+        {
+            if (sender is View view)
+            {
+                await view.ScaleTo(0.9, 50);
+                await view.ScaleTo(1.0, 50);
+            }
+            await ApplyFavoritDataToForm(_nearestReminderFav);
+            BannerReminderInfo.IsVisible = false;
+        }
+    }
+
+    private async void BtnImportFavorit_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is View view)
+        {
+            await view.ScaleTo(0.9, 50);
+            await view.ScaleTo(1.0, 50);
+        }
+
+        var sheet = new PilihFavorit_BottomSheet();
+        sheet.HasHandle = true;
+        sheet.HasBackdrop = true;
+
+        sheet.FavoritSelected += async (s, selectedFav) =>
+        {
+            await ApplyFavoritDataToForm(selectedFav);
+        };
+
+        _ = sheet.ShowAsync(Window);
+    }
+
+    private async Task ApplyFavoritDataToForm(FavoritImportItemModel fav)
+    {
+        // 1. Set Tipe Transaksi (Pemasukan / Pengeluaran)
+        if (fav.tipe != _isPemasukan)
+        {
+            _isPemasukan = fav.tipe;
+            if (_isPemasukan)
+            {
+                BPemasukan.BackgroundColor = Colors.DarkCyan;
+                BPemasukan.TextColor = Colors.White;
+                BPengeluaran.BackgroundColor = Colors.Transparent;
+                BPengeluaran.TextColor = Colors.DarkGrey;
+            }
+            else
+            {
+                BPengeluaran.BackgroundColor = Colors.DarkCyan;
+                BPengeluaran.TextColor = Colors.White;
+                BPemasukan.BackgroundColor = Colors.Transparent;
+                BPemasukan.TextColor = Colors.DarkGrey;
+            }
+            // Muat kategori sesuai tipe baru
+            await LoadKategoriAsync();
+        }
+
+        // 2. Pilih Kategori yang sesuai
+        _selectedIdKategori = fav.id_kategori;
+        foreach (var k in _kategoris)
+        {
+            k.IsSelected = (k.id_kategori == fav.id_kategori);
+        }
+
+        // 3. Set Catatan
+        T_Catatan.Text = fav.keterangan ?? fav.nama_kategori ?? "";
+
+        // 4. Ambil dan isi Detail Barang / Jasa dari Supabase
+        await FetchAndApplyFavoritDetailAsync(fav.id_fav, fav.total_harga, fav.TitleDisplay ?? "");
+
+        await Toast.Make($"Berhasil mengimpor {fav.TitleDisplay}").Show();
+    }
+
+    private async Task FetchAndApplyFavoritDetailAsync(int idFav, decimal defaultTotal, string defaultTitle)
+    {
+        try
+        {
+            var app = Application.Current as App;
+            string tokenKey = app?.TOKEN_KEY ?? string.Empty;
+
+            using (var client = new HttpClient())
+            {
+                string url = $"{App.API_HOST}/favorit_transaksi_detail?id_fav=eq.{idFav}&order=id_fav_detail.asc";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenKey);
+                client.DefaultRequestHeaders.Add("apikey", tokenKey);
+
+                var response = await client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var list = JsonConvert.DeserializeObject<List<FavoritDetailResponseModel>>(json);
+
+                    New_Transaksi_Detail.TempDetailItems.Clear();
+
+                    if (list != null && list.Count > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            New_Transaksi_Detail.TempDetailItems.Add(new FormDetailItem
+                            {
+                                NamaBarang = item.nama_barang_jasa,
+                                HargaString = item.harga.ToString("N0"),
+                                JumlahString = "1"
+                            });
+                        }
+                    }
+                    else if (defaultTotal > 0)
+                    {
+                        New_Transaksi_Detail.TempDetailItems.Add(new FormDetailItem
+                        {
+                            NamaBarang = defaultTitle,
+                            HargaString = defaultTotal.ToString("N0"),
+                            JumlahString = "1"
+                        });
+                    }
+
+                    int count = New_Transaksi_Detail.TempDetailItems.Count;
+                    decimal sumTotal = New_Transaksi_Detail.TempDetailItems.Sum(x => x.Subtotal);
+
+                    LabelDetailCount.Text = $"{count} Item Detail Barang / Jasa";
+                    LabelDetailCount.TextColor = Colors.CornflowerBlue;
+                    T_Nominal.Text = sumTotal.ToString("N0");
+                    return;
+                }
+            }
+        }
+        catch { }
+
+        // Fallback jika fetch detail gagal
+        T_Nominal.Text = defaultTotal.ToString("N0");
+    }
+
+    private Task LoadKategoriAsync()
+    {
+        var tcs = new TaskCompletionSource<bool>();
+        LoadKategori();
+        tcs.SetResult(true);
+        return tcs.Task;
     }
 
     private async void LoadKategori()
@@ -584,4 +777,12 @@ public class KategoriData : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+}
+
+public class FavoritDetailResponseModel
+{
+    public int id_fav_detail { get; set; }
+    public int id_fav { get; set; }
+    public string nama_barang_jasa { get; set; } = string.Empty;
+    public decimal harga { get; set; }
 }

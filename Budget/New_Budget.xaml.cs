@@ -166,11 +166,12 @@ public partial class New_Budget : ContentPage
 
                 var payload = new
                 {
-                    periode_awal = dStart.ToString("MM/dd/yyyy"),
-                    periode_akhir = dEnd.ToString("MM/dd/yyyy"),
+                    periode_awal = dStart.ToString("yyyy-MM-dd"),
+                    periode_akhir = dEnd.ToString("yyyy-MM-dd"),
                     id_users = currentUserId > 0 ? currentUserId : 1,
                     deskripsi = e_deskripsi.Text ?? "",
-                    total_rencana = totalRencana
+                    total_rencana = totalRencana,
+                    created_at = DateTimeOffset.Now.ToString("yyyy-MM-ddTHH:mm:sszzz")
                 };
 
                 var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");

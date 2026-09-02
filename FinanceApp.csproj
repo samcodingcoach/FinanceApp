@@ -148,6 +148,9 @@
 	  <MauiXaml Update="Transaksi\New_Transaksi_Detail.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Transaksi\PilihFavorit_BottomSheet.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Transaksi\PilihRekening_BottomSheet.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -1,6 +1,17 @@
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using Microsoft.Maui.Controls.Shapes;
+using CommunityToolkit.Maui.Alerts;
+using MauiColor = Microsoft.Maui.Graphics.Color;
+
+#if ANDROID
+using Android.Content;
+using Android.Graphics.Pdf;
+using Android.Provider;
+using AndroidColor = Android.Graphics.Color;
+using AndroidPaint = Android.Graphics.Paint;
+using AndroidRect = Android.Graphics.Rect;
+#endif
 
 namespace FinanceApp;
 
@@ -51,6 +62,10 @@ public partial class Report : ContentPage
     {
         InitializeComponent();
         InitializePickers();
+
+        DateTime now = DateTime.Now;
+        DP_LaporanStart.Date = new DateTime(now.Year, now.Month, 1);
+        DP_LaporanEnd.Date = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
     }
 
     protected override async void OnAppearing()
@@ -157,7 +172,7 @@ public partial class Report : ContentPage
         // Base background ring
         var baseRing = new Ellipse
         {
-            Stroke = Color.FromArgb("#e9efe9"),
+            Stroke = MauiColor.FromArgb("#e9efe9"),
             StrokeThickness = 12,
             Fill = Colors.Transparent
         };
@@ -173,7 +188,7 @@ public partial class Report : ContentPage
                 Text = "0%",
                 FontAttributes = FontAttributes.Bold,
                 FontSize = 12,
-                TextColor = Color.FromArgb("#171d19"),
+                TextColor = MauiColor.FromArgb("#171d19"),
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center
             });
@@ -195,7 +210,7 @@ public partial class Report : ContentPage
             // 1. Tambahkan irisan Donut
             var slice = new Ellipse
             {
-                Stroke = Color.FromArgb(colorHex),
+                Stroke = MauiColor.FromArgb(colorHex),
                 StrokeThickness = 12,
                 Fill = Colors.Transparent
             };
@@ -224,7 +239,7 @@ public partial class Report : ContentPage
 
             gridLegend.Children.Add(new Microsoft.Maui.Controls.Shapes.Ellipse
             {
-                Fill = new SolidColorBrush(Color.FromArgb(colorHex)),
+                Fill = new SolidColorBrush(MauiColor.FromArgb(colorHex)),
                 WidthRequest = 10,
                 HeightRequest = 10,
                 VerticalOptions = LayoutOptions.Center
@@ -234,7 +249,7 @@ public partial class Report : ContentPage
             {
                 Text = cat.nama_kategori,
                 FontSize = 14,
-                TextColor = Color.FromArgb("#3d4a42"),
+                TextColor = MauiColor.FromArgb("#3d4a42"),
                 Margin = new Thickness(8, 0, 0, 0),
                 VerticalOptions = LayoutOptions.Center
             };
@@ -246,7 +261,7 @@ public partial class Report : ContentPage
                 Text = $"{(percentage * 100):0.#}%",
                 FontAttributes = FontAttributes.Bold,
                 FontSize = 14,
-                TextColor = Color.FromArgb("#171d19"),
+                TextColor = MauiColor.FromArgb("#171d19"),
                 VerticalOptions = LayoutOptions.Center
             };
             Grid.SetColumn(lblPct, 2);
@@ -263,7 +278,7 @@ public partial class Report : ContentPage
             Text = "100%",
             FontAttributes = FontAttributes.Bold,
             FontSize = 12,
-            TextColor = Color.FromArgb("#171d19"),
+            TextColor = MauiColor.FromArgb("#171d19"),
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.Center
         });
@@ -332,12 +347,12 @@ public partial class Report : ContentPage
         }
         bar.HeightRequest = calculatedHeight;
 
-        Color barColor = isActive ? Color.FromArgb("#006948") : Color.FromArgb("#d0e1fb");
-        Color valColor = isActive ? Color.FromArgb("#006948") : Color.FromArgb("#171d19");
+            MauiColor barColor = isActive ? MauiColor.FromArgb("#006948") : MauiColor.FromArgb("#d0e1fb");
+        MauiColor valColor = isActive ? MauiColor.FromArgb("#006948") : MauiColor.FromArgb("#171d19");
 
         bar.BackgroundColor = barColor;
         lblVal.TextColor = valColor;
-        lblBar.TextColor = isActive ? Color.FromArgb("#006948") : Color.FromArgb("#6d7a72");
+        lblBar.TextColor = isActive ? MauiColor.FromArgb("#006948") : MauiColor.FromArgb("#6d7a72");
         lblBar.FontAttributes = isActive ? FontAttributes.Bold : FontAttributes.None;
     }
 
@@ -357,7 +372,7 @@ public partial class Report : ContentPage
         ResetTabStyle(BtnBulanan);
         ResetTabStyle(BtnTahunan);
 
-        btn.BackgroundColor = Color.FromArgb("#006948");
+        btn.BackgroundColor = MauiColor.FromArgb("#006948");
         btn.TextColor = Colors.White;
 
         if (btn == BtnMingguan)
@@ -388,6 +403,488 @@ public partial class Report : ContentPage
     private void ResetTabStyle(Button btn)
     {
         btn.BackgroundColor = Colors.Transparent;
-        btn.TextColor = Color.FromArgb("#3d4a42");
+        btn.TextColor = MauiColor.FromArgb("#3d4a42");
     }
+
+    private async void BtnDownloadLaporan_Clicked(object sender, EventArgs e)
+    {
+        if (sender is Button btn)
+        {
+            await btn.ScaleTo(0.96, 70);
+            await btn.ScaleTo(1.0, 70);
+        }
+
+        DateTime dStart = DP_LaporanStart.Date ?? DateTime.Now;
+        DateTime dEnd = DP_LaporanEnd.Date ?? DateTime.Now;
+
+        if (dStart > dEnd)
+        {
+            await DisplayAlertAsync("Peringatan", "Tanggal awal tidak boleh lebih besar dari tanggal akhir!", "OK");
+            return;
+        }
+
+        LoadingOverlay.IsVisible = true;
+
+        try
+        {
+            var app = Application.Current as App;
+            string tokenKey = app?.TOKEN_KEY ?? string.Empty;
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenKey);
+                client.DefaultRequestHeaders.Add("apikey", tokenKey);
+
+                var payload = new
+                {
+                    p_tanggal_awal = dStart.ToString("yyyy-MM-dd"),
+                    p_tanggal_akhir = dEnd.ToString("yyyy-MM-dd")
+                };
+
+                string url = $"{App.API_HOST}/rpc/get_laporan_keuangan";
+                var content = new StringContent(JsonConvert.SerializeObject(payload), System.Text.Encoding.UTF8, "application/json");
+
+                var response = await client.PostAsync(url, content);
+                if (!response.IsSuccessStatusCode)
+                {
+                    await DisplayAlertAsync("Gagal", "Gagal mengambil data laporan dari server.", "OK");
+                    return;
+                }
+
+                string json = await response.Content.ReadAsStringAsync();
+                LaporanKeuanganResponse? laporan = null;
+
+                if (json.TrimStart().StartsWith("["))
+                {
+                    var list = JsonConvert.DeserializeObject<List<LaporanKeuanganResponse>>(json);
+                    if (list != null && list.Count > 0) laporan = list[0];
+                }
+                else
+                {
+                    laporan = JsonConvert.DeserializeObject<LaporanKeuanganResponse>(json);
+                }
+
+                if (laporan == null)
+                {
+                    await DisplayAlertAsync("Informasi", "Data laporan tidak ditemukan untuk rentang periode tersebut.", "OK");
+                    return;
+                }
+
+#if ANDROID
+                await GenerateAndSavePdfAsync(laporan, dStart, dEnd);
+#else
+                await DisplayAlertAsync("Sukses", "Data laporan berhasil digenerate!", "OK");
+#endif
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync("Error", $"Gagal memproses laporan: {ex.Message}", "OK");
+        }
+        finally
+        {
+            LoadingOverlay.IsVisible = false;
+        }
+    }
+
+#if ANDROID
+    private async Task GenerateAndSavePdfAsync(LaporanKeuanganResponse laporan, DateTime dStart, DateTime dEnd)
+    {
+        try
+        {
+            var pdfDoc = new PdfDocument();
+            int pageWidth = 595;
+            int pageHeight = 842;
+            int marginX = 24;
+            int rightX = pageWidth - marginX;
+            int pageNumber = 1;
+
+            var pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).Create();
+            var page = pdfDoc.StartPage(pageInfo);
+            var canvas = page.Canvas;
+
+            // Paint styles
+            var paintTitle = new AndroidPaint { Color = AndroidColor.Rgb(20, 20, 20), TextSize = 16, FakeBoldText = true, AntiAlias = true };
+            var paintSubtitle = new AndroidPaint { Color = AndroidColor.Rgb(100, 100, 100), TextSize = 9, AntiAlias = true };
+            var paintSectionHeader = new AndroidPaint { Color = AndroidColor.Rgb(20, 20, 20), TextSize = 10, FakeBoldText = true, AntiAlias = true };
+            var paintBold = new AndroidPaint { Color = AndroidColor.Rgb(20, 20, 20), TextSize = 9, FakeBoldText = true, AntiAlias = true };
+            var paintBoldRight = new AndroidPaint { Color = AndroidColor.Rgb(20, 20, 20), TextSize = 9, FakeBoldText = true, AntiAlias = true, TextAlign = AndroidPaint.Align.Right };
+            var paintNormal = new AndroidPaint { Color = AndroidColor.Rgb(50, 50, 50), TextSize = 9, AntiAlias = true };
+            var paintNormalRight = new AndroidPaint { Color = AndroidColor.Rgb(50, 50, 50), TextSize = 9, AntiAlias = true, TextAlign = AndroidPaint.Align.Right };
+            var paintFooter = new AndroidPaint { Color = AndroidColor.Rgb(120, 120, 120), TextSize = 8, AntiAlias = true };
+            var paintFooterRight = new AndroidPaint { Color = AndroidColor.Rgb(120, 120, 120), TextSize = 8, AntiAlias = true, TextAlign = AndroidPaint.Align.Right };
+
+            var paintBorder = new AndroidPaint { Color = AndroidColor.Rgb(220, 224, 230), StrokeWidth = 0.8f, AntiAlias = true };
+            paintBorder.SetStyle(AndroidPaint.Style.Stroke);
+
+            var paintHeaderRowBg = new AndroidPaint { Color = AndroidColor.Rgb(240, 243, 246), AntiAlias = true };
+            paintHeaderRowBg.SetStyle(AndroidPaint.Style.Fill);
+
+            var paintThickDivider = new AndroidPaint { Color = AndroidColor.Rgb(200, 200, 200), StrokeWidth = 1.0f, AntiAlias = true };
+            paintThickDivider.SetStyle(AndroidPaint.Style.Stroke);
+
+            var paintThinDivider = new AndroidPaint { Color = AndroidColor.Rgb(235, 238, 242), StrokeWidth = 0.6f, AntiAlias = true };
+            paintThinDivider.SetStyle(AndroidPaint.Style.Stroke);
+
+            int y = 45;
+
+            // 1. Header Judul Laporan
+            paintTitle.TextAlign = AndroidPaint.Align.Center;
+            paintSubtitle.TextAlign = AndroidPaint.Align.Center;
+            canvas.DrawText("LAPORAN KEUANGAN", pageWidth / 2, y, paintTitle);
+            y += 14;
+            canvas.DrawText("Laporan transaksi dan posisi keuangan", pageWidth / 2, y, paintSubtitle);
+            paintTitle.TextAlign = AndroidPaint.Align.Left;
+            paintSubtitle.TextAlign = AndroidPaint.Align.Left;
+            y += 24;
+
+            // 2. Baris Periode Laporan
+            canvas.DrawLine(marginX, y, rightX, y, paintThickDivider);
+            y += 13;
+            canvas.DrawText("PERIODE LAPORAN", marginX, y, paintBold);
+            string strPeriode = $"{dStart:dd MMMM yyyy} — {dEnd:dd MMMM yyyy}".ToUpper();
+            canvas.DrawText(strPeriode, rightX, y, paintBoldRight);
+            y += 6;
+            canvas.DrawLine(marginX, y, rightX, y, paintThickDivider);
+            y += 22;
+
+            // 3. Ringkasan Keuangan
+            canvas.DrawText("RINGKASAN KEUANGAN", marginX, y, paintSectionHeader);
+            y += 8;
+
+            decimal saldoAwal = laporan.ringkasan?.saldo_awal ?? 0;
+            decimal totalPemasukan = laporan.ringkasan?.total_pemasukan ?? 0;
+            decimal totalPengeluaran = laporan.ringkasan?.total_pengeluaran ?? 0;
+            decimal saldoAkhir = laporan.ringkasan?.saldo_akhir ?? 0;
+
+            string[,] ringkasanItems = new string[,]
+            {
+                { "Saldo Awal", $"Rp {saldoAwal:N0}" },
+                { "Total Pemasukan", $"Rp {totalPemasukan:N0}" },
+                { "Total Pengeluaran", $"Rp {totalPengeluaran:N0}" }
+            };
+
+            for (int i = 0; i < 3; i++)
+            {
+                y += 16;
+                canvas.DrawText(ringkasanItems[i, 0], marginX + 8, y, paintNormal);
+                canvas.DrawText(ringkasanItems[i, 1], rightX - 8, y, paintNormalRight);
+                y += 5;
+                canvas.DrawLine(marginX, y, rightX, y, paintThinDivider);
+            }
+
+            y += 16;
+            canvas.DrawText("Saldo Akhir", marginX + 8, y, paintBold);
+            canvas.DrawText($"Rp {saldoAkhir:N0}", rightX - 8, y, paintBoldRight);
+            y += 6;
+            canvas.DrawLine(marginX, y, rightX, y, paintThickDivider);
+            y += 24;
+
+            // 4. Anggaran / Budget (Tabel Format)
+            canvas.DrawText("ANGGARAN", marginX, y, paintSectionHeader);
+            y += 12;
+
+            int budgetBoxTop = y;
+            int budgetRowHeight = 22;
+            int budgetTotalRows = 4;
+            int budgetBoxBottom = budgetBoxTop + (budgetRowHeight * budgetTotalRows);
+            int budgetColSplit = marginX + 160;
+
+            // Gambar Kotak Budget
+            canvas.DrawRect(marginX, budgetBoxTop, rightX, budgetBoxBottom, paintBorder);
+            canvas.DrawLine(budgetColSplit, budgetBoxTop, budgetColSplit, budgetBoxBottom, paintBorder);
+
+            string budgetPeriode = "-";
+            if (laporan.budget != null && !string.IsNullOrEmpty(laporan.budget.periode_awal) && !string.IsNullOrEmpty(laporan.budget.periode_akhir))
+            {
+                DateTime.TryParse(laporan.budget.periode_awal, out DateTime bStart);
+                DateTime.TryParse(laporan.budget.periode_akhir, out DateTime bEnd);
+                budgetPeriode = $"{bStart:dd MMMM yyyy} — {bEnd:dd MMMM yyyy}";
+            }
+
+            decimal bRencana = laporan.budget?.total_rencana ?? 0;
+            decimal bPakai = laporan.budget?.total_pemakaian ?? 0;
+            decimal bSisa = laporan.budget?.sisa_budget ?? 0;
+
+            string[,] budgetData = new string[,]
+            {
+                { "Periode Budget", budgetPeriode, "" },
+                { "Total Rencana", "", $"Rp {bRencana:N0}" },
+                { "Total Pemakaian", "", $"Rp {bPakai:N0}" },
+                { "Sisa Anggaran", "", $"Rp {bSisa:N0}" }
+            };
+
+            for (int r = 0; r < budgetTotalRows; r++)
+            {
+                int rowY = budgetBoxTop + (r * budgetRowHeight);
+                if (r > 0) canvas.DrawLine(marginX, rowY, rightX, rowY, paintBorder);
+
+                int textBaseline = rowY + 15;
+                bool isLast = (r == budgetTotalRows - 1);
+                var pLabel = isLast ? paintBold : paintNormal;
+                var pVal = isLast ? paintBoldRight : paintNormalRight;
+
+                canvas.DrawText(budgetData[r, 0], marginX + 8, textBaseline, pLabel);
+                if (!string.IsNullOrEmpty(budgetData[r, 1]))
+                {
+                    canvas.DrawText(budgetData[r, 1], budgetColSplit + 8, textBaseline, paintNormal);
+                }
+                if (!string.IsNullOrEmpty(budgetData[r, 2]))
+                {
+                    canvas.DrawText(budgetData[r, 2], rightX - 8, textBaseline, pVal);
+                }
+            }
+
+            y = budgetBoxBottom + 24;
+
+            // 5. Ringkasan Pengeluaran Berdasarkan Kategori
+            canvas.DrawText("RINGKASAN PENGELUARAN BERDASARKAN KATEGORI", marginX, y, paintSectionHeader);
+            y += 12;
+
+            int katCol0 = marginX;
+            int katCol1 = marginX + 35;
+            int katCol2 = marginX + 360;
+            int katCol3 = rightX;
+            int katRowHeight = 22;
+
+            var listKat = laporan.pengeluaran_per_kategori ?? new List<LaporanKategoriItem>();
+            int katCount = Math.Max(listKat.Count, 1);
+            int katBoxTop = y;
+            int katBoxBottom = katBoxTop + (katRowHeight * (katCount + 1));
+
+            // Header Background
+            canvas.DrawRect(katCol0, katBoxTop, katCol3, katBoxTop + katRowHeight, paintHeaderRowBg);
+            canvas.DrawRect(katCol0, katBoxTop, katCol3, katBoxBottom, paintBorder);
+
+            // Garis Kolom Header & Body
+            canvas.DrawLine(katCol1, katBoxTop, katCol1, katBoxBottom, paintBorder);
+            canvas.DrawLine(katCol2, katBoxTop, katCol2, katBoxBottom, paintBorder);
+
+            // Teks Header Kategori
+            canvas.DrawText("No.", katCol0 + 8, katBoxTop + 15, paintBold);
+            canvas.DrawText("Kategori", katCol1 + 8, katBoxTop + 15, paintBold);
+            canvas.DrawText("Jumlah", katCol2 + 8, katBoxTop + 15, paintBold);
+
+            for (int k = 0; k < listKat.Count; k++)
+            {
+                int rY = katBoxTop + ((k + 1) * katRowHeight);
+                canvas.DrawLine(katCol0, rY, katCol3, rY, paintBorder);
+
+                int baseline = rY + 15;
+                canvas.DrawText((k + 1).ToString(), katCol0 + 12, baseline, paintNormal);
+                canvas.DrawText(listKat[k].nama_kategori ?? "-", katCol1 + 8, baseline, paintNormal);
+                canvas.DrawText($"Rp {listKat[k].total:N0}", katCol3 - 8, baseline, paintNormalRight);
+            }
+
+            if (listKat.Count == 0)
+            {
+                int rY = katBoxTop + katRowHeight;
+                canvas.DrawLine(katCol0, rY, katCol3, rY, paintBorder);
+                canvas.DrawText("-", katCol0 + 12, rY + 15, paintNormal);
+                canvas.DrawText("Tidak ada pengeluaran", katCol1 + 8, rY + 15, paintNormal);
+                canvas.DrawText("Rp 0", katCol3 - 8, rY + 15, paintNormalRight);
+            }
+
+            y = katBoxBottom + 24;
+
+            // 6. Daftar Transaksi
+            canvas.DrawText("DAFTAR TRANSAKSI", marginX, y, paintSectionHeader);
+            y += 12;
+
+            int trxCol0 = marginX;
+            int trxCol1 = marginX + 70;
+            int trxCol2 = marginX + 150;
+            int trxCol3 = marginX + 260;
+            int trxCol4 = marginX + 320;
+            int trxCol5 = marginX + 410;
+            int trxCol6 = rightX;
+            int trxRowHeight = 22;
+
+            var listTrx = laporan.transaksi ?? new List<LaporanTransaksiItem>();
+
+            void DrawTrxHeader(int currentY)
+            {
+                canvas.DrawRect(trxCol0, currentY, trxCol6, currentY + trxRowHeight, paintHeaderRowBg);
+                canvas.DrawRect(trxCol0, currentY, trxCol6, currentY + trxRowHeight, paintBorder);
+                canvas.DrawLine(trxCol1, currentY, trxCol1, currentY + trxRowHeight, paintBorder);
+                canvas.DrawLine(trxCol2, currentY, trxCol2, currentY + trxRowHeight, paintBorder);
+                canvas.DrawLine(trxCol3, currentY, trxCol3, currentY + trxRowHeight, paintBorder);
+                canvas.DrawLine(trxCol4, currentY, trxCol4, currentY + trxRowHeight, paintBorder);
+                canvas.DrawLine(trxCol5, currentY, trxCol5, currentY + trxRowHeight, paintBorder);
+
+                int hBaseline = currentY + 15;
+                canvas.DrawText("Tanggal", trxCol0 + 6, hBaseline, paintBold);
+                canvas.DrawText("No. Faktur", trxCol1 + 6, hBaseline, paintBold);
+                canvas.DrawText("Kategori", trxCol2 + 6, hBaseline, paintBold);
+                canvas.DrawText("Jenis", trxCol3 + 6, hBaseline, paintBold);
+                canvas.DrawText("Rekening", trxCol4 + 6, hBaseline, paintBold);
+                canvas.DrawText("Nominal", trxCol5 + 6, hBaseline, paintBold);
+            }
+
+            DrawTrxHeader(y);
+            y += trxRowHeight;
+
+            for (int t = 0; t < listTrx.Count; t++)
+            {
+                if (y > 780)
+                {
+                    // Footer halaman saat ini
+                    canvas.DrawText("Dokumen laporan keuangan — Finance App", marginX, 815, paintFooter);
+                    canvas.DrawText($"Dicetak: {DateTime.Now:dd MMMM yyyy}", rightX, 815, paintFooterRight);
+
+                    pdfDoc.FinishPage(page);
+                    pageNumber++;
+                    pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).Create();
+                    page = pdfDoc.StartPage(pageInfo);
+                    canvas = page.Canvas;
+
+                    y = 45;
+                    DrawTrxHeader(y);
+                    y += trxRowHeight;
+                }
+
+                var trx = listTrx[t];
+                int rY = y;
+                canvas.DrawRect(trxCol0, rY, trxCol6, rY + trxRowHeight, paintBorder);
+                canvas.DrawLine(trxCol1, rY, trxCol1, rY + trxRowHeight, paintBorder);
+                canvas.DrawLine(trxCol2, rY, trxCol2, rY + trxRowHeight, paintBorder);
+                canvas.DrawLine(trxCol3, rY, trxCol3, rY + trxRowHeight, paintBorder);
+                canvas.DrawLine(trxCol4, rY, trxCol4, rY + trxRowHeight, paintBorder);
+                canvas.DrawLine(trxCol5, rY, trxCol5, rY + trxRowHeight, paintBorder);
+
+                int baseline = rY + 15;
+                string tglStr = "-";
+                if (DateTime.TryParse(trx.created_at, out DateTime dt)) tglStr = dt.ToString("dd/MM/yyyy");
+
+                string noFaktur = string.IsNullOrEmpty(trx.no_faktur) ? $"TRX#{trx.id_transaksi}" : trx.no_faktur;
+                string jenis = trx.tipe ? "Masuk" : "Keluar";
+
+                canvas.DrawText(tglStr, trxCol0 + 6, baseline, paintNormal);
+                canvas.DrawText(noFaktur, trxCol1 + 6, baseline, paintNormal);
+                canvas.DrawText(trx.nama_kategori ?? "-", trxCol2 + 6, baseline, paintNormal);
+                canvas.DrawText(jenis, trxCol3 + 6, baseline, paintNormal);
+                canvas.DrawText(trx.nama_rekening ?? "-", trxCol4 + 6, baseline, paintNormal);
+                canvas.DrawText($"Rp {trx.total_transaksi:N0}", trxCol6 - 6, baseline, paintNormalRight);
+
+                y += trxRowHeight;
+            }
+
+            if (listTrx.Count == 0)
+            {
+                int rY = y;
+                canvas.DrawRect(trxCol0, rY, trxCol6, rY + trxRowHeight, paintBorder);
+                canvas.DrawText("Tidak ada transaksi pada periode ini", trxCol0 + 8, rY + 15, paintNormal);
+                y += trxRowHeight;
+            }
+
+            // Footer Dokumen
+            canvas.DrawText("Dokumen laporan keuangan — Finance App", marginX, 815, paintFooter);
+            canvas.DrawText($"Dicetak: {DateTime.Now:dd MMMM yyyy}", rightX, 815, paintFooterRight);
+
+            pdfDoc.FinishPage(page);
+
+            // Simpan PDF dengan format nama REPORT_YYYYMMDD-YYYYMMDD.pdf
+            string fileName = $"REPORT_{dStart:yyyyMMdd}-{dEnd:yyyyMMdd}.pdf";
+
+            var context = Android.App.Application.Context;
+            string downloadsPath = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDownloads).AbsolutePath;
+            string filePath = System.IO.Path.Combine(downloadsPath, fileName);
+
+            // Auto-overwrite / Timpa jika file sudah ada sebelumnya
+            if (System.IO.File.Exists(filePath))
+            {
+                try { System.IO.File.Delete(filePath); } catch { }
+            }
+
+            var values = new ContentValues();
+            values.Put(MediaStore.IMediaColumns.DisplayName, fileName);
+            values.Put(MediaStore.IMediaColumns.MimeType, "application/pdf");
+            values.Put(MediaStore.IMediaColumns.RelativePath, Android.OS.Environment.DirectoryDownloads);
+
+            var uri = context.ContentResolver.Insert(MediaStore.Downloads.ExternalContentUri, values);
+            if (uri != null)
+            {
+                using (var stream = context.ContentResolver.OpenOutputStream(uri))
+                {
+                    pdfDoc.WriteTo(stream);
+                }
+                pdfDoc.Close();
+
+                await Toast.Make($"Laporan {fileName} berhasil diunduh ke folder Downloads").Show();
+
+                // Buka Share Intent untuk melihat / membagikan PDF
+                var shareIntent = new Intent(Intent.ActionSend);
+                shareIntent.SetType("application/pdf");
+                shareIntent.PutExtra(Intent.ExtraStream, uri);
+                shareIntent.PutExtra(Intent.ExtraText, $"Laporan Keuangan Periode {dStart:dd/MM/yyyy} - {dEnd:dd/MM/yyyy}");
+
+                var chooserIntent = Intent.CreateChooser(shareIntent, "Buka / Bagikan Laporan Keuangan");
+                chooserIntent.AddFlags(ActivityFlags.NewTask);
+                context.StartActivity(chooserIntent);
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync("Error PDF", $"Gagal membuat file PDF: {ex.Message}", "OK");
+        }
+    }
+#endif
+}
+
+public class LaporanKeuanganResponse
+{
+    public LaporanPeriode? periode { get; set; }
+    public LaporanRingkasan? ringkasan { get; set; }
+    public LaporanBudget? budget { get; set; }
+    public List<LaporanKategoriItem>? pengeluaran_per_kategori { get; set; }
+    public List<LaporanTransaksiItem>? transaksi { get; set; }
+}
+
+public class LaporanPeriode
+{
+    public string? tanggal_awal { get; set; }
+    public string? tanggal_akhir { get; set; }
+}
+
+public class LaporanRingkasan
+{
+    public decimal saldo_awal { get; set; }
+    public decimal total_pemasukan { get; set; }
+    public decimal total_pengeluaran { get; set; }
+    public decimal saldo_akhir { get; set; }
+}
+
+public class LaporanBudget
+{
+    public int id_budget { get; set; }
+    public string? periode_awal { get; set; }
+    public string? periode_akhir { get; set; }
+    public decimal total_rencana { get; set; }
+    public decimal total_pemakaian { get; set; }
+    public decimal sisa_budget { get; set; }
+}
+
+public class LaporanKategoriItem
+{
+    public int id_kategori { get; set; }
+    public string? nama_kategori { get; set; }
+    public string? icon { get; set; }
+    public decimal total { get; set; }
+}
+
+public class LaporanTransaksiItem
+{
+    public int id_transaksi { get; set; }
+    public string? created_at { get; set; }
+    public string? no_faktur { get; set; }
+    public int id_users { get; set; }
+    public string? nama_lengkap { get; set; }
+    public int id_rekening { get; set; }
+    public string? nama_rekening { get; set; }
+    public int id_kategori { get; set; }
+    public string? nama_kategori { get; set; }
+    public bool tipe { get; set; }
+    public string? icon { get; set; }
+    public string? keterangan { get; set; }
+    public decimal total_transaksi { get; set; }
 }

@@ -9,48 +9,80 @@
         <ScrollView Margin="0,15">
             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" Padding="20,10" RowSpacing="5">
 
-                <StackLayout Orientation="Horizontal" Spacing="10" Grid.Row="0">
-                    <Image Source="backbiru1.png" HeightRequest="24">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Back_Tapped" />
-                        </Image.GestureRecognizers>
-                    </Image>
-                    <Label Text="Tambahkan Transaksi" FontAttributes="Bold" FontSize="16" 
-                           TextColor="CornflowerBlue"
-                           VerticalTextAlignment="Center"></Label>
+                <!-- Header -->
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8" Grid.Row="0">
+                    <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                        <Image Source="backbiru1.png" HeightRequest="24">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Back_Tapped" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Label Text="Tambahkan Transaksi" FontAttributes="Bold" FontSize="16" 
+                               TextColor="CornflowerBlue" VerticalTextAlignment="Center" />
+                    </HorizontalStackLayout>
 
-                    <Border HorizontalOptions="EndAndExpand"  Padding="15,5" StrokeShape="RoundRectangle 10" Stroke="Transparent" StrokeThickness="0.5" 
-                            BackgroundColor="CornflowerBlue">
-                        <StackLayout Orientation="Horizontal" Spacing="15">
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer x:Name="TapRekening" Tapped="TapRekening_Tapped"></TapGestureRecognizer>
-                            </StackLayout.GestureRecognizers>
-                            <Image Source="wallet100.png" HeightRequest="14"></Image>
-                            <Label x:Name="LabelPilihRekening" Text="Pilih Rekening" VerticalTextAlignment="Center" TextColor="White"></Label>
-                        </StackLayout>
+                    <!-- Tombol Impor dari Favorit (Model 2) -->
+                    <Border Grid.Column="1" HorizontalOptions="End" Padding="10,5" StrokeShape="RoundRectangle 8" Stroke="Transparent" BackgroundColor="#e8f0fe">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="BtnImportFavorit_Tapped" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                            
+                            <Label Text="Impor Favorit" FontSize="11" FontAttributes="Bold" TextColor="#1967d2" VerticalTextAlignment="Center" />
+                        </HorizontalStackLayout>
                     </Border>
 
-                </StackLayout>
+                    <!-- Tombol Pilih Rekening -->
+                    <Border Grid.Column="2" HorizontalOptions="End" Padding="12,5" StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="CornflowerBlue">
+                        <StackLayout Orientation="Horizontal" Spacing="8">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="TapRekening" Tapped="TapRekening_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                            <Image Source="wallet100.png" HeightRequest="14" />
+                            <Label x:Name="LabelPilihRekening" Text="Pilih Rekening" FontSize="12" VerticalTextAlignment="Center" TextColor="White" />
+                        </StackLayout>
+                    </Border>
+                </Grid>
 
-                <Border Grid.Row="1" Margin="0,15,0,0"  Padding="5" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
-                    BackgroundColor="WhiteSmoke">
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                        <!--tipe-->
-                        <Button x:Name="BPemasukan" Clicked="BPemasukan_Clicked" CornerRadius="10" FontAttributes="Bold" Text="PEMASUKAN" TextColor="DarkGrey" Grid.Column="0" BackgroundColor="Transparent"></Button>
-                        <Button x:Name="BPengeluaran" Clicked="BPengeluaran_Clicked" Text="PENGELUARAN" TextColor="White" FontAttributes="Bold" CornerRadius="10" Grid.Column="1" BackgroundColor="DarkCyan"></Button>
+                <!-- Banner Informasi Pengingat Jadwal Terdekat (Model 1) -->
+                <Border x:Name="BannerReminderInfo" Grid.Row="1" Margin="0,10,0,0" Padding="12,10" StrokeShape="RoundRectangle 12" Stroke="#BFDBFE" StrokeThickness="1" BackgroundColor="#EFF6FF" IsVisible="False">
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                        <Border Grid.Column="0" StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="#DBEAFE" WidthRequest="36" HeightRequest="36" Padding="6" VerticalOptions="Center">
+                            <Image Source="iconfavtx1.png" Aspect="AspectFit" VerticalOptions="Center" HorizontalOptions="Center" />
+                        </Border>
+                        
+                        <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                            <Label x:Name="L_BannerReminderTitle" Text="Pengingat: Tagihan Bulanan" FontSize="12" FontAttributes="Bold" TextColor="#1E40AF" LineBreakMode="TailTruncation" MaxLines="1" />
+                            <Label x:Name="L_BannerReminderSubtitle" Text="Jadwal setiap tgl 10 (7 hari lagi) • Rp 150.000" FontSize="11" TextColor="#3B82F6" LineBreakMode="TailTruncation" MaxLines="1" />
+                        </VerticalStackLayout>
+
+                        <!-- Tombol Terapkan / Impor -->
+                        <Border Grid.Column="2" Padding="10,6" StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="#2563EB" VerticalOptions="Center">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ApplyBannerReminder_Tapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="Terapkan" FontSize="11" FontAttributes="Bold" TextColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
+                        </Border>
                     </Grid>
                 </Border>
 
-                <StackLayout Grid.Row="2" Margin="0,15">
-                    <Label Text="NOMINAL TRANSAKSI" CharacterSpacing="3" FontSize="14" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" TextColor="Grey"></Label>
+                <!-- Tipe Transaksi -->
+                <Border Grid.Row="2" Margin="0,12,0,0" Padding="5" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" BackgroundColor="WhiteSmoke">
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <Button x:Name="BPemasukan" Clicked="BPemasukan_Clicked" CornerRadius="10" FontAttributes="Bold" Text="PEMASUKAN" TextColor="DarkGrey" Grid.Column="0" BackgroundColor="Transparent" />
+                        <Button x:Name="BPengeluaran" Clicked="BPengeluaran_Clicked" Text="PENGELUARAN" TextColor="White" FontAttributes="Bold" CornerRadius="10" Grid.Column="1" BackgroundColor="DarkCyan" />
+                    </Grid>
+                </Border>
+
+                <!-- Nominal Transaksi -->
+                <StackLayout Grid.Row="3" Margin="0,15">
+                    <Label Text="NOMINAL TRANSAKSI" CharacterSpacing="3" FontSize="14" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" TextColor="Grey" />
                     <Entry x:Name="T_Nominal" Keyboard="Numeric" Placeholder="0" FontAttributes="Bold" TextColor="CornflowerBlue" HorizontalOptions="Center" 
-                           FontSize="32"
-                           HorizontalTextAlignment="Center"></Entry>
+                           FontSize="32" HorizontalTextAlignment="Center" />
                 </StackLayout>
 
-                <!--katagori-->
-
-                <Grid Grid.Row="3" RowDefinitions="Auto,Auto" RowSpacing="10" >
+                <!-- Kategori -->
+                <Grid Grid.Row="4" RowDefinitions="Auto,Auto" RowSpacing="10">
                     <Label Text="Pilih Kategori" Grid.Row="0"></Label>
                     <CollectionView x:Name="KategoriCollectionView" Grid.Row="1" BackgroundColor="Transparent" SelectionMode="None">
                         <CollectionView.ItemsLayout>
@@ -81,7 +113,8 @@
                     </CollectionView>
                 </Grid>
 
-                <Grid ColumnDefinitions="*,*,*" Grid.Row="4" Margin="0,10,0,0" ColumnSpacing="8">
+                <!-- NO STRUK, TANGGAL, JAM -->
+                <Grid ColumnDefinitions="*,*,*" Grid.Row="5" Margin="0,10,0,0" ColumnSpacing="8">
                     <!-- NO STRUK -->
                     <Border Grid.Column="0" Padding="12,10" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
                             BackgroundColor="WhiteSmoke" HeightRequest="75">
@@ -110,8 +143,8 @@
                     </Border>
                 </Grid>
 
-                
-                <Border Grid.Row="5" Margin="0,10,0,0"  Padding="20,13" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                <!-- CATATAN -->
+                <Border Grid.Row="6" Margin="0,10,0,0"  Padding="20,13" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
                         BackgroundColor="WhiteSmoke" HeightRequest="75">
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                         <StackLayout Grid.Column="0">
@@ -123,7 +156,8 @@
                     </Grid>
                 </Border>
                 
-                <Border Grid.Row="6" Margin="0,10,0,0"  Padding="20,13" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                <!-- DETAIL ITEM -->
+                <Border Grid.Row="7" Margin="0,10,0,0"  Padding="20,13" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
                         BackgroundColor="WhiteSmoke" HeightRequest="75">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="DetailItem_Tapped" />
@@ -138,7 +172,8 @@
                     </Grid>
                 </Border>
                 
-                <Border Grid.Row="7" Margin="0,10,0,0"  Padding="20,13" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="1" StrokeDashArray="5,5" 
+                <!-- NOTA / STRUK -->
+                <Border Grid.Row="8" Margin="0,10,0,0"  Padding="20,13" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="1" StrokeDashArray="5,5" 
                         BackgroundColor="WhiteSmoke" HeightRequest="75">
                     <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
                         <StackLayout Grid.Column="0" Spacing="10">

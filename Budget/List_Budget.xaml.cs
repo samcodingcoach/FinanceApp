@@ -48,7 +48,11 @@ public partial class List_Budget : ContentPage
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
-                    var data = JsonConvert.DeserializeObject<List<BudgetModel>>(json);
+                    var settings = new JsonSerializerSettings
+                    {
+                        DateParseHandling = DateParseHandling.DateTimeOffset
+                    };
+                    var data = JsonConvert.DeserializeObject<List<BudgetModel>>(json, settings);
                     
                     _allBudgets.Clear();
                     if (data != null)
@@ -136,6 +140,14 @@ public class BudgetModel
     public bool is_active { get; set; }
     public decimal total_rencana { get; set; }
     public decimal total_pemakaian { get; set; }
+    public DateTimeOffset? created_at { get; set; }
+    public DateTimeOffset? last_update { get; set; }
+
+    [JsonIgnore]
+    public DateTime CreatedAtLocal => created_at?.LocalDateTime ?? DateTime.MinValue;
+
+    [JsonIgnore]
+    public DateTime LastUpdateLocal => last_update?.LocalDateTime ?? DateTime.MinValue;
     
     [JsonIgnore]
     public string PeriodeDisplay => $"{periode_awal:dd MMM yyyy} - {periode_akhir:dd MMM yyyy}";

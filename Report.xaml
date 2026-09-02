@@ -9,134 +9,196 @@
              
     <Grid>
         <ScrollView>
-        <StackLayout Padding="15" Spacing="24">
+            <StackLayout Padding="15" Spacing="24">
             
             <!-- Time Period Selector -->
-            <Border BackgroundColor="#e4eae4" Padding="4" StrokeShape="RoundRectangle 12" StrokeThickness="0">
-                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="4">
-                    <Button x:Name="BtnMingguan"
-                            Text="Mingguan" 
-                            BackgroundColor="#006948" 
-                            TextColor="#ffffff" 
-                            FontAttributes="Bold" 
-                            FontSize="12" 
-                            CornerRadius="8"
-                            HeightRequest="40" 
-                            Clicked="Tab_Clicked" />
+                <Border BackgroundColor="#e4eae4" Padding="4" StrokeShape="RoundRectangle 12" StrokeThickness="0">
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="4">
+                        <Button x:Name="BtnMingguan"
+                                Text="Mingguan" 
+                                BackgroundColor="#006948" 
+                                TextColor="#ffffff" 
+                                FontAttributes="Bold" 
+                                FontSize="12" 
+                                CornerRadius="8"
+                                HeightRequest="40" 
+                                Clicked="Tab_Clicked" />
                             
-                    <Button x:Name="BtnBulanan"
-                            Grid.Column="1" 
-                            Text="Bulanan" 
-                            BackgroundColor="Transparent" 
-                            TextColor="#3d4a42" 
-                            FontAttributes="Bold" 
-                            FontSize="12" 
-                            CornerRadius="8"
-                            HeightRequest="40" 
-                            Clicked="Tab_Clicked" />
+                        <Button x:Name="BtnBulanan"
+                                Grid.Column="1" 
+                                Text="Bulanan" 
+                                BackgroundColor="Transparent" 
+                                TextColor="#3d4a42" 
+                                FontAttributes="Bold" 
+                                FontSize="12" 
+                                CornerRadius="8"
+                                HeightRequest="40" 
+                                Clicked="Tab_Clicked" />
                             
-                    <Button x:Name="BtnTahunan"
-                            Grid.Column="2" 
-                            Text="Tahunan" 
-                            BackgroundColor="Transparent" 
-                            TextColor="#3d4a42" 
-                            FontAttributes="Bold" 
-                            FontSize="12" 
-                            CornerRadius="8"
-                            HeightRequest="40" 
-                            Clicked="Tab_Clicked" />
-                </Grid>
-            </Border>
-
-            <!-- Trend Pengeluaran -->
-            <Border BackgroundColor="#ffffff" Stroke="#bccac0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
-                <Border.Shadow>
-                    <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
-                </Border.Shadow>
-                
-                <StackLayout>
-                    <Grid>
-                        <Label Text="Trend Pengeluaran" FontAttributes="Bold" FontSize="18" TextColor="#171d19" HorizontalOptions="Start" VerticalOptions="Center" />
-                        <HorizontalStackLayout HorizontalOptions="End" VerticalOptions="Center" Spacing="4">
-                            <Label x:Name="LabelTahunIni" Text="Tahun Ini" FontSize="12" TextColor="#3d4a42" VerticalOptions="Center" IsVisible="False" />
-                            <Picker x:Name="PickerTahun" Title="Tahun" FontSize="12" TextColor="#3d4a42" WidthRequest="80" />
-                            <Picker x:Name="PickerBulan" Title="Bulan" FontSize="12" TextColor="#3d4a42" WidthRequest="80" />
-                        </HorizontalStackLayout>
+                        <Button x:Name="BtnTahunan"
+                                Grid.Column="2" 
+                                Text="Tahunan" 
+                                BackgroundColor="Transparent" 
+                                TextColor="#3d4a42" 
+                                FontAttributes="Bold" 
+                                FontSize="12" 
+                                CornerRadius="8"
+                                HeightRequest="40" 
+                                Clicked="Tab_Clicked" />
                     </Grid>
+                </Border>
 
-                    <!-- Bar Chart Area -->
-                    <Grid ColumnDefinitions="*,*,*,*,*" HeightRequest="160" Margin="0,24,0,0" ColumnSpacing="12">
-                        
-                        <!-- Bar W1 -->
-                        <VerticalStackLayout Grid.Column="0" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
-                            <Label x:Name="LblVal1" Text="0" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-                            <BoxView x:Name="Bar1" BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
-                            <Label x:Name="LblBar1" Text="W1" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
-                        </VerticalStackLayout>
-                        
-                        <!-- Bar W2 -->
-                        <VerticalStackLayout Grid.Column="1" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
-                            <Label x:Name="LblVal2" Text="0" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-                            <BoxView x:Name="Bar2" BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
-                            <Label x:Name="LblBar2" Text="W2" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
-                        </VerticalStackLayout>
-
-                        <!-- Bar W3 (Active) -->
-                        <VerticalStackLayout Grid.Column="2" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
-                            <Label x:Name="LblVal3" Text="0" FontSize="10" TextColor="#006948" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-                            <BoxView x:Name="Bar3" BackgroundColor="#006948" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
-                            <Label x:Name="LblBar3" Text="W3" FontSize="10" TextColor="#006948" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-                        </VerticalStackLayout>
-
-                        <!-- Bar W4 -->
-                        <VerticalStackLayout Grid.Column="3" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
-                            <Label x:Name="LblVal4" Text="0" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-                            <BoxView x:Name="Bar4" BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
-                            <Label x:Name="LblBar4" Text="W4" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
-                        </VerticalStackLayout>
-
-                        <!-- Bar W5 -->
-                        <VerticalStackLayout Grid.Column="4" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
-                            <Label x:Name="LblVal5" Text="0" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-                            <BoxView x:Name="Bar5" BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
-                            <Label x:Name="LblBar5" Text="W5" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
-                        </VerticalStackLayout>
-                        
-                    </Grid>
-                </StackLayout>
-            </Border>
-
-            <!-- Rincian Kategori -->
-            <StackLayout Spacing="16">
-                <Grid>
-                    <Label Text="Rincian Kategori" FontAttributes="Bold" FontSize="20" TextColor="#171d19" HorizontalOptions="Start" />
-                    <Label Text="Lihat Semua" FontSize="14" FontAttributes="Bold" TextColor="#006948" HorizontalOptions="End" VerticalOptions="Center" />
-                </Grid>
-
+                <!-- Trend Pengeluaran -->
                 <Border BackgroundColor="#ffffff" Stroke="#bccac0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
                     <Border.Shadow>
                         <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
                     </Border.Shadow>
-                    
-                    <Grid ColumnDefinitions="100, *" ColumnSpacing="24">
-                        
-                        <!-- Fake Donut Chart (Menggunakan Shapes MAUI) -->
-                        <Grid x:Name="DonutContainer" WidthRequest="100" HeightRequest="100" VerticalOptions="Center" HorizontalOptions="Center">
-                            <Ellipse Stroke="#e9efe9" StrokeThickness="12" Fill="Transparent" />
-                            <Label Text="100%" FontAttributes="Bold" FontSize="12" TextColor="#171d19" HorizontalOptions="Center" VerticalOptions="Center" />
+                
+                    <StackLayout>
+                        <Grid>
+                            <Label Text="Trend Pengeluaran" FontAttributes="Bold" FontSize="18" TextColor="#171d19" HorizontalOptions="Start" VerticalOptions="Center" />
+                            <HorizontalStackLayout HorizontalOptions="End" VerticalOptions="Center" Spacing="4">
+                                <Label x:Name="LabelTahunIni" Text="Tahun Ini" FontSize="12" TextColor="#3d4a42" VerticalOptions="Center" IsVisible="False" />
+                                <Picker x:Name="PickerTahun" Title="Tahun" FontSize="12" TextColor="#3d4a42" WidthRequest="80" />
+                                <Picker x:Name="PickerBulan" Title="Bulan" FontSize="12" TextColor="#3d4a42" WidthRequest="80" />
+                            </HorizontalStackLayout>
                         </Grid>
-                        
-                        <!-- Legend -->
-                        <VerticalStackLayout x:Name="LegendContainer" Grid.Column="1" VerticalOptions="Center" Spacing="12">
-                            <!-- Items will be generated dynamically in C# -->
-                        </VerticalStackLayout>
 
-                    </Grid>
+                        <!-- Bar Chart Area -->
+                        <Grid ColumnDefinitions="*,*,*,*,*" HeightRequest="160" Margin="0,24,0,0" ColumnSpacing="12">
+                        
+                            <!-- Bar W1 -->
+                            <VerticalStackLayout Grid.Column="0" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
+                                <Label x:Name="LblVal1" Text="0" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                                <BoxView x:Name="Bar1" BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
+                                <Label x:Name="LblBar1" Text="W1" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                        
+                            <!-- Bar W2 -->
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
+                                <Label x:Name="LblVal2" Text="0" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                                <BoxView x:Name="Bar2" BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
+                                <Label x:Name="LblBar2" Text="W2" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+
+                            <!-- Bar W3 (Active) -->
+                            <VerticalStackLayout Grid.Column="2" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
+                                <Label x:Name="LblVal3" Text="0" FontSize="10" TextColor="#006948" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                                <BoxView x:Name="Bar3" BackgroundColor="#006948" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
+                                <Label x:Name="LblBar3" Text="W3" FontSize="10" TextColor="#006948" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+
+                            <!-- Bar W4 -->
+                            <VerticalStackLayout Grid.Column="3" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
+                                <Label x:Name="LblVal4" Text="0" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                                <BoxView x:Name="Bar4" BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
+                                <Label x:Name="LblBar4" Text="W4" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+
+                            <!-- Bar W5 -->
+                            <VerticalStackLayout Grid.Column="4" VerticalOptions="End" Spacing="4" HorizontalOptions="Center">
+                                <Label x:Name="LblVal5" Text="0" FontSize="10" TextColor="#171d19" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                                <BoxView x:Name="Bar5" BackgroundColor="#d0e1fb" WidthRequest="30" HeightRequest="10" CornerRadius="0" HorizontalOptions="Center" />
+                                <Label x:Name="LblBar5" Text="W5" FontSize="10" TextColor="#6d7a72" HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                        
+                        </Grid>
+                    </StackLayout>
                 </Border>
-            </StackLayout>
+
+                <!-- Rincian Kategori -->
+                <StackLayout Spacing="16">
+                    <Grid>
+                        <Label Text="Rincian Kategori" FontAttributes="Bold" FontSize="20" TextColor="#171d19" HorizontalOptions="Start" />
+                        <Label Text="Lihat Semua" FontSize="14" FontAttributes="Bold" TextColor="#006948" HorizontalOptions="End" VerticalOptions="Center" />
+                    </Grid>
+
+                    <Border BackgroundColor="#ffffff" Stroke="#bccac0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+                        </Border.Shadow>
+                    
+                        <Grid ColumnDefinitions="100, *" ColumnSpacing="24">
+                        
+                            <!-- Fake Donut Chart (Menggunakan Shapes MAUI) -->
+                            <Grid x:Name="DonutContainer" WidthRequest="100" HeightRequest="100" VerticalOptions="Center" HorizontalOptions="Center">
+                                <Ellipse Stroke="#e9efe9" StrokeThickness="12" Fill="Transparent" />
+                                <Label Text="100%" FontAttributes="Bold" FontSize="12" TextColor="#171d19" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Grid>
+                        
+                            <!-- Legend -->
+                            <VerticalStackLayout x:Name="LegendContainer" Grid.Column="1" VerticalOptions="Center" Spacing="12">
+                                <!-- Items will be generated dynamically in C# -->
+                            </VerticalStackLayout>
+
+                        </Grid>
+                    </Border>
+                </StackLayout>
+
+                <!-- Generate & Download Laporan Section -->
+                <Border BackgroundColor="#ffffff" Stroke="#bccac0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="18" Margin="0,0,0,20">
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.05" Radius="8" Offset="0,2" />
+                    </Border.Shadow>
+                
+                    <VerticalStackLayout Spacing="15">
+                        <!-- Title Header -->
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                            <Border BackgroundColor="#e8f0fe" Grid.Column="1" StrokeThickness="0" StrokeShape="RoundRectangle 12" WidthRequest="38" HeightRequest="38" Padding="6" VerticalOptions="Center">
+                                <Image Source="download1.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" HorizontalOptions="Center" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
+                                <Label Text="Unduh &amp; Cetak Laporan" FontAttributes="Bold" FontSize="17" TextColor="#171d19" />
+                                <Label Text="Pilih rentang periode laporan keuangan" FontSize="12" TextColor="#6d7a72" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Rentang Tanggal (Tanggal Awal & Tanggal Akhir) -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,5,0,0">
+                            <!-- Tanggal Awal -->
+                            <Border Grid.Column="0" BackgroundColor="#f8fafa" Stroke="#d1d5db" StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="12,8">
+                                <VerticalStackLayout Spacing="3">
+                                    <Label Text="TANGGAL AWAL" FontSize="10" FontAttributes="Bold" TextColor="#6d7a72" />
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <DatePicker x:Name="DP_LaporanStart" Format="dd/MM/yyyy" TextColor="#171d19" FontSize="13" VerticalOptions="Center" Margin="0" />
+                                        <Image Source="date100.png" Grid.Column="1" WidthRequest="16" HeightRequest="16" VerticalOptions="Center" Opacity="0.7" />
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Tanggal Akhir -->
+                            <Border Grid.Column="1" BackgroundColor="#f8fafa" Stroke="#d1d5db" StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="12,8">
+                                <VerticalStackLayout Spacing="3">
+                                    <Label Text="TANGGAL AKHIR" FontSize="10" FontAttributes="Bold" TextColor="#6d7a72" />
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <DatePicker x:Name="DP_LaporanEnd" Format="dd/MM/yyyy" TextColor="#171d19" FontSize="13" VerticalOptions="Center" Margin="0" />
+                                        <Image Source="date100.png" Grid.Column="1" WidthRequest="16" HeightRequest="16" VerticalOptions="Center" Opacity="0.7" />
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+
+                        <!-- Tombol Generate & Download Laporan -->
+                        <Button x:Name="BtnDownloadLaporan"
+                                Text="GENERATE &amp; DOWNLOAD LAPORAN"
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                CharacterSpacing="1"
+                                BackgroundColor="#006948"
+                                TextColor="White"
+                                CornerRadius="10"
+                                HeightRequest="48"
+                                Margin="0,5,0,0"
+                                Clicked="BtnDownloadLaporan_Clicked">
+                            <Button.Shadow>
+                                <Shadow Brush="#006948" Opacity="0.25" Radius="8" Offset="0,3" />
+                            </Button.Shadow>
+                        </Button>
+                    </VerticalStackLayout>
+                </Border>
             
-        </StackLayout>
-    </ScrollView>
+            </StackLayout>
+        </ScrollView>
 
     <!-- Loading Overlay -->
     <Grid x:Name="LoadingOverlay" BackgroundColor="#80000000" IsVisible="False">
