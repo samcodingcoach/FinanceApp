@@ -2,11 +2,155 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FinanceApp.Favorit.NewFav"
-             Title="NewFav">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             BackgroundColor="#f8fafa"
+             NavigationPage.HasNavigationBar="False" Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="False">
+    <Grid>
+        <ScrollView Margin="0,15">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" Padding="20,10" RowSpacing="5">
+
+                <!-- Header / Navbar -->
+                <StackLayout Orientation="Horizontal" Spacing="10" Grid.Row="0">
+                    <Image Source="backbiru1.png" HeightRequest="24">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Back_Tapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Tambah Transaksi Rutin" FontAttributes="Bold" FontSize="16" 
+                           TextColor="CornflowerBlue"
+                           VerticalTextAlignment="Center" />
+                </StackLayout>
+
+                <!-- Tipe Transaksi (Pemasukan / Pengeluaran) -->
+                <Border Grid.Row="1" Margin="0,15,0,0" Padding="5" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                        BackgroundColor="WhiteSmoke">
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <Button x:Name="BPemasukan" Clicked="BPemasukan_Clicked" CornerRadius="10" FontAttributes="Bold" Text="PEMASUKAN" TextColor="DarkGrey" Grid.Column="0" BackgroundColor="Transparent" />
+                        <Button x:Name="BPengeluaran" Clicked="BPengeluaran_Clicked" Text="PENGELUARAN" TextColor="White" FontAttributes="Bold" CornerRadius="10" Grid.Column="1" BackgroundColor="DarkCyan" />
+                    </Grid>
+                </Border>
+
+                <!-- Total Nominal -->
+                <StackLayout Grid.Row="2" Margin="0,15">
+                    <Label Text="TOTAL HARGA (RP)" CharacterSpacing="3" FontSize="14" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" TextColor="Grey" />
+                    <Entry x:Name="T_Nominal" Keyboard="Numeric" Placeholder="0" FontAttributes="Bold" TextColor="CornflowerBlue" HorizontalOptions="Center" 
+                           FontSize="32" HorizontalTextAlignment="Center" TextChanged="T_Nominal_TextChanged" />
+                </StackLayout>
+
+                <!-- Pilih Kategori -->
+                <Grid Grid.Row="3" RowDefinitions="Auto,Auto" RowSpacing="10">
+                    <Label Text="Pilih Kategori" FontAttributes="Bold" TextColor="#444" Grid.Row="0" />
+                    <CollectionView x:Name="KategoriCollectionView" Grid.Row="1" BackgroundColor="Transparent" SelectionMode="None">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical" Span="4" VerticalItemSpacing="10" HorizontalItemSpacing="10" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border WidthRequest="75" HorizontalOptions="Center" Padding="5,10" 
+                                        StrokeShape="RoundRectangle 15" 
+                                        Stroke="{Binding BorderStrokeColor}" StrokeThickness="{Binding BorderThicknessVal}"
+                                        BackgroundColor="{Binding BorderBackgroundColor}">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="Kategori_Tapped" CommandParameter="{Binding .}" />
+                                    </Border.GestureRecognizers>
+
+                                    <StackLayout Spacing="7" VerticalOptions="Center">
+                                        <Border WidthRequest="40" HeightRequest="40" HorizontalOptions="Center" 
+                                                Padding="5" StrokeShape="RoundRectangle 60" Stroke="LightGrey" StrokeThickness="0.3" BackgroundColor="{Binding IconBackgroundColor}">
+                                            <Image Source="{Binding DisplayIcon}" HeightRequest="25" />
+                                        </Border>
+                                        <Label Text="{Binding nama_kategori}" LineBreakMode="TailTruncation" TextColor="#444" FontSize="10" 
+                                               HorizontalTextAlignment="Center" FontAttributes="Bold" />
+                                    </StackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+
+                <!-- Form Rutin: Setiap Tanggal & Keterangan -->
+                <Grid ColumnDefinitions="140,*" Grid.Row="4" Margin="0,10,0,0" ColumnSpacing="10">
+                    <!-- SETIAP TANGGAL (1 - 31) -->
+                    <Border Grid.Column="0" Padding="12,10" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                            BackgroundColor="WhiteSmoke" HeightRequest="75">
+                        <StackLayout Spacing="2">
+                            <Label Text="SETIAP TGL (1-31)" FontSize="Caption" FontAttributes="Bold" TextColor="Grey" />
+                            <Picker x:Name="PickerTanggal" Title="Pilih Tgl" FontSize="14" FontAttributes="Bold" TextColor="#333" VerticalOptions="Center" />
+                        </StackLayout>
+                    </Border>
+
+                    <!-- KETERANGAN / DESKRIPSI -->
+                    <Border Grid.Column="1" Padding="12,10" StrokeShape="RoundRectangle 10" Stroke="#CCCCCC" StrokeThickness="0.5" 
+                            BackgroundColor="WhiteSmoke" HeightRequest="75">
+                        <StackLayout Spacing="2">
+                            <Label Text="KETERANGAN" FontSize="Caption" FontAttributes="Bold" TextColor="Grey" />
+                            <Entry x:Name="T_Keterangan" Placeholder="Ex: Bayar Listrik..." FontSize="13" TextColor="#333" VerticalOptions="Center" />
+                        </StackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Form Rincian Detail Item (Dynamic) -->
+                <StackLayout Grid.Row="5" Margin="0,15,0,0" Spacing="10">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="RINCIAN BARANG / JASA" FontAttributes="Bold" TextColor="#444" VerticalOptions="Center" />
+                        <Button Text="+ Tambah Item" Clicked="BtnAddDetailItem_Clicked" Grid.Column="1" 
+                                FontSize="12" FontAttributes="Bold" BackgroundColor="#e8f0fe" TextColor="#1967d2" CornerRadius="8" Padding="10,0" HeightRequest="32" />
+                    </Grid>
+
+                    <!-- List Form Detail Items -->
+                    <StackLayout x:Name="DetailListContainer" BindableLayout.ItemsSource="{Binding DetailItems}" Spacing="8">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeShape="RoundRectangle 10" Stroke="#E2E8F0" StrokeThickness="1" BackgroundColor="White" Padding="10,8">
+                                    <Grid ColumnDefinitions="*,110,Auto" ColumnSpacing="8" VerticalOptions="Center">
+                                        <!-- Nama Barang / Jasa -->
+                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                            <Label Text="Nama Item" FontSize="11" TextColor="Grey" FontAttributes="Bold" />
+                                            <Border StrokeShape="RoundRectangle 6" Stroke="#D1D5DB" StrokeThickness="0.5" BackgroundColor="WhiteSmoke" Padding="8,2">
+                                                <Entry Text="{Binding NamaBarang, Mode=TwoWay}" FontSize="13" FontAttributes="Bold" TextColor="#333" Placeholder="Nama barang/jasa" />
+                                            </Border>
+                                        </VerticalStackLayout>
+
+                                        <!-- Harga -->
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                            <Label Text="Harga (Rp)" FontSize="11" TextColor="Grey" FontAttributes="Bold" />
+                                            <Border StrokeShape="RoundRectangle 6" Stroke="#D1D5DB" StrokeThickness="0.5" BackgroundColor="WhiteSmoke" Padding="8,2">
+                                                <Entry Text="{Binding HargaString, Mode=TwoWay}" Keyboard="Numeric" FontSize="13" FontAttributes="Bold" TextColor="DarkCyan" HorizontalTextAlignment="End" Placeholder="0" />
+                                            </Border>
+                                        </VerticalStackLayout>
+
+                                        <!-- Hapus Baris -->
+                                        <Border Grid.Column="2" StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="#FEE2E2" WidthRequest="36" HeightRequest="36" VerticalOptions="End" HorizontalOptions="Center" Margin="0,0,0,2">
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="DeleteDetailItem_Tapped" CommandParameter="{Binding .}" />
+                                            </Border.GestureRecognizers>
+                                            <Image Source="delete1.png" WidthRequest="18" HeightRequest="18" HorizontalOptions="Center" VerticalOptions="Center" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
+        </ScrollView>
+
+        <!-- Loading Overlay (3 Detik Delay) -->
+        <Grid x:Name="OverlayLoading" BackgroundColor="#80000000" IsVisible="False">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="12">
+                <ActivityIndicator IsRunning="{Binding Source={x:Reference OverlayLoading}, Path=IsVisible}" Color="White" WidthRequest="45" HeightRequest="45" />
+                <Label x:Name="OverlayText" Text="Menyimpan..." TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" FontSize="15" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- FAB Simpan Data -->
+        <ImageButton Source="fabsave100.png" Clicked="BSimpan_Clicked" x:Name="BSimpan"
+                     BackgroundColor="CornflowerBlue" Padding="15"
+                     WidthRequest="60" HeightRequest="60" CornerRadius="30"
+                     HorizontalOptions="End" VerticalOptions="End" Margin="20">
+            <ImageButton.Shadow>
+                <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.3" />
+            </ImageButton.Shadow>
+        </ImageButton>
+    </Grid>
 </ContentPage>
