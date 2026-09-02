@@ -155,6 +155,75 @@ public partial class ListFav : ContentPage
             }
         }
     }
+
+    private async void DeleteSwipeItem_Invoked(object sender, EventArgs e)
+    {
+        FavoritTransaksiModel? itemToDelete = null;
+
+        if (sender is SwipeItemView swipeItemView && swipeItemView.CommandParameter is FavoritTransaksiModel modelView)
+        {
+            itemToDelete = modelView;
+        }
+        else if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is FavoritTransaksiModel model)
+        {
+            itemToDelete = model;
+        }
+        else if (sender is Element element && element.BindingContext is FavoritTransaksiModel modelCtx)
+        {
+            itemToDelete = modelCtx;
+        }
+
+        if (itemToDelete == null) return;
+
+        bool confirm = await DisplayAlert("Konfirmasi Hapus", $"Apakah Anda yakin ingin menghapus transaksi rutin '{itemToDelete.TitleDisplay}'?", "Hapus", "Batal");
+        if (!confirm) return;
+
+        LoadingOverlay.IsVisible = true;
+        var delayTask = Task.Delay(3000);
+
+        try
+        {
+            var app = Application.Current as App;
+            string tokenKey = app?.TOKEN_KEY ?? string.Empty;
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenKey);
+                client.DefaultRequestHeaders.Add("apikey", tokenKey);
+
+                // 1. Hapus rincian detail terlebih dahulu
+                string deleteDetailUrl = $"{App.API_HOST}/favorit_transaksi_detail?id_fav=eq.{itemToDelete.id_fav}";
+                var resDetail = await client.DeleteAsync(deleteDetailUrl);
+
+                // 2. Hapus header transaksi favorit
+                string deleteHeaderUrl = $"{App.API_HOST}/favorit_transaksi?id_fav=eq.{itemToDelete.id_fav}";
+                var resHeader = await client.DeleteAsync(deleteHeaderUrl);
+
+                await delayTask;
+
+                if (resHeader.IsSuccessStatusCode)
+                {
+                    await Toast.Make("Transaksi rutin berhasil dihapus").Show();
+
+                    // Hapus dari list lokal & refresh
+                    _allRawData.Remove(itemToDelete);
+                    RefreshDisplay();
+                }
+                else
+                {
+                    await Toast.Make("Gagal menghapus transaksi rutin").Show();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await Toast.Make($"Error: {ex.Message}").Show();
+        }
+        finally
+        {
+            LoadingOverlay.IsVisible = false;
+        }
+    }
 }
 
 public class FavoritTransaksiModel

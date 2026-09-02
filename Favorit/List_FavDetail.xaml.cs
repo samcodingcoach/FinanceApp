@@ -219,6 +219,84 @@ public partial class List_FavDetail : BottomSheet
         }
     }
 
+    private async void BtnDeleteRow_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is View view)
+        {
+            await view.ScaleTo(0.9, 80);
+            await view.ScaleTo(1.0, 80);
+        }
+
+        if (e.Parameter is not FavoritDetailModel itemToDelete) return;
+
+        bool confirm = await Application.Current.MainPage.DisplayAlert(
+            "Hapus Item",
+            $"Hapus item '{itemToDelete.nama_barang_jasa}' dari rincian?",
+            "Hapus",
+            "Batal");
+
+        if (!confirm) return;
+
+        L_LoadingText.Text = "Menghapus Item...";
+        LoadingOverlay.IsVisible = true;
+        var delayTask = Task.Delay(2000);
+
+        try
+        {
+            var app = Application.Current as App;
+            string tokenKey = app?.TOKEN_KEY ?? string.Empty;
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenKey);
+                client.DefaultRequestHeaders.Add("apikey", tokenKey);
+
+                // 1. Hapus baris dari tabel favorit_transaksi_detail
+                string deleteUrl = $"{App.API_HOST}/favorit_transaksi_detail?id_fav_detail=eq.{itemToDelete.id_fav_detail}";
+                var res = await client.DeleteAsync(deleteUrl);
+
+                await delayTask;
+
+                if (res.IsSuccessStatusCode)
+                {
+                    _allData.Remove(itemToDelete);
+                    _filteredData.Remove(itemToDelete);
+                    UpdateTotal();
+
+                    // 2. Update total_harga di header transaksi rutin
+                    decimal remainingTotal = 0;
+                    foreach (var item in _allData)
+                    {
+                        remainingTotal += item.harga;
+                    }
+
+                    string updateHeaderUrl = $"{App.API_HOST}/favorit_transaksi?id_fav=eq.{_id_fav}";
+                    var headerPayload = new { total_harga = remainingTotal };
+                    var headerContent = new StringContent(JsonConvert.SerializeObject(headerPayload), Encoding.UTF8, "application/json");
+                    var headerReq = new HttpRequestMessage(new HttpMethod("PATCH"), updateHeaderUrl) { Content = headerContent };
+                    await client.SendAsync(headerReq);
+
+                    // Beritahu halaman induk ListFav agar me-refresh data
+                    _onUpdated?.Invoke();
+
+                    await Toast.Make("Item berhasil dihapus").Show();
+                }
+                else
+                {
+                    await Toast.Make("Gagal menghapus item").Show();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await Toast.Make($"Error: {ex.Message}").Show();
+        }
+        finally
+        {
+            LoadingOverlay.IsVisible = false;
+        }
+    }
+
     private async void Close_Tapped(object sender, TappedEventArgs e)
     {
         await this.DismissAsync();

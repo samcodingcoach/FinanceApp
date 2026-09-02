@@ -35,48 +35,66 @@
                         </BindableLayout.EmptyView>
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
-                                <Border StrokeShape="RoundRectangle 10" Padding="12" Margin="0,0,0,8" Stroke="#ccc" StrokeThickness="0.5" BackgroundColor="White">
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="FavItem_Tapped" CommandParameter="{Binding id_fav}" />
-                                    </Border.GestureRecognizers>
-                                    <Border.Shadow>
-                                        <Shadow Brush="#000000" Opacity="0.05" Radius="6" Offset="0,2" />
-                                    </Border.Shadow>
-                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" RowDefinitions="Auto,Auto" RowSpacing="6">
-                                        <!-- Kategori Icon (Sesuai List_Kategori.xaml) -->
-                                        <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" StrokeShape="RoundRectangle 15" Stroke="LightGrey" StrokeThickness="0.3" BackgroundColor="{Binding BgColor}" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" Padding="8" HorizontalOptions="Center">
-                                            <Border.Shadow>
-                                                <Shadow Brush="#000000" Opacity="0.10" Radius="8" Offset="0,2" />
-                                            </Border.Shadow>
-                                            <Image Source="{Binding FullIconUrl}" Aspect="AspectFit" VerticalOptions="Center" HorizontalOptions="Center" />
-                                        </Border>
+                                <SwipeView Margin="0,0,0,8">
+                                    <SwipeView.RightItems>
+                                        <SwipeItems Mode="Reveal">
+                                            <SwipeItemView Invoked="DeleteSwipeItem_Invoked" CommandParameter="{Binding .}">
+                                                <Border StrokeShape="RoundRectangle 12" StrokeThickness="0.5" BackgroundColor="White" WidthRequest="75" Margin="6,0,0,0" Padding="8">
+                                                    <Border.Shadow>
+                                                        <Shadow Brush="#000000" Opacity="0.10" Radius="6" Offset="0,2" />
+                                                    </Border.Shadow>
+                                                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
+                                                        <Image Source="delete1.png"  HorizontalOptions="Center" HeightRequest="32" />
+                                                        
+                                                    </VerticalStackLayout>
+                                                </Border>
+                                            </SwipeItemView>
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
 
-                                        <!-- Title & Category Info -->
-                                        <StackLayout Grid.Column="1" Grid.Row="0" Spacing="4" VerticalOptions="Center">
-                                            <Label Text="{Binding TitleDisplay}" FontAttributes="Bold" FontSize="16" TextColor="#333333" LineBreakMode="TailTruncation" MaxLines="2" />
-                                            <Label Text="{Binding nama_kategori}" FontSize="13" TextColor="CornflowerBlue" FontAttributes="Bold" />
-                                        </StackLayout>
-
-                                        <!-- Nominal -->
-                                        <Label Text="{Binding NominalDisplay}" Grid.Column="2" Grid.Row="0" 
-                                               HorizontalOptions="End" HorizontalTextAlignment="End" 
-                                               FontSize="17" FontAttributes="Bold" 
-                                               TextColor="{Binding NominalColor}" VerticalOptions="Center" />
-
-                                        <!-- Schedule Badge & Type -->
-                                        <StackLayout Orientation="Horizontal" Spacing="8" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1">
-                                            <Border Padding="10,3" StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="#e8f0fe">
-                                                <HorizontalStackLayout Spacing="4">
-                                                    <Image Source="date100.png" HeightRequest="14" WidthRequest="14" VerticalOptions="Center" />
-                                                    <Label Text="{Binding ScheduleDisplay}" VerticalTextAlignment="Center" FontAttributes="Bold" FontSize="12" TextColor="#1967d2" />
-                                                </HorizontalStackLayout>
+                                    <Border StrokeShape="RoundRectangle 10" Padding="12" Stroke="#ccc" StrokeThickness="0.5" BackgroundColor="White">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="FavItem_Tapped" CommandParameter="{Binding id_fav}" />
+                                        </Border.GestureRecognizers>
+                                        <Border.Shadow>
+                                            <Shadow Brush="#000000" Opacity="0.05" Radius="6" Offset="0,2" />
+                                        </Border.Shadow>
+                                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" RowDefinitions="Auto,Auto" RowSpacing="6">
+                                            <!-- Kategori Icon (Sesuai List_Kategori.xaml) -->
+                                            <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" StrokeShape="RoundRectangle 15" Stroke="LightGrey" StrokeThickness="0.3" BackgroundColor="{Binding BgColor}" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" Padding="8" HorizontalOptions="Center">
+                                                <Border.Shadow>
+                                                    <Shadow Brush="#000000" Opacity="0.10" Radius="8" Offset="0,2" />
+                                                </Border.Shadow>
+                                                <Image Source="{Binding FullIconUrl}" Aspect="AspectFit" VerticalOptions="Center" HorizontalOptions="Center" />
                                             </Border>
-                                            <Border Padding="10,3" StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="{Binding TypeBadgeBg}">
-                                                <Label Text="{Binding TypeText}" VerticalTextAlignment="Center" FontAttributes="Bold" FontSize="12" TextColor="{Binding TypeBadgeTextColor}" />
-                                            </Border>
-                                        </StackLayout>
-                                    </Grid>
-                                </Border>
+
+                                            <!-- Title & Category Info -->
+                                            <StackLayout Grid.Column="1" Grid.Row="0" Spacing="4" VerticalOptions="Center">
+                                                <Label Text="{Binding TitleDisplay}" FontAttributes="Bold" FontSize="16" TextColor="#333333" LineBreakMode="TailTruncation" MaxLines="2" />
+                                                <Label Text="{Binding nama_kategori}" FontSize="13" TextColor="CornflowerBlue" FontAttributes="Bold" />
+                                            </StackLayout>
+
+                                            <!-- Nominal -->
+                                            <Label Text="{Binding NominalDisplay}" Grid.Column="2" Grid.Row="0" 
+                                                   HorizontalOptions="End" HorizontalTextAlignment="End" 
+                                                   FontSize="17" FontAttributes="Bold" 
+                                                   TextColor="{Binding NominalColor}" VerticalOptions="Center" />
+
+                                            <!-- Schedule Badge & Type -->
+                                            <StackLayout Orientation="Horizontal" Spacing="8" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1">
+                                                <Border Padding="10,3" StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="#e8f0fe">
+                                                    <HorizontalStackLayout Spacing="4">
+                                                        <Image Source="date100.png" HeightRequest="14" WidthRequest="14" VerticalOptions="Center" />
+                                                        <Label Text="{Binding ScheduleDisplay}" VerticalTextAlignment="Center" FontAttributes="Bold" FontSize="12" TextColor="#1967d2" />
+                                                    </HorizontalStackLayout>
+                                                </Border>
+                                                <Border Padding="10,3" StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="{Binding TypeBadgeBg}">
+                                                    <Label Text="{Binding TypeText}" VerticalTextAlignment="Center" FontAttributes="Bold" FontSize="12" TextColor="{Binding TypeBadgeTextColor}" />
+                                                </Border>
+                                            </StackLayout>
+                                        </Grid>
+                                    </Border>
+                                </SwipeView>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
                     </StackLayout>

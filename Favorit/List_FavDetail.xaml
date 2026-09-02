@@ -27,12 +27,12 @@
                 <SearchBar Placeholder="Cari nama barang / jasa..." x:Name="T_Search" TextChanged="T_Search_TextChanged" />
             </Border>
 
-            <!-- Collection of Detail Items (Editable Inline) -->
+            <!-- Collection of Detail Items (Editable Inline with Delete Button) -->
             <CollectionView Grid.Row="2" x:Name="DetailCollection">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border StrokeShape="RoundRectangle 10" Stroke="#E2E8F0" StrokeThickness="1" BackgroundColor="#FAFAFA" Padding="12,8" Margin="0,0,0,10">
-                            <Grid ColumnDefinitions="*,130" ColumnSpacing="10" VerticalOptions="Center">
+                        <Border StrokeShape="RoundRectangle 10" Stroke="#E2E8F0" StrokeThickness="1" BackgroundColor="#FAFAFA" Padding="10,8" Margin="0,0,0,10">
+                            <Grid ColumnDefinitions="*,110,Auto" ColumnSpacing="8" VerticalOptions="Center">
                                 <!-- Edit Nama Barang / Jasa -->
                                 <VerticalStackLayout Grid.Column="0" Spacing="2">
                                     <Label Text="Nama Barang / Jasa" FontSize="11" TextColor="Grey" FontAttributes="Bold" />
@@ -54,6 +54,22 @@
                                                Placeholder="0" />
                                     </Border>
                                 </VerticalStackLayout>
+
+                                <!-- Tombol Hapus Baris -->
+                                <Border Grid.Column="2" 
+                                        StrokeShape="RoundRectangle 8" 
+                                        StrokeThickness="0" 
+                                        BackgroundColor="#FEE2E2" 
+                                        WidthRequest="38" 
+                                        HeightRequest="38" 
+                                        VerticalOptions="End" 
+                                        HorizontalOptions="Center" 
+                                        Margin="0,0,0,2">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="BtnDeleteRow_Tapped" CommandParameter="{Binding .}" />
+                                    </Border.GestureRecognizers>
+                                    <Image Source="delete1.png" WidthRequest="20" HeightRequest="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
                             </Grid>
                         </Border>
                     </DataTemplate>
