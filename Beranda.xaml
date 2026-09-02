@@ -34,14 +34,14 @@
                         <Label x:Name="L_TotalSaldo" Text="Rp 0" FontSize="32" FontAttributes="Bold" TextColor="White" Margin="0,5,0,0" />
                         
                         <HorizontalStackLayout Spacing="16" Margin="0,24,0,0">
-                            <!-- Top Up Button -->
+                            <!-- Top Up / Transaksi Baru Button -->
                             <Border BackgroundColor="#33ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 8" Padding="16,8">
                                 <HorizontalStackLayout Spacing="8">
                                     <Image Source="buy1.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center"/>
                                     <Label Text="Transaksi Baru" FontSize="14" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                                 <Border.GestureRecognizers>
-                                    <TapGestureRecognizer />
+                                    <TapGestureRecognizer Tapped="TransaksiBaru_Tapped" />
                                 </Border.GestureRecognizers>
                             </Border>
 
