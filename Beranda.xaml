@@ -37,24 +37,16 @@
                             <!-- Top Up Button -->
                             <Border BackgroundColor="#33ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 8" Padding="16,8">
                                 <HorizontalStackLayout Spacing="8">
-                                    <Image Source="add60.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center"/>
-                                    <Label Text="Isi Saldo" FontSize="12" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" />
+                                    <Image Source="buy1.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center"/>
+                                    <Label Text="Transaksi Baru" FontSize="14" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer />
                                 </Border.GestureRecognizers>
                             </Border>
 
-                            <!-- Transfer Button -->
-                            <Border BackgroundColor="#33ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 8" Padding="16,8">
-                                <HorizontalStackLayout Spacing="8">
-                                    <Image Source="transfer1.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center"/>
-                                    <Label Text="Kirim" FontSize="12" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" />
-                                </HorizontalStackLayout>
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer />
-                                </Border.GestureRecognizers>
-                            </Border>
+                           
+                           
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
                 </Grid>
