@@ -82,10 +82,27 @@ public partial class New_Rekening : ContentPage
                     }
                 }
 
+                // Ambil id_users pengguna yang sedang login
+                int currentUserId = Preferences.Get("id_user", 0);
+                if (currentUserId <= 0)
+                {
+                    string jsonUser = Preferences.Get("user_data", string.Empty);
+                    if (!string.IsNullOrEmpty(jsonUser))
+                    {
+                        try
+                        {
+                            var jObj = Newtonsoft.Json.Linq.JObject.Parse(jsonUser);
+                            currentUserId = (int?)jObj["id_users"] ?? (int?)jObj["user_id"] ?? (int?)jObj["id_user"] ?? (int?)jObj["id"] ?? 0;
+                        }
+                        catch { }
+                    }
+                }
+
                 // POST Insert
                 client.DefaultRequestHeaders.Add("Prefer", "return=representation");
                 var requestData = new
                 {
+                    id_users = currentUserId > 0 ? (int?)currentUserId : null,
                     nama_rekening = namaRekening,
                     saldo_awal = saldoAwal,
                     saldo_akhir = saldoAwal, // Biasanya saldo akhir sama dengan saldo awal saat pembuatan

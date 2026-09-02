@@ -511,6 +511,7 @@ public partial class Report : ContentPage
             var paintBoldRight = new AndroidPaint { Color = AndroidColor.Rgb(20, 20, 20), TextSize = 9, FakeBoldText = true, AntiAlias = true, TextAlign = AndroidPaint.Align.Right };
             var paintNormal = new AndroidPaint { Color = AndroidColor.Rgb(50, 50, 50), TextSize = 9, AntiAlias = true };
             var paintNormalRight = new AndroidPaint { Color = AndroidColor.Rgb(50, 50, 50), TextSize = 9, AntiAlias = true, TextAlign = AndroidPaint.Align.Right };
+            var paintExpenseRed = new AndroidPaint { Color = AndroidColor.Rgb(186, 26, 26), TextSize = 9, FakeBoldText = true, AntiAlias = true, TextAlign = AndroidPaint.Align.Right };
             var paintFooter = new AndroidPaint { Color = AndroidColor.Rgb(120, 120, 120), TextSize = 8, AntiAlias = true };
             var paintFooterRight = new AndroidPaint { Color = AndroidColor.Rgb(120, 120, 120), TextSize = 8, AntiAlias = true, TextAlign = AndroidPaint.Align.Right };
 
@@ -559,9 +560,9 @@ public partial class Report : ContentPage
 
             string[,] ringkasanItems = new string[,]
             {
-                { "Saldo Awal", $"Rp {saldoAwal:N0}" },
-                { "Total Pemasukan", $"Rp {totalPemasukan:N0}" },
-                { "Total Pengeluaran", $"Rp {totalPengeluaran:N0}" }
+                { "Saldo Awal", $"{saldoAwal:N0}" },
+                { "Total Pemasukan", $"{totalPemasukan:N0}" },
+                { "Total Pengeluaran", $"{totalPengeluaran:N0}" }
             };
 
             for (int i = 0; i < 3; i++)
@@ -575,7 +576,7 @@ public partial class Report : ContentPage
 
             y += 16;
             canvas.DrawText("Saldo Akhir", marginX + 8, y, paintBold);
-            canvas.DrawText($"Rp {saldoAkhir:N0}", rightX - 8, y, paintBoldRight);
+            canvas.DrawText($"{saldoAkhir:N0}", rightX - 8, y, paintBoldRight);
             y += 6;
             canvas.DrawLine(marginX, y, rightX, y, paintThickDivider);
             y += 24;
@@ -609,9 +610,9 @@ public partial class Report : ContentPage
             string[,] budgetData = new string[,]
             {
                 { "Periode Budget", budgetPeriode, "" },
-                { "Total Rencana", "", $"Rp {bRencana:N0}" },
-                { "Total Pemakaian", "", $"Rp {bPakai:N0}" },
-                { "Sisa Anggaran", "", $"Rp {bSisa:N0}" }
+                { "Total Rencana", "", $"{bRencana:N0}" },
+                { "Total Pemakaian", "", $"{bPakai:N0}" },
+                { "Sisa Anggaran", "", $"{bSisa:N0}" }
             };
 
             for (int r = 0; r < budgetTotalRows; r++)
@@ -673,7 +674,7 @@ public partial class Report : ContentPage
                 int baseline = rY + 15;
                 canvas.DrawText((k + 1).ToString(), katCol0 + 12, baseline, paintNormal);
                 canvas.DrawText(listKat[k].nama_kategori ?? "-", katCol1 + 8, baseline, paintNormal);
-                canvas.DrawText($"Rp {listKat[k].total:N0}", katCol3 - 8, baseline, paintNormalRight);
+                canvas.DrawText($"{listKat[k].total:N0}", katCol3 - 8, baseline, paintNormalRight);
             }
 
             if (listKat.Count == 0)
@@ -682,7 +683,7 @@ public partial class Report : ContentPage
                 canvas.DrawLine(katCol0, rY, katCol3, rY, paintBorder);
                 canvas.DrawText("-", katCol0 + 12, rY + 15, paintNormal);
                 canvas.DrawText("Tidak ada pengeluaran", katCol1 + 8, rY + 15, paintNormal);
-                canvas.DrawText("Rp 0", katCol3 - 8, rY + 15, paintNormalRight);
+                canvas.DrawText("0", katCol3 - 8, rY + 15, paintNormalRight);
             }
 
             y = katBoxBottom + 24;
@@ -692,33 +693,36 @@ public partial class Report : ContentPage
             y += 12;
 
             int trxCol0 = marginX;
-            int trxCol1 = marginX + 70;
-            int trxCol2 = marginX + 150;
-            int trxCol3 = marginX + 260;
-            int trxCol4 = marginX + 320;
-            int trxCol5 = marginX + 410;
-            int trxCol6 = rightX;
+            int trxCol1 = marginX + 30;
+            int trxCol2 = marginX + 95;
+            int trxCol3 = marginX + 175;
+            int trxCol4 = marginX + 275;
+            int trxCol5 = marginX + 335;
+            int trxCol6 = marginX + 420;
+            int trxCol7 = rightX;
             int trxRowHeight = 22;
 
             var listTrx = laporan.transaksi ?? new List<LaporanTransaksiItem>();
 
             void DrawTrxHeader(int currentY)
             {
-                canvas.DrawRect(trxCol0, currentY, trxCol6, currentY + trxRowHeight, paintHeaderRowBg);
-                canvas.DrawRect(trxCol0, currentY, trxCol6, currentY + trxRowHeight, paintBorder);
+                canvas.DrawRect(trxCol0, currentY, trxCol7, currentY + trxRowHeight, paintHeaderRowBg);
+                canvas.DrawRect(trxCol0, currentY, trxCol7, currentY + trxRowHeight, paintBorder);
                 canvas.DrawLine(trxCol1, currentY, trxCol1, currentY + trxRowHeight, paintBorder);
                 canvas.DrawLine(trxCol2, currentY, trxCol2, currentY + trxRowHeight, paintBorder);
                 canvas.DrawLine(trxCol3, currentY, trxCol3, currentY + trxRowHeight, paintBorder);
                 canvas.DrawLine(trxCol4, currentY, trxCol4, currentY + trxRowHeight, paintBorder);
                 canvas.DrawLine(trxCol5, currentY, trxCol5, currentY + trxRowHeight, paintBorder);
+                canvas.DrawLine(trxCol6, currentY, trxCol6, currentY + trxRowHeight, paintBorder);
 
                 int hBaseline = currentY + 15;
-                canvas.DrawText("Tanggal", trxCol0 + 6, hBaseline, paintBold);
-                canvas.DrawText("No. Faktur", trxCol1 + 6, hBaseline, paintBold);
-                canvas.DrawText("Kategori", trxCol2 + 6, hBaseline, paintBold);
-                canvas.DrawText("Jenis", trxCol3 + 6, hBaseline, paintBold);
-                canvas.DrawText("Rekening", trxCol4 + 6, hBaseline, paintBold);
-                canvas.DrawText("Nominal", trxCol5 + 6, hBaseline, paintBold);
+                canvas.DrawText("No.", trxCol0 + 5, hBaseline, paintBold);
+                canvas.DrawText("Tanggal", trxCol1 + 6, hBaseline, paintBold);
+                canvas.DrawText("No. Faktur", trxCol2 + 6, hBaseline, paintBold);
+                canvas.DrawText("Kategori", trxCol3 + 6, hBaseline, paintBold);
+                canvas.DrawText("Jenis", trxCol4 + 6, hBaseline, paintBold);
+                canvas.DrawText("Rekening", trxCol5 + 6, hBaseline, paintBold);
+                canvas.DrawText("Nominal", trxCol6 + 6, hBaseline, paintBold);
             }
 
             DrawTrxHeader(y);
@@ -745,12 +749,13 @@ public partial class Report : ContentPage
 
                 var trx = listTrx[t];
                 int rY = y;
-                canvas.DrawRect(trxCol0, rY, trxCol6, rY + trxRowHeight, paintBorder);
+                canvas.DrawRect(trxCol0, rY, trxCol7, rY + trxRowHeight, paintBorder);
                 canvas.DrawLine(trxCol1, rY, trxCol1, rY + trxRowHeight, paintBorder);
                 canvas.DrawLine(trxCol2, rY, trxCol2, rY + trxRowHeight, paintBorder);
                 canvas.DrawLine(trxCol3, rY, trxCol3, rY + trxRowHeight, paintBorder);
                 canvas.DrawLine(trxCol4, rY, trxCol4, rY + trxRowHeight, paintBorder);
                 canvas.DrawLine(trxCol5, rY, trxCol5, rY + trxRowHeight, paintBorder);
+                canvas.DrawLine(trxCol6, rY, trxCol6, rY + trxRowHeight, paintBorder);
 
                 int baseline = rY + 15;
                 string tglStr = "-";
@@ -759,12 +764,17 @@ public partial class Report : ContentPage
                 string noFaktur = string.IsNullOrEmpty(trx.no_faktur) ? $"TRX#{trx.id_transaksi}" : trx.no_faktur;
                 string jenis = trx.tipe ? "Masuk" : "Keluar";
 
-                canvas.DrawText(tglStr, trxCol0 + 6, baseline, paintNormal);
-                canvas.DrawText(noFaktur, trxCol1 + 6, baseline, paintNormal);
-                canvas.DrawText(trx.nama_kategori ?? "-", trxCol2 + 6, baseline, paintNormal);
-                canvas.DrawText(jenis, trxCol3 + 6, baseline, paintNormal);
-                canvas.DrawText(trx.nama_rekening ?? "-", trxCol4 + 6, baseline, paintNormal);
-                canvas.DrawText($"Rp {trx.total_transaksi:N0}", trxCol6 - 6, baseline, paintNormalRight);
+                // Nominal display: jika keluar (-) minus dan merah
+                string nominalDisplay = trx.tipe ? $"{trx.total_transaksi:N0}" : $"-{trx.total_transaksi:N0}";
+                var nominalPaint = trx.tipe ? paintNormalRight : paintExpenseRed;
+
+                canvas.DrawText((t + 1).ToString(), trxCol0 + 8, baseline, paintNormal);
+                canvas.DrawText(tglStr, trxCol1 + 6, baseline, paintNormal);
+                canvas.DrawText(noFaktur, trxCol2 + 6, baseline, paintNormal);
+                canvas.DrawText(trx.nama_kategori ?? "-", trxCol3 + 6, baseline, paintNormal);
+                canvas.DrawText(jenis, trxCol4 + 6, baseline, paintNormal);
+                canvas.DrawText(trx.nama_rekening ?? "-", trxCol5 + 6, baseline, paintNormal);
+                canvas.DrawText(nominalDisplay, trxCol7 - 6, baseline, nominalPaint);
 
                 y += trxRowHeight;
             }
@@ -772,7 +782,7 @@ public partial class Report : ContentPage
             if (listTrx.Count == 0)
             {
                 int rY = y;
-                canvas.DrawRect(trxCol0, rY, trxCol6, rY + trxRowHeight, paintBorder);
+                canvas.DrawRect(trxCol0, rY, trxCol7, rY + trxRowHeight, paintBorder);
                 canvas.DrawText("Tidak ada transaksi pada periode ini", trxCol0 + 8, rY + 15, paintNormal);
                 y += trxRowHeight;
             }

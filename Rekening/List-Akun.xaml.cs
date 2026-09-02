@@ -68,7 +68,29 @@ public partial class List_Akun : ContentPage
         {
             var app = Application.Current as App;
             string tokenKey = app?.TOKEN_KEY ?? string.Empty;
+
+            // Ambil id_users pengguna yang sedang login dari Preferences/Storage
+            int currentUserId = Preferences.Get("id_user", 0);
+            if (currentUserId <= 0)
+            {
+                string jsonUser = Preferences.Get("user_data", string.Empty);
+                if (!string.IsNullOrEmpty(jsonUser))
+                {
+                    try
+                    {
+                        var jObj = Newtonsoft.Json.Linq.JObject.Parse(jsonUser);
+                        currentUserId = (int?)jObj["id_users"] ?? (int?)jObj["user_id"] ?? (int?)jObj["id_user"] ?? (int?)jObj["id"] ?? 0;
+                    }
+                    catch { }
+                }
+            }
+
             string apiUrl = App.API_HOST + $"akun_rekening?limit={_limit}&offset={_offset}";
+
+            if (currentUserId > 0)
+            {
+                apiUrl += $"&id_users=eq.{currentUserId}";
+            }
 
             using (var client = new HttpClient())
             {
@@ -170,6 +192,7 @@ public partial class List_Akun : ContentPage
 public class AkunRekening
 {
     public int id_rekening { get; set; }
+    public int? id_users { get; set; }
     public DateTime created_at { get; set; }
     public string? nama_rekening { get; set; }
     public double saldo_awal { get; set; }
