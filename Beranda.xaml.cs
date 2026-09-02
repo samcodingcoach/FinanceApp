@@ -320,6 +320,48 @@ public partial class Beranda : ContentPage
                         BindableLayout.SetItemsSource(HS_DokumenTerakhir, mappedList);
                     }
                 }
+
+                // 7. Pengingat Transaksi Favorit / Berulang (Maks 5 item yang belum lewat dari setiap_tanggal)
+                string urlFavorit = $"{App.API_HOST}/rpc/get_favorit_transaksi";
+                var resFavorit = await client.PostAsync(urlFavorit, new StringContent("{}", System.Text.Encoding.UTF8, "application/json"));
+                if (resFavorit.IsSuccessStatusCode)
+                {
+                    string json = await resFavorit.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        DateParseHandling = DateParseHandling.DateTimeOffset
+                    };
+                    var listFav = JsonConvert.DeserializeObject<List<ReminderFavoritModel>>(json, settings);
+                    if (listFav != null && listFav.Count > 0)
+                    {
+                        int currentDay = DateTime.Now.Day;
+
+                        // Filter hanya yang belum lewat dari tanggal jadwal bulan ini (setiap_tanggal >= hari ini), lalu urutkan terdekat dan ambil maks 5
+                        var upcomingFavs = listFav
+                            .Where(x => x.setiap_tanggal >= currentDay)
+                            .OrderBy(x => x.setiap_tanggal)
+                            .Take(5)
+                            .ToList();
+
+                        if (upcomingFavs.Count > 0)
+                        {
+                            BindableLayout.SetItemsSource(HS_ReminderFavorit, upcomingFavs);
+                            SectionReminder.IsVisible = true;
+                        }
+                        else
+                        {
+                            SectionReminder.IsVisible = false;
+                        }
+                    }
+                    else
+                    {
+                        SectionReminder.IsVisible = false;
+                    }
+                }
+                else
+                {
+                    SectionReminder.IsVisible = false;
+                }
                 
                 // Jika semua API dieksekusi tanpa error, catat waktu terakhirnya
                 _lastFetchTime = DateTime.Now;
@@ -456,6 +498,27 @@ public partial class Beranda : ContentPage
             await Navigation.PushAsync(new Favorit.ListFav());
         }
     }
+
+    private async void ReminderItem_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is Border border)
+        {
+            await border.ScaleToAsync(0.95, 80);
+            await border.ScaleToAsync(1.0, 80);
+
+            if (e.Parameter is int id_fav)
+            {
+                var page = new Favorit.List_FavDetail(id_fav, () =>
+                {
+                    ResetCache();
+                    _ = LoadApiDataAsync(force: true);
+                });
+                page.HasHandle = true;
+                page.HasBackdrop = true;
+                _ = page.ShowAsync(Window);
+            }
+        }
+    }
 #pragma warning restore CS0618
 
     private async void LihatSemuaPengeluaran_Tapped(object sender, TappedEventArgs e)
@@ -578,4 +641,47 @@ public class DashboardDokumenTerakhirResponse
     public string no_faktur { get; set; }
     public string keterangan { get; set; }
     public string foto_transaksi { get; set; }
+}
+
+public class ReminderFavoritModel
+{
+    public int id_fav { get; set; }
+    public DateTimeOffset created_at { get; set; }
+    public int id_kategori { get; set; }
+    public string? keterangan { get; set; }
+    public int setiap_tanggal { get; set; }
+    public string? nama_kategori { get; set; }
+    public bool tipe { get; set; }
+    public string? icon { get; set; }
+    public decimal total_harga { get; set; }
+
+    [JsonIgnore]
+    public Color BgColor => tipe ? Color.FromArgb("#16841E") : Color.FromArgb("#FA5252");
+
+    [JsonIgnore]
+    public string FullIconUrl
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(icon)) return "nopic100.png";
+            if (icon.StartsWith("http", StringComparison.OrdinalIgnoreCase)) return icon;
+            var app = Application.Current as App;
+            string? cleanBucket = app?.BUCKET_URL;
+            if (!string.IsNullOrEmpty(cleanBucket) && !cleanBucket.EndsWith("/")) cleanBucket += "/";
+            string cleanIcon = icon.StartsWith("/") ? icon.Substring(1) : icon;
+            return $"{cleanBucket}icon/{cleanIcon}";
+        }
+    }
+
+    [JsonIgnore]
+    public string NominalDisplay => $"{(tipe ? "+" : "-")} Rp {total_harga:N0}";
+
+    [JsonIgnore]
+    public Color NominalColor => tipe ? Colors.Green : Colors.OrangeRed;
+
+    [JsonIgnore]
+    public string? TitleDisplay => string.IsNullOrEmpty(keterangan) ? nama_kategori : keterangan;
+
+    [JsonIgnore]
+    public string ScheduleDisplay => $"Tanggal {setiap_tanggal}";
 }

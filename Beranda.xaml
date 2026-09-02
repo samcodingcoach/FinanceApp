@@ -93,6 +93,56 @@
                 </Border>
             </Grid>
 
+            <!-- Reminder Transaksi Favorit / Berulang (Horizontal Scroll) -->
+            <VerticalStackLayout x:Name="SectionReminder" Spacing="12" IsVisible="False">
+                <Grid ColumnDefinitions="*,Auto">
+                    <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                        
+                        <Label Text="Favorit &amp; Rutin" FontSize="18" FontAttributes="Bold" TextColor="#171d19" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    
+                </Grid>
+
+                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                    <HorizontalStackLayout x:Name="HS_ReminderFavorit" Spacing="12" Padding="0">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="#ffffff" Stroke="#f1f5f9" StrokeThickness="1" StrokeShape="RoundRectangle 14"  Padding="14">
+                                    <Border.Shadow>
+                                        <Shadow Brush="Black" Opacity="0.06" Radius="8" Offset="0,2" />
+                                    </Border.Shadow>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="ReminderItem_Tapped" CommandParameter="{Binding id_fav}" />
+                                    </Border.GestureRecognizers>
+                                    <VerticalStackLayout Spacing="10">
+                                        <!-- Header Card: Icon Category & Schedule Badge -->
+                                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                                            <Border Grid.Column="0" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="{Binding BgColor}" WidthRequest="40" HeightRequest="40" VerticalOptions="Center" Padding="6">
+                                                <Image Source="{Binding FullIconUrl}" Aspect="AspectFit" VerticalOptions="Center" HorizontalOptions="Center" />
+                                            </Border>
+                                            <StackLayout Grid.Column="1">
+                                                <Label Text="{Binding TitleDisplay}" FontAttributes="Bold" TextColor="#333" LineBreakMode="TailTruncation" MaxLines="1" />
+                                                <Label Text="{Binding NominalDisplay}" FontSize="16" VerticalTextAlignment="Center" FontAttributes="Bold" TextColor="{Binding NominalColor}" Margin="0,2,0,0" />
+                                            </StackLayout>
+
+                                            <Border VerticalOptions="Center" HorizontalOptions="Start" Padding="8,4" Grid.Column="2"  StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="#e8f0fe">
+                                                <HorizontalStackLayout Spacing="4">
+
+                                                    <Label Text="{Binding ScheduleDisplay}" FontSize="Caption" FontAttributes="Bold" TextColor="#1967d2" VerticalOptions="Center" />
+                                                </HorizontalStackLayout>
+                                            </Border>
+                                        </Grid>
+
+                                        <!-- Keterangan & Nama Kategori -->
+                                        
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </HorizontalStackLayout>
+                </ScrollView>
+            </VerticalStackLayout>
+
             <!-- Budgeting Progress -->
             <Border BackgroundColor="#ffffff" Stroke="#f1f5f9" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
                 <Border.Shadow>
